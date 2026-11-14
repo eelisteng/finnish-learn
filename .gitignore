@@ -21,3 +21,6 @@ node_modules/
 # NOTE: app/data.js, data/groups.json and data/packs/*.json are GENERATED but
 # intentionally committed. The app must also run by double-clicking index.html
 # under file://, where fetching JSON is blocked by CORS.
+
+# Throwaway clips written by the build/validation self-tests, removed on exit.
+assets/audio/_*-selftest.mp3

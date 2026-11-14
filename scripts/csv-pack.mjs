@@ -14,12 +14,18 @@
  * After editing CSV, always run:
  *   node scripts/build-content.mjs && node scripts/build-groups.mjs && node scripts/validate-content.mjs --self-test
  *
+ * One CSV row is one production unit: gloss, morphology, illustration and
+ * audio clip are all declared here. The new image_* and audio_* columns
+ * carry the asset path, provenance (source + license) and human-review state;
+ * a declared file must physically exist, otherwise the build refuses to write.
+ * An empty audio_file means "no clip yet" and the app falls back to browser TTS.
+ *
  * build-content.mjs also applies the CSV automatically, so the CSV stays the
  * authoritative editing layer even when the seed file is rebuilt from scratch.
  * Adding rows in CSV appends words; removing rows does NOT delete them (delete
  * from data/content-source.mjs instead, then re-export).
  */
-import { readFileSync, writeFileSync, existsSync } from 'node:fs'
+import { readFileSync, writeFileSync, existsSync, mkdirSync, unlinkSync } from 'node:fs'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { dirname, join } from 'node:path'
 
@@ -45,18 +51,51 @@ const CASE_LABEL = {
   ins: '具格 instruktiivi', abe: '欠格 abessiivi', com: '共格 komitatiivi',
 }
 const REVIEW_STATES = ['auto-derived', 'human-reviewed', 'csv-authored']
+/** Shared by illustrations and audio clips: a produced asset stays pending
+    until a human has actually looked at / listened to it. */
+export const ASSET_REVIEW_STATES = ['pending', 'human-verified']
+export const AUDIO_SOURCES = ['tts', 'human', 'other']
+export const AUDIO_DIR = 'assets/audio/'
+export const AUDIO_EXTS = ['mp3', 'ogg', 'm4a', 'wav', 'webm']
+export const AUDIO_COLS = ['audio_file', 'audio_source', 'audio_license', 'audio_duration', 'audio_reviewStatus']
 
+/* One CSV row is one complete production unit: gloss + morphology + image
+   + audio + review state. Files are declared here, never inside app/*.js. */
 export const WORD_COLS = [
   'id', 'lemma', 'pos', 'cefr', 'topicId', 'ipa',
-  'sense_zh', 'sense_en', 'image_path', 'image_status', 'motif',
+  'sense_zh', 'sense_en',
+  'image_path', 'image_status', 'image_source', 'image_license', 'image_reviewStatus', 'motif',
   'singular', 'plural',
   'nom', 'gen', 'par', 'ine', 'ela', 'ill',
   'suffix_gen', 'suffix_par', 'suffix_ine', 'suffix_ela', 'suffix_ill',
   'stem_strong', 'stem_weak', 'gradation', 'harmony', 'kotusType', 'declensionClass',
   'verbType', 'infinitiveEnding', 'presentStem', 'present1sg', 'past3sg', 'nutParticiple', 'irregular',
   'reviewStatus',
+  ...AUDIO_COLS,
 ]
-export const SENTENCE_COLS = ['id', 'fiText', 'zhText', 'enText', 'cefr', 'grammarPoints', 'gloss']
+export const SENTENCE_COLS = ['id', 'fiText', 'zhText', 'enText', 'cefr', 'grammarPoints', 'gloss', ...AUDIO_COLS]
+
+/** Build the audio object shared by words and sentences. Absence of a file
+    means no audio entry at all, so the app falls back to browser TTS. */
+export function audioFromRow(row) {
+  if (!row.audio_file) return null
+  return {
+    path: row.audio_file,
+    source: row.audio_source,
+    license: row.audio_license,
+    durationSec: row.audio_duration === '' || row.audio_duration == null ? null : Number(row.audio_duration),
+    reviewStatus: row.audio_reviewStatus || 'pending',
+  }
+}
+export function audioToRow(audio) {
+  return {
+    audio_file: audio?.path ?? '',
+    audio_source: audio?.source ?? '',
+    audio_license: audio?.license ?? '',
+    audio_duration: audio?.durationSec ?? '',
+    audio_reviewStatus: audio?.reviewStatus ?? '',
+  }
+}
 
 /* ── RFC 4180-ish CSV (quotes, embedded commas, CRLF, UTF-8 BOM) ───────── */
 export function parseCSV(text) {
@@ -105,7 +144,9 @@ export function wordToRow(w) {
   const row = {
     id: w.id, lemma: w.lemma, pos: w.pos, cefr: w.cefr, topicId: w.topicId, ipa: w.ipa,
     sense_zh: sense.zh, sense_en: sense.en,
-    image_path: image.path, image_status: image.status, motif: image.motif,
+    image_path: image.path, image_status: image.status,
+    image_source: image.source, image_license: image.license,
+    image_reviewStatus: image.reviewStatus, motif: image.motif,
     singular: w.number?.singular, plural: w.number?.plural,
     stem_strong: n.stems?.strong, stem_weak: n.stems?.weak,
     gradation: n.gradation, harmony: n.harmony,
@@ -116,6 +157,7 @@ export function wordToRow(w) {
     past3sg: v.past3sg, nutParticiple: v.nutParticiple,
     irregular: v.irregular === undefined ? '' : str(v.irregular),
     reviewStatus: w.provenance?.reviewStatus,
+    ...audioToRow(w.audio),
   }
   for (const c of BASIC_CASES) row[c] = byCase[c]?.form ?? ''
   for (const c of BASIC_CASES.slice(1)) row[`suffix_${c}`] = byCase[c]?.suffix ?? ''
@@ -128,6 +170,7 @@ export function sentenceToRow(s) {
     grammarPoints: (s.grammarPoints ?? []).join('|'),
     // token~senseId~caseForm | token~senseId  (empty senseId => null)
     gloss: (s.gloss ?? []).map((t) => [t.token, t.senseId ?? '', t.caseForm ?? ''].join('~')).join('|'),
+    ...audioToRow(s.audio),
   }
 }
 
@@ -195,10 +238,13 @@ export function applyWordRow(base, row) {
   image.motif = row.motif || image.motif || 'idea'
   image.altZh = `${row.sense_zh}的情境示意图`
   image.altEn = `Illustration for ${row.sense_en}`
-  image.source = image.source ?? (image.status === 'ready' ? 'generated' : 'hand-drawn')
-  image.license = image.license ?? 'own'
-  image.reviewStatus = image.reviewStatus ?? 'pending'
+  image.source = row.image_source || image.source || (image.status === 'ready' ? 'generated' : 'hand-drawn')
+  image.license = row.image_license || image.license || 'own'
+  image.reviewStatus = row.image_reviewStatus || image.reviewStatus || 'pending'
   w.provenance = { ...(w.provenance ?? {}), reviewStatus: row.reviewStatus || 'auto-derived' }
+  const audio = audioFromRow(row)
+  if (audio) w.audio = audio
+  else delete w.audio
 
   if (row.pos === 'verb') {
     delete w.nominal
@@ -241,10 +287,46 @@ export function applySentenceRow(base, row) {
     const [token, senseId, caseForm] = part.split('~')
     return { token, senseId: senseId || null, ...(caseForm ? { caseForm } : {}) }
   }) : []
+  const audio = audioFromRow(row)
+  if (audio) s.audio = audio
+  else delete s.audio
   return s
 }
 
 /* ── validation ───────────────────────────────────────────────────────── */
+
+/** An audio clip must be fully declared or fully absent. A half-filled row
+    would silently ship an unplayable word and hide the missing production
+    step, so both directions are rejected here. */
+function validateAudioRow(row, tag) {
+  const errors = []
+  const filled = AUDIO_COLS.filter((c) => String(row[c] ?? '') !== '')
+  if (!row.audio_file) {
+    if (filled.length) errors.push(`${tag}: audio_file missing but ${filled.join(', ')} set`)
+    return errors
+  }
+  if (!row.audio_file.startsWith(AUDIO_DIR)) {
+    errors.push(`${tag}: audio_file must live under ${AUDIO_DIR}`)
+  }
+  if (!new RegExp(`\\.(${AUDIO_EXTS.join('|')})$`, 'i').test(row.audio_file)) {
+    errors.push(`${tag}: audio_file must end with ${AUDIO_EXTS.join(' / ')}`)
+  }
+  if (!existsSync(join(root, row.audio_file))) {
+    errors.push(`${tag}: audio file not found: ${row.audio_file}`)
+  }
+  if (!AUDIO_SOURCES.includes(row.audio_source)) {
+    errors.push(`${tag}: audio_source must be ${AUDIO_SOURCES.join(' / ')}`)
+  }
+  if (!row.audio_license) errors.push(`${tag}: audio_license missing`)
+  if (!ASSET_REVIEW_STATES.includes(row.audio_reviewStatus)) {
+    errors.push(`${tag}: audio_reviewStatus must be ${ASSET_REVIEW_STATES.join(' / ')}`)
+  }
+  if (row.audio_duration !== '' && !(Number(row.audio_duration) > 0)) {
+    errors.push(`${tag}: audio_duration must be a positive number of seconds`)
+  }
+  return errors
+}
+
 export function validateCsv(wordRows, sentenceRows, wordHeader, sentenceHeader) {
   const errors = []
   const missing = (cols, header, file) => {
@@ -273,6 +355,12 @@ export function validateCsv(wordRows, sentenceRows, wordHeader, sentenceHeader) 
       if (!r.image_path) errors.push(`${tag}: ready image needs image_path`)
       else if (!existsSync(join(root, r.image_path))) errors.push(`${tag}: image file not found: ${r.image_path}`)
     } else if (!r.motif) errors.push(`${tag}: pending image needs a motif`)
+    if (!r.image_source) errors.push(`${tag}: image_source missing`)
+    if (!r.image_license) errors.push(`${tag}: image_license missing`)
+    if (!ASSET_REVIEW_STATES.includes(r.image_reviewStatus)) {
+      errors.push(`${tag}: image_reviewStatus must be ${ASSET_REVIEW_STATES.join(' / ')}`)
+    }
+    errors.push(...validateAudioRow(r, tag))
 
     if (r.pos === 'verb') {
       if (!(Number(r.verbType) >= 1 && Number(r.verbType) <= 6)) errors.push(`${tag}: verbType must be 1-6`)
@@ -311,6 +399,7 @@ export function validateCsv(wordRows, sentenceRows, wordHeader, sentenceHeader) 
       if (senseId && !senseIds.has(senseId)) errors.push(`${tag}: dangling senseId "${senseId}"`)
       if (caseForm && !(caseForm in CASE_CEFR)) errors.push(`${tag}: unknown caseForm "${caseForm}"`)
     }
+    errors.push(...validateAudioRow(r, tag))
   }
   return errors
 }
@@ -376,22 +465,62 @@ function selfTest() {
   ok('round-trip: comma-containing gloss survives', csvW.rows.find((r) => r.id === 'kauppa').sense_en === 'shop, store')
   ok('round-trip: Finnish diacritics survive', csvW.rows.find((r) => r.id === 'leipa').lemma === 'leipä')
 
-  const cases = [
-    ['invalid cefr', (c) => { c.w[0].cefr = 'Z9' }, 'invalid cefr'],
-    ['missing basic case', (c) => { c.w[0].ine = '' }, 'basic case ine'],
-    ['verbType out of range', (c) => { c.w.find((r) => r.pos === 'verb').verbType = '9' }, 'verbType'],
-    ['duplicate id', (c) => { c.w[1].id = c.w[0].id }, 'duplicate id'],
-    ['dangling gloss senseId', (c) => { c.s[0].gloss = 'Ghost~ghost-1' }, 'dangling senseId'],
-    ['malformed gloss item', (c) => { c.s[0].gloss = 'Broken' }, 'malformed gloss'],
-    ['missing column', (c) => { c.wh = c.wh.filter((x) => x !== 'ipa') }, 'missing column'],
-    ['invalid harmony', (c) => { c.w[0].harmony = 'mixed' }, 'invalid harmony'],
-    ['ready image without file', (c) => { c.w[0].image_status = 'ready'; c.w[0].image_path = '' }, 'ready image needs'],
-  ]
-  for (const [name, mutate, expected] of cases) {
-    const c = { w: JSON.parse(JSON.stringify(csvW.rows)), s: JSON.parse(JSON.stringify(csvS.rows)), wh: [...csvW.header], sh: [...csvS.header] }
-    mutate(c)
-    const errs = validateCsv(c.w, c.s, c.wh, c.sh)
-    ok(`reject: ${name}`, errs.some((e) => e.includes(expected)), errs.slice(0, 2).join('; '))
+  // A throwaway clip makes the audio pipeline testable without shipping a
+  // fake Finnish pronunciation inside the repository. Removed in `finally`.
+  const stubPath = `${AUDIO_DIR}_csv-selftest.mp3`
+  mkdirSync(join(root, AUDIO_DIR), { recursive: true })
+  writeFileSync(join(root, stubPath), 'ID3')
+  const audioRow = (r) => Object.assign(r, {
+    audio_file: stubPath, audio_source: 'tts', audio_license: 'own',
+    audio_duration: '1.2', audio_reviewStatus: 'human-verified',
+  })
+
+  try {
+    const cases = [
+      ['invalid cefr', (c) => { c.w[0].cefr = 'Z9' }, 'invalid cefr'],
+      ['missing basic case', (c) => { c.w[0].ine = '' }, 'basic case ine'],
+      ['verbType out of range', (c) => { c.w.find((r) => r.pos === 'verb').verbType = '9' }, 'verbType'],
+      ['duplicate id', (c) => { c.w[1].id = c.w[0].id }, 'duplicate id'],
+      ['dangling gloss senseId', (c) => { c.s[0].gloss = 'Ghost~ghost-1' }, 'dangling senseId'],
+      ['malformed gloss item', (c) => { c.s[0].gloss = 'Broken' }, 'malformed gloss'],
+      ['missing column', (c) => { c.wh = c.wh.filter((x) => x !== 'ipa') }, 'missing column'],
+      ['invalid harmony', (c) => { c.w[0].harmony = 'mixed' }, 'invalid harmony'],
+      ['ready image without file', (c) => { c.w[0].image_status = 'ready'; c.w[0].image_path = '' }, 'ready image needs'],
+      ['image review status', (c) => { c.w[0].image_reviewStatus = 'approved' }, 'image_reviewStatus'],
+      ['image source missing', (c) => { c.w[0].image_source = '' }, 'image_source missing'],
+      ['half-filled audio row', (c) => { c.w[0].audio_source = 'tts' }, 'audio_file missing but'],
+      ['audio file not found', (c) => { audioRow(c.w[0]); c.w[0].audio_file = 'assets/audio/missing.mp3' }, 'audio file not found'],
+      ['audio source invalid', (c) => { audioRow(c.w[0]); c.w[0].audio_source = 'radio' }, 'audio_source'],
+      ['audio licence missing', (c) => { audioRow(c.w[0]); c.w[0].audio_license = '' }, 'audio_license'],
+      ['audio review status invalid', (c) => { audioRow(c.w[0]); c.w[0].audio_reviewStatus = 'approved' }, 'audio_reviewStatus'],
+      ['audio duration invalid', (c) => { audioRow(c.w[0]); c.w[0].audio_duration = 'long' }, 'audio_duration'],
+      ['audio outside the audio directory', (c) => { audioRow(c.w[0]); c.w[0].audio_file = 'assets/illustrations/talo.png' }, 'audio_file must'],
+      ['sentence audio file not found', (c) => { audioRow(c.s[0]); c.s[0].audio_file = 'assets/audio/missing.mp3' }, 'audio file not found'],
+    ]
+    for (const [name, mutate, expected] of cases) {
+      const c = { w: JSON.parse(JSON.stringify(csvW.rows)), s: JSON.parse(JSON.stringify(csvS.rows)), wh: [...csvW.header], sh: [...csvS.header] }
+      mutate(c)
+      const errs = validateCsv(c.w, c.s, c.wh, c.sh)
+      ok(`reject: ${name}`, errs.some((e) => e.includes(expected)), errs.slice(0, 2).join('; '))
+    }
+
+    // Positive path: a fully declared clip validates, lands in the pack and
+    // exports back to the same CSV values.
+    const aw = JSON.parse(JSON.stringify(csvW.rows))
+    const as = JSON.parse(JSON.stringify(csvS.rows))
+    audioRow(aw[0]); audioRow(as[0])
+    const audioErrs = validateCsv(aw, as, csvW.header, csvS.header)
+    ok('accept: fully declared word + sentence audio', audioErrs.length === 0, audioErrs.slice(0, 3).join('; '))
+    const withAudio = applyCsvToPack(pack, aw, as)
+    const wAudio = withAudio.words.find((x) => x.id === aw[0].id)?.audio
+    const sAudio = withAudio.sentences.find((x) => x.id === as[0].id)?.audio
+    ok('audio object written into word', wAudio?.path === stubPath && wAudio.source === 'tts' && wAudio.durationSec === 1.2)
+    ok('audio object written into sentence', sAudio?.path === stubPath && sAudio.reviewStatus === 'human-verified')
+    ok('audio columns round-trip',
+      wordToRow(withAudio.words.find((x) => x.id === aw[0].id)).audio_file === stubPath &&
+      sentenceToRow(withAudio.sentences.find((x) => x.id === as[0].id)).audio_source === 'tts')
+  } finally {
+    unlinkSync(join(root, stubPath))
   }
   console.log(`\n  csv bridge: ${passed} passed, ${failed} failed`)
   if (failed) process.exitCode = 1
@@ -421,6 +550,8 @@ function main() {
     return
   }
   console.log(`CSV OK: ${csv.wordRows.length} words / ${csv.sentenceRows.length} sentences`)
+  console.log(`  media: ${csv.wordRows.filter((r) => r.image_status === 'ready').length} ready illustration(s), ` +
+    `${[...csv.wordRows, ...csv.sentenceRows].filter((r) => r.audio_file).length} audio clip(s) declared`)
   if (cmd === 'check') { console.log('No files written.'); return }
   if (cmd === 'import') {
     const next = applyCsvToPack(pack, csv.wordRows, csv.sentenceRows)

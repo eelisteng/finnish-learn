@@ -1,36 +1,36 @@
-﻿id,fiText,zhText,enText,cefr,grammarPoints,gloss
-a1-s01,Kirja on talossa.,书在房子里。,The book is in the house.,A1,ine,Kirja~kirja-1~|on~olla-1~|talossa~talo-1~ine
-a1-s02,Minä haluan kirjan.,我想要一本书。,I want a book.,A1,gen,Minä~~|haluan~haluta-1~|kirjan~kirja-1~gen
-a1-s03,Minä juon kahvia.,我喝咖啡。,I drink coffee.,A1,par,Minä~~|juon~~|kahvia~kahvi-1~par
-a1-s04,Minä olen talossa.,我在房子里。,I am in the house.,A1,ine,Minä~~|olen~olla-1~|talossa~talo-1~ine
-a1-s05,Minä juon vettä.,我喝水。,I drink water.,A1,par,Minä~~|juon~~|vettä~vesi-1~par
-a1-s06,Kirja on autossa.,书在车里。,The book is in the car.,A1,ine,Kirja~kirja-1~|on~olla-1~|autossa~auto-1~ine
-a1-s07,Minä tulen kaupasta.,我从商店来。,I come from the shop.,A1,ela,Minä~~|tulen~tulla-1~|kaupasta~kauppa-1~ela
-a1-s08,Minä menen taloon.,我走进房子。,I go into the house.,A1,ill,Minä~~|menen~~|taloon~talo-1~ill
-a1-s09,Haluan leipää.,我想要面包。,I want some bread.,A1,par,Haluan~haluta-1~|leipää~leipa-1~par
-a1-s10,Puhun kirjasta.,我在谈这本书。,I am talking about the book.,A1,ela,Puhun~puhua-1~|kirjasta~kirja-1~ela
-a2-s01,Talo on kadulla.,房子在街上。,The house is on the street.,A2,ade,Talo~talo-1~|on~olla-1~|kadulla~katu-1~ade
-a2-s02,Minä asun kaupungissa.,我住在城里。,I live in the city.,A2,ine,Minä~~|asun~asua-1~|kaupungissa~kaupunki-1~ine
-a2-s03,Ystävä tulee kaupasta.,朋友从商店来。,A friend comes from the shop.,A2,ela,Ystävä~ystava-1~|tulee~tulla-1~|kaupasta~kauppa-1~ela
-a2-s04,Minä vastaan ystävälle.,我回答朋友。,I answer my friend.,A2,all,Minä~~|vastaan~vastata-1~|ystävälle~ystava-1~all
-a2-s05,Tarvitsen aikaa.,我需要时间。,I need time.,A2,par,Tarvitsen~tarvita-1~|aikaa~aika-1~par
-b1-s01,Minä muistan kielen.,我记得这门语言。,I remember the language.,B1,gen,Minä~~|muistan~muistaa-1~|kielen~kieli-1~gen
-b1-s02,Ihminen kertoo vuodesta.,这个人讲述这一年。,The person tells about the year.,B1,ela,Ihminen~ihminen-1~|kertoo~kertoa-1~|vuodesta~vuosi-1~ela
-b1-s03,Vuosi on pitkä.,这一年很漫长。,The year is long.,B1,,Vuosi~vuosi-1~|on~olla-1~|pitkä~~
-b1-s04,Minä valitsen kirjan.,我选一本书。,I choose a book.,B1,gen,Minä~~|valitsen~valita-1~|kirjan~kirja-1~gen
-b1-s05,Ystävä vanhenee.,朋友渐渐变老。,The friend is getting older.,B1,,Ystävä~ystava-1~|vanhenee~vanheta-1~
-b2-s01,Tutkimus on mahdollisuus.,这项研究是一个机会。,The study is an opportunity.,B2,,Tutkimus~tutkimus-1~|on~olla-1~|mahdollisuus~mahdollisuus-1~
-b2-s02,Minä arvioin vaikutusta.,我在评估影响。,I am assessing the impact.,B2,par,Minä~~|arvioin~arvioida-1~|vaikutusta~vaikutus-1~par
-b2-s03,Yhteiskunta muuttuu.,社会在变化。,Society is changing.,B2,,Yhteiskunta~yhteiskunta-1~|muuttuu~~
-b2-s04,Vaikutus on suuri.,影响很大。,The impact is significant.,B2,,Vaikutus~vaikutus-1~|on~olla-1~|suuri~~
-b2-s05,Mahdollisuus on tutkimuksessa.,机会存在于这项研究中。,The opportunity lies in the study.,B2,ine,Mahdollisuus~mahdollisuus-1~|on~olla-1~|tutkimuksessa~tutkimus-1~ine
-c1-s01,Minä pohdin käsitettä.,我在琢磨这个概念。,I am reflecting on the concept.,C1,par,Minä~~|pohdin~pohtia-1~|käsitettä~kasite-1~par
-c1-s02,Ilmiö on monimutkainen.,这一现象很复杂。,The phenomenon is complex.,C1,,Ilmiö~ilmio-1~|on~olla-1~|monimutkainen~~
-c1-s03,Näkökulma on tärkeä.,视角很重要。,The point of view matters.,C1,,Näkökulma~nakokulma-1~|on~olla-1~|tärkeä~~
-c1-s04,Minä perustelen vastausta.,我为这个回答说明理由。,I justify the answer.,C1,par,Minä~~|perustelen~perustella-1~|vastausta~~par
-c1-s05,Käsite on ilmiössä.,概念体现在现象之中。,The concept is present in the phenomenon.,C1,ine,Käsite~kasite-1~|on~olla-1~|ilmiössä~ilmio-1~ine
-c2-s01,Minä sovellan käsitettä.,我把这个概念加以运用。,I apply the concept.,C2,par,Minä~~|sovellan~soveltaa-1~|käsitettä~kasite-1~par
-c2-s02,Vastaus on monitulkintainen.,这个回答可作多种解读。,The answer is open to multiple interpretations.,C2,,Vastaus~~|on~olla-1~|monitulkintainen~monitulkintainen-1~
-c2-s03,Yhteisymmärrys on tärkeää.,达成共识很重要。,Mutual understanding is important.,C2,par,Yhteisymmärrys~yhteisymmarrys-1~|on~olla-1~|tärkeää~~par
-c2-s04,Minä olen kriittinen.,我持批判态度。,I take a critical stance.,C2,,Minä~~|olen~olla-1~|kriittinen~kriittinen-1~
-c2-s05,Kieli on vivahteinen.,语言充满细微差别。,Language is nuanced.,C2,,Kieli~kieli-1~|on~olla-1~|vivahteinen~vivahteinen-1~
+﻿id,fiText,zhText,enText,cefr,grammarPoints,gloss,audio_file,audio_source,audio_license,audio_duration,audio_reviewStatus
+a1-s01,Kirja on talossa.,书在房子里。,The book is in the house.,A1,ine,Kirja~kirja-1~|on~olla-1~|talossa~talo-1~ine,,,,,
+a1-s02,Minä haluan kirjan.,我想要一本书。,I want a book.,A1,gen,Minä~~|haluan~haluta-1~|kirjan~kirja-1~gen,,,,,
+a1-s03,Minä juon kahvia.,我喝咖啡。,I drink coffee.,A1,par,Minä~~|juon~~|kahvia~kahvi-1~par,,,,,
+a1-s04,Minä olen talossa.,我在房子里。,I am in the house.,A1,ine,Minä~~|olen~olla-1~|talossa~talo-1~ine,,,,,
+a1-s05,Minä juon vettä.,我喝水。,I drink water.,A1,par,Minä~~|juon~~|vettä~vesi-1~par,,,,,
+a1-s06,Kirja on autossa.,书在车里。,The book is in the car.,A1,ine,Kirja~kirja-1~|on~olla-1~|autossa~auto-1~ine,,,,,
+a1-s07,Minä tulen kaupasta.,我从商店来。,I come from the shop.,A1,ela,Minä~~|tulen~tulla-1~|kaupasta~kauppa-1~ela,,,,,
+a1-s08,Minä menen taloon.,我走进房子。,I go into the house.,A1,ill,Minä~~|menen~~|taloon~talo-1~ill,,,,,
+a1-s09,Haluan leipää.,我想要面包。,I want some bread.,A1,par,Haluan~haluta-1~|leipää~leipa-1~par,,,,,
+a1-s10,Puhun kirjasta.,我在谈这本书。,I am talking about the book.,A1,ela,Puhun~puhua-1~|kirjasta~kirja-1~ela,,,,,
+a2-s01,Talo on kadulla.,房子在街上。,The house is on the street.,A2,ade,Talo~talo-1~|on~olla-1~|kadulla~katu-1~ade,,,,,
+a2-s02,Minä asun kaupungissa.,我住在城里。,I live in the city.,A2,ine,Minä~~|asun~asua-1~|kaupungissa~kaupunki-1~ine,,,,,
+a2-s03,Ystävä tulee kaupasta.,朋友从商店来。,A friend comes from the shop.,A2,ela,Ystävä~ystava-1~|tulee~tulla-1~|kaupasta~kauppa-1~ela,,,,,
+a2-s04,Minä vastaan ystävälle.,我回答朋友。,I answer my friend.,A2,all,Minä~~|vastaan~vastata-1~|ystävälle~ystava-1~all,,,,,
+a2-s05,Tarvitsen aikaa.,我需要时间。,I need time.,A2,par,Tarvitsen~tarvita-1~|aikaa~aika-1~par,,,,,
+b1-s01,Minä muistan kielen.,我记得这门语言。,I remember the language.,B1,gen,Minä~~|muistan~muistaa-1~|kielen~kieli-1~gen,,,,,
+b1-s02,Ihminen kertoo vuodesta.,这个人讲述这一年。,The person tells about the year.,B1,ela,Ihminen~ihminen-1~|kertoo~kertoa-1~|vuodesta~vuosi-1~ela,,,,,
+b1-s03,Vuosi on pitkä.,这一年很漫长。,The year is long.,B1,,Vuosi~vuosi-1~|on~olla-1~|pitkä~~,,,,,
+b1-s04,Minä valitsen kirjan.,我选一本书。,I choose a book.,B1,gen,Minä~~|valitsen~valita-1~|kirjan~kirja-1~gen,,,,,
+b1-s05,Ystävä vanhenee.,朋友渐渐变老。,The friend is getting older.,B1,,Ystävä~ystava-1~|vanhenee~vanheta-1~,,,,,
+b2-s01,Tutkimus on mahdollisuus.,这项研究是一个机会。,The study is an opportunity.,B2,,Tutkimus~tutkimus-1~|on~olla-1~|mahdollisuus~mahdollisuus-1~,,,,,
+b2-s02,Minä arvioin vaikutusta.,我在评估影响。,I am assessing the impact.,B2,par,Minä~~|arvioin~arvioida-1~|vaikutusta~vaikutus-1~par,,,,,
+b2-s03,Yhteiskunta muuttuu.,社会在变化。,Society is changing.,B2,,Yhteiskunta~yhteiskunta-1~|muuttuu~~,,,,,
+b2-s04,Vaikutus on suuri.,影响很大。,The impact is significant.,B2,,Vaikutus~vaikutus-1~|on~olla-1~|suuri~~,,,,,
+b2-s05,Mahdollisuus on tutkimuksessa.,机会存在于这项研究中。,The opportunity lies in the study.,B2,ine,Mahdollisuus~mahdollisuus-1~|on~olla-1~|tutkimuksessa~tutkimus-1~ine,,,,,
+c1-s01,Minä pohdin käsitettä.,我在琢磨这个概念。,I am reflecting on the concept.,C1,par,Minä~~|pohdin~pohtia-1~|käsitettä~kasite-1~par,,,,,
+c1-s02,Ilmiö on monimutkainen.,这一现象很复杂。,The phenomenon is complex.,C1,,Ilmiö~ilmio-1~|on~olla-1~|monimutkainen~~,,,,,
+c1-s03,Näkökulma on tärkeä.,视角很重要。,The point of view matters.,C1,,Näkökulma~nakokulma-1~|on~olla-1~|tärkeä~~,,,,,
+c1-s04,Minä perustelen vastausta.,我为这个回答说明理由。,I justify the answer.,C1,par,Minä~~|perustelen~perustella-1~|vastausta~~par,,,,,
+c1-s05,Käsite on ilmiössä.,概念体现在现象之中。,The concept is present in the phenomenon.,C1,ine,Käsite~kasite-1~|on~olla-1~|ilmiössä~ilmio-1~ine,,,,,
+c2-s01,Minä sovellan käsitettä.,我把这个概念加以运用。,I apply the concept.,C2,par,Minä~~|sovellan~soveltaa-1~|käsitettä~kasite-1~par,,,,,
+c2-s02,Vastaus on monitulkintainen.,这个回答可作多种解读。,The answer is open to multiple interpretations.,C2,,Vastaus~~|on~olla-1~|monitulkintainen~monitulkintainen-1~,,,,,
+c2-s03,Yhteisymmärrys on tärkeää.,达成共识很重要。,Mutual understanding is important.,C2,par,Yhteisymmärrys~yhteisymmarrys-1~|on~olla-1~|tärkeää~~par,,,,,
+c2-s04,Minä olen kriittinen.,我持批判态度。,I take a critical stance.,C2,,Minä~~|olen~olla-1~|kriittinen~kriittinen-1~,,,,,
+c2-s05,Kieli on vivahteinen.,语言充满细微差别。,Language is nuanced.,C2,,Kieli~kieli-1~|on~olla-1~|vivahteinen~vivahteinen-1~,,,,,

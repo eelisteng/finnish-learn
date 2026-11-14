@@ -27,7 +27,8 @@ python3 -m http.server 8000
 | 背词卡 | 词形、IPA、词性、单复数、词干与基本格、格与义项的 CEFR 标注、动词类型徽标、每义项一图、中英释义 |
 | 练习流程 | 单词：背词 → 选词 → 听选 → 找图 → 配对 → 填空 → 听写 → 完成；句子：背词 → 选词 → 听选 → 配对 → 填空 → 完成。设置里可开关 6 种练习模式 |
 | 选词 / 听选 / 找图 | 4 个选项；答对变绿、答错变红；重来只针对答错的词 |
-| 听写 | 正常 1.0x 与慢速 0.5x，慢速按音节断开朗读；重来包含用过提示的词 |
+| 听写 | 正常 1.0× 与慢速 0.5×；无预录音频时按音节断开朗读；重来包含用过提示的词 |
+| 发音 | 词包声明音频时优先播放预录文件（慢速用 `playbackRate=0.5` 且保持音高）；未配音频的条目回退浏览器语音合成，设置里会提示本机是否装有 `fi-FI` 语音 |
 | 填空 | 随机露出若干字母 + 下划线字母槽 + 图片提示，提供芬兰语虚拟字母栏 |
 | 释义语言 | 只中文 / 只英文 / 中英都显示 |
 | 外观 | 浅色 / 深色 / 跟随系统主题，可选背景音乐（Web Audio 生成，默认关闭） |
@@ -53,6 +54,19 @@ node scripts/build-content.mjs && node scripts/build-groups.mjs && node scripts/
 
 `csv-pack.mjs import` 会保留人工复核状态，并检查悬空义项、缺失释义等问题。
 
+### 一行 CSV = 一条完整生产单元
+
+扩词时每加一行就一次性配齐「词条 + 释义 + 词形 + 图 + 音频」，避免同一批词返工三遍。新增列：
+
+| 列 | 用途 |
+| --- | --- |
+| `image_path` / `image_status` / `image_source` / `image_license` / `image_reviewStatus` / `motif` | 每义项一图；`ready` 必须指向真实文件，复核状态为 `pending` 或 `human-verified` |
+| `audio_file` / `audio_source` / `audio_license` / `audio_duration` / `audio_reviewStatus` | 每个词或句子一条音频；`audio_file` 留空表示暂无音频，前端回退合成语音 |
+
+音频约定：文件放 `assets/audio/<id>.mp3`（也支持 `ogg` / `m4a` / `wav` / `webm`），`audio_source` 取 `tts` / `human` / `other`，`audio_license` 写明授权，`audio_duration` 填秒数（可空），`audio_reviewStatus` 为 `pending` / `human-verified`。**声明了文件但文件不存在、或只填了半行，`csv-pack.mjs check`、`build-content.mjs` 与 `validate-content.mjs` 都会报错并拒绝生成词包**；未人工复核的素材只报警告。
+
+图片与音频元数据都写在 CSV，不要写进 `app/*.js` 或 `data/content-source.mjs`——CSV 是权威编辑层，从种子重建时也会覆盖回去。素材齐了以后前端会自动优先播放预录文件，无需改代码。
+
 ## 验证
 
 ```bash
@@ -74,14 +88,16 @@ app/main.js                   界面与流程控制
 app/styles.css                浅色 / 深色主题
 app/bgm.js                    背景音乐
 data/                         词包、分组、CSV、素材清单
+assets/illustrations/         成品插画
+assets/audio/                 预录音频（当前为空，按 CSV 声明填充）
 scripts/                      构建、校验、CSV 桥接、领域测试
 tests/                        浏览器回归
 ```
 
 ## 已知限制
 
-- 插画目前 3 张成品（`talo` / `kauppa` / `puhua`），其余为几何占位图；生成图已裁掉水印、修正伪文字，仍需人工复核。
-- 发音依赖浏览器自带的 `fi-FI` 语音，缺失时回退，无离线音频文件。
+- 插画目前 3 张成品（`talo` / `kauppa` / `puhua`），其余为几何占位图；50 张的 `image_reviewStatus` 均为 `pending`，仍需人工复核。
+- 词包目前 0 条预录音频，全部走浏览器语音合成；多数设备没有 `fi-FI` 语音，长短音与 `ä/ö/å` 会失真。补齐 CSV 的 `audio_*` 列并放入文件后会自动切换为预录播放。
 - IPA、释义、屈折 / Kotus 类型等标注来源标记为 `auto-derived`，需人工校对；CEFR 分级是本产品的内部约定，CEFR / YKI 并无官方词表。
 - 无账号、无后端、无自动同步；换设备只能靠导出 / 导入 JSON。
 - 内部标识 `finnish-learn:v1`（存储键）与 `finnish-learn-progress`（导出格式）不要改，否则旧进度与已导出的文件会读不出来。

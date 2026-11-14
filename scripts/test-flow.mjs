@@ -210,6 +210,21 @@ ok('syllabify kauppa → kau/ppa', FI.syllabify('kauppa').join('-') === 'kau-ppa
 ok('syllabify kirja → ki/rja', FI.syllabify('kirja').join('-') === 'ki-rja')
 ok('syllabify is case-stable', FI.syllabify('talo').join('-') === FI.syllabify('Talo').join('-'))
 
+console.log('Audio assets')
+ok('itemAudio: demo pack declares no clips', FI.itemAudio(pack.words[0]) === null)
+ok('itemAudio: declared clip resolves to its path', FI.itemAudio({ audio: { path: 'assets/audio/talo.mp3' } }) === 'assets/audio/talo.mp3')
+ok('itemAudio: malformed audio object is ignored', FI.itemAudio({ audio: {} }) === null)
+const noClipQs = FI.buildSelectQuestions(wg, pack, { seed: 7, optionCount: 4, hideLabel: true })
+ok('questions: audioFile null when no clip exists', noClipQs.every((q) => q.audioFile === null))
+const talo = pack.words.find((w) => w.id === 'talo')
+talo.audio = { path: 'assets/audio/talo.mp3', source: 'tts', license: 'own', durationSec: 1.2, reviewStatus: 'human-verified' }
+const clipQs = FI.buildSelectQuestions(wg, pack, { seed: 7, optionCount: 4, hideLabel: true })
+const clipLetterQs = FI.buildLetterQuestions(wg, pack, wg.itemIds, 'dictation')
+ok('questions: listen carries the clip path', clipQs.find((q) => q.itemId === 'talo')?.audioFile === 'assets/audio/talo.mp3')
+ok('questions: dictation carries the clip path', clipLetterQs.find((q) => q.itemId === 'talo')?.audioFile === 'assets/audio/talo.mp3')
+ok('questions: other items stay on the TTS fallback', clipQs.filter((q) => q.itemId !== 'talo').every((q) => q.audioFile === null))
+delete talo.audio
+
 console.log('Generic round recording')
 const st3 = FI.Store.load()
 const roundSession = {

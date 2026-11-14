@@ -27,7 +27,8 @@ python3 -m http.server 8000
 | Memorize cards | Lemma, IPA, part of speech, singular/plural, stems and basic cases, CEFR tags on cases and senses, verb-type badge, one image per sense, Chinese and English glosses |
 | Practice flow | Words: memorize → choice → listen → find image → match → cloze → dictation → complete. Sentences: memorize → choice → listen → match → cloze → complete. All 6 practice modes can be toggled in Settings |
 | Choice / listen / find image | 4 options; correct answers turn green, wrong ones red; a retry covers only the missed items |
-| Dictation | Normal 1.0x and slow 0.5x playback, with syllable breaks for the slow version; a retry also includes items solved with a hint |
+| Dictation | Normal 1.0x and slow 0.5x playback; falls back to syllable-separated speech when no clip exists; a retry also includes items solved with a hint |
+| Pronunciation | Pre-recorded clips are played first when declared (slow = `playbackRate=0.5` with pitch preserved); items without a clip fall back to browser TTS, and Settings reports whether a `fi-FI` voice is installed |
 | Cloze | A few letters revealed at random, underline slots for the rest, an image hint, and a virtual Finnish letter bar (ä/ö/å) |
 | Gloss language | Chinese only / English only / both |
 | Appearance | Light / dark / follow-system theme, plus optional ambient background music (Web Audio, off by default) |
@@ -53,6 +54,19 @@ node scripts/build-content.mjs && node scripts/build-groups.mjs && node scripts/
 
 `csv-pack.mjs import` preserves human review status and checks for dangling senses, missing glosses and similar problems.
 
+### One CSV row = one complete production unit
+
+When adding vocabulary, fill in the word, glosses, morphology, illustration and audio in a single pass so the same batch never has to be reworked three times. New columns:
+
+| Columns | Purpose |
+| --- | --- |
+| `image_path` / `image_status` / `image_source` / `image_license` / `image_reviewStatus` / `motif` | One image per sense; `ready` must point to a real file; review state is `pending` or `human-verified` |
+| `audio_file` / `audio_source` / `audio_license` / `audio_duration` / `audio_reviewStatus` | One clip per word or sentence; an empty `audio_file` means "no clip yet" and the UI falls back to browser TTS |
+
+Audio convention: put files at `assets/audio/<id>.mp3` (`ogg` / `m4a` / `wav` / `webm` also accepted), set `audio_source` to `tts` / `human` / `other`, record the licence, fill `audio_duration` in seconds (optional) and set `audio_reviewStatus` to `pending` / `human-verified`. **A declared file that does not exist, or a half-filled row, makes `csv-pack.mjs check`, `build-content.mjs` and `validate-content.mjs` fail instead of writing the pack.** Assets that still await human review only produce warnings.
+
+Keep image and audio metadata in the CSV, not in `app/*.js` or `data/content-source.mjs`: the CSV is the authoritative editing layer and overrides the seed on every rebuild. Once clips are present the UI plays them automatically — no code changes needed.
+
 ## Validation
 
 ```bash
@@ -74,14 +88,16 @@ app/main.js                   UI and flow controller
 app/styles.css                light / dark themes
 app/bgm.js                    background music
 data/                         content pack, groups, CSV files, source inventory
+assets/illustrations/         finished illustrations
+assets/audio/                 pre-recorded clips (empty for now; declared in CSV)
 scripts/                      build, validation, CSV bridge, domain tests
 tests/                        browser regression
 ```
 
 ## Known limitations
 
-- Only 3 finished illustrations (`talo`, `kauppa`, `puhua`); the rest are geometric placeholders. Generated images were cropped to remove watermarks and still need human review.
-- Pronunciation relies on the browser's built-in `fi-FI` voice with a fallback; there are no offline audio files.
+- Only 3 finished illustrations (`talo`, `kauppa`, `puhua`); the rest are geometric placeholders. All 50 have `image_reviewStatus: pending` and still need human review.
+- The pack declares 0 audio clips, so every item currently uses browser speech synthesis. Most devices lack a `fi-FI` voice, which distorts long/short vowels and `ä/ö/å`. Filling the `audio_*` columns and adding the files automatically switches playback to the recordings.
 - IPA, glosses and inflection / Kotus types are marked `auto-derived` and need proofreading. CEFR levels are an internal product convention — neither CEFR nor YKI publishes an official word list.
 - No accounts, no backend, no automatic sync; moving to another device requires a JSON export / import.
 - Do not rename the internal keys `finnish-learn:v1` (storage key) or `finnish-learn-progress` (export format), or existing progress and exported files become unreadable.

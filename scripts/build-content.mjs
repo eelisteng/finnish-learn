@@ -2,6 +2,9 @@
  * Expands data/content-source.mjs into the versioned JSON content pack.
  * All linguistic values are explicitly tagged auto-derived: this script only
  * guarantees structural consistency, not Finnish correctness.
+ * Illustration and audio assets (path, source, license, review state) are
+ * declared in data/words.csv / data/sentences.csv; the CSV override below is
+ * authoritative, so keep asset metadata there rather than in the seed.
  *
  *   node scripts/build-content.mjs
  */
@@ -160,4 +163,8 @@ for (const level of LEVELS) {
   console.log(`  ${level}: ${byLevel[level].words} words / ${byLevel[level].sentences} sentences`)
 }
 const ready = pack.words.filter((w) => w.senses[0].image.status === 'ready').length
-console.log(`  ready illustrations ${ready} / motif placeholders ${pack.words.length - ready}`)
+const reviewed = pack.words.filter((w) => w.senses[0].image.reviewStatus === 'human-verified').length
+const clips = [...pack.words, ...pack.sentences].filter((x) => x.audio?.path).length
+console.log(`  ready illustrations ${ready} / motif placeholders ${pack.words.length - ready} / human-reviewed ${reviewed}`)
+console.log(`  audio clips declared ${clips} of ${pack.words.length + pack.sentences.length} items (declared in CSV, not in the seed)`)
+console.log('  Next: node scripts/build-groups.mjs && node scripts/validate-content.mjs --self-test')

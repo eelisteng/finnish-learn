@@ -5,6 +5,23 @@
 <div id="app"></div><div id="modal-root"></div><div id="toast" class="toast"></div>
 <pre id="smoke" style="padding:20px;font:13px monospace">RUNNING</pre>
 <script>localStorage.removeItem('finnish-learn:v1'); window.FI_FAST_TEST = true</script>
+<script>
+  // Stub HTMLAudioElement so the clip-first playback path is asserted without
+  // shipping or downloading a real recording in this regression page.
+  window.__audioCalls = []
+  window.Audio = class {
+    constructor() { this._src = ''; this.preload = ''; this.playbackRate = 1; this.preservesPitch = false }
+    set src(v) { this._src = v }
+    get src() { return this._src }
+    set currentTime(v) { this._time = v }
+    get currentTime() { return this._time ?? 0 }
+    pause() { this.paused = true }
+    play() {
+      window.__audioCalls.push({ src: this._src, playbackRate: this.playbackRate, preservesPitch: this.preservesPitch })
+      return Promise.resolve()
+    }
+  }
+</script>
 <script src="../app/data.js"></script>
 <script src="../app/grouping.js"></script>
 <script src="../app/store.js"></script>
@@ -109,6 +126,8 @@
     ok('settings: three meaning-language options', $$('input[name="meaningLang"]').length === 3)
     ok('settings: three theme options', $$('input[name="theme"]').length === 3)
     ok('settings: background music switch', $('[data-bgm]') !== null && $('[data-bgm]').checked === false)
+    ok('settings: pronunciation source is explained', $('.modal')?.textContent.includes('发音来源') &&
+      $('.modal')?.textContent.includes('预录音频') && $('.modal')?.textContent.includes('fi-FI'))
     click('[data-modal="preset-slim"]')
     ok('settings: slim preset drops find-image', !$('.hero p')?.textContent.includes('找图片'))
     click('[data-act="settings"]')
@@ -134,8 +153,21 @@
     ok('music: toggle turns it back off', window.FI.Store.load().preferences.bgm === false && window.FI.Bgm.isOn() === false)
 
     /* ── ① memorize ─────────────────────────────────────────── */
+    // Inject one declared clip so the "real audio wins over TTS" path is
+    // exercised; window.Audio is stubbed above, so nothing is fetched.
+    const stubClip = 'assets/audio/_browser-selftest.mp3'
+    pack.words.find((w) => w.id === 'talo').audio = {
+      path: stubClip, source: 'tts', license: 'own', durationSec: 1.2, reviewStatus: 'human-verified',
+    }
     click('[data-act="start-group"][data-id="A1-W-01"]')
     ok('memorize: lemma talo', $('.lemma')?.textContent.trim() === 'talo')
+    ok('audio: itemAudio reads the declared clip', window.FI.itemAudio(pack.words.find((w) => w.id === 'talo')) === stubClip)
+    ok('audio: items without a clip return null', window.FI.itemAudio(pack.words.find((w) => w.id === 'katu')) === null)
+    ok('audio: memorize button carries data-audio', $('.ipa [data-act="speak"]')?.dataset.audio === stubClip)
+    click('.ipa [data-act="speak"]')
+    ok('audio: clip is played instead of the TTS fallback',
+      window.__audioCalls.at(-1)?.src === stubClip && window.__audioCalls.at(-1)?.playbackRate === 1)
+    ok('audio: pitch is preserved at normal speed', window.__audioCalls.at(-1)?.preservesPitch === true)
     ok('memorize: ipa shown', $('.ipa')?.textContent.includes('ˈtɑlo'))
     ok('memorize: 单复数 shown', $('.kv')?.textContent.includes('单数') && $('.kv')?.textContent.includes('复数'))
     ok('memorize: zh + en gloss', $('.gloss-box .zh')?.textContent.length > 0 && $('.gloss-box .en')?.textContent.length > 0)
@@ -171,6 +203,13 @@
       $$('.listen-hero [data-act="speak"]').some((b) => b.dataset.speed === 'slow'))
     const listenSpeeds = $$('.listen-hero [data-act="speak"]').map((b) => Number(b.dataset.rate))
     ok('listen: slow rate is at most half the normal rate', Math.min(...listenSpeeds) <= Math.max(...listenSpeeds) / 2)
+    ok('listen: both buttons point at the declared clip', $$('.listen-hero [data-act="speak"]')
+      .every((b) => b.dataset.audio === stubClip))
+    $$('.listen-hero [data-act="speak"]').find((b) => b.dataset.speed === 'slow').click()
+    ok('audio: slow clip uses 0.5x playbackRate with preserved pitch',
+      window.__audioCalls.at(-1)?.src === stubClip &&
+      window.__audioCalls.at(-1)?.playbackRate === 0.5 &&
+      window.__audioCalls.at(-1)?.preservesPitch === true)
     ok('listen: four options', $$('.optcard').length === 4)
     ok('listen: every option has a picture', $$('.optcard-pic').length === 4)
     ok('listen: every option has a meaning', $$('.optcard-meaning').length === 4 &&

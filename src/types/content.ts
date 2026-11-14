@@ -39,8 +39,25 @@ export interface ImageRef {
   license: string
   attribution?: string
   status: 'ready' | 'pending'
-  reviewStatus: 'approved' | 'pending'
+  /** Generated assets stay pending until a human has actually looked at them. */
+  reviewStatus: 'pending' | 'human-verified'
   note?: string
+}
+
+/**
+ * Optional pre-recorded Finnish pronunciation. Declared in the CSV editing
+ * layer, never in app/*.js. A missing `audio` entry means "no clip yet": the
+ * UI falls back to browser speech synthesis and warns when no fi-FI voice is
+ * installed. Slow playback uses playbackRate 0.5 with preservesPitch on.
+ */
+export interface AudioRef {
+  /** Relative path, e.g. assets/audio/talo.mp3 */
+  path: string
+  source: 'tts' | 'human' | 'other'
+  license: string
+  /** Seconds; null until measured. */
+  durationSec: number | null
+  reviewStatus: 'pending' | 'human-verified'
 }
 
 /** One image per sense, never one image per lemma: polysemy would otherwise mislead learners. */
@@ -99,7 +116,7 @@ export interface Provenance {
   glossSource: string
   frequencyBand?: number
   gradingSignals: string[]
-  reviewStatus: 'auto-derived' | 'human-verified'
+  reviewStatus: 'auto-derived' | 'human-reviewed' | 'csv-authored'
 }
 
 export interface WordEntry {
@@ -114,7 +131,7 @@ export interface WordEntry {
   ipa: string
   ipaSource: 'rule-derived' | 'human-verified'
   senses: Sense[]
-  audioUrl?: string
+  audio?: AudioRef
   provenance: Provenance
   nominal?: NominalParadigm
   verb?: VerbParadigm
@@ -130,7 +147,7 @@ export interface SentenceEntry {
   cefr: CEFR
   grammarPoints: FinnishCase[]
   gloss: { token: string; senseId: string | null; caseForm?: FinnishCase }[]
-  audioUrl?: string
+  audio?: AudioRef
 }
 
 export interface ContentPack {
@@ -180,6 +197,8 @@ export interface GroupIndex {
 
 export const GROUP_SIZE = 5
 
-/** Phase order inside one group session. */
-export const FLOW_PHASES = ['memorize', 'choice', 'cloze', 'complete'] as const
+/** Default word-group phase order. Sentence groups skip word-only modes. */
+export const FLOW_PHASES = [
+  'memorize', 'choice', 'listen', 'findImage', 'match', 'cloze', 'dictation', 'complete',
+] as const
 export type FlowPhase = (typeof FLOW_PHASES)[number]

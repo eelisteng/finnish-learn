@@ -109,15 +109,33 @@
   }
 
   /* ── audio ──────────────────────────────────────────────────
-     normal = 1.0×, slow = 0.5× AND syllable-separated commas for a single
-     word. The commas matter: several fi-FI voices clamp or ignore `rate`,
-     so rate alone used to sound identical. Sentences only use rate.       */
-  function speak(text, speed) {
+     Pre-recorded clips win. An item may declare audio.path in the content
+     pack (produced from the CSV columns). Clips go through HTMLAudioElement:
+     slow = playbackRate 0.5 with preservesPitch on, which is both genuinely
+     slower and pitch-correct — unlike SpeechSynthesisUtterance.rate, which
+     many engines clamp. Only items without a clip fall back to browser TTS;
+     most devices have no fi-FI voice, so that fallback is called out in the
+     Settings dialog and in the listen/dictation prompts.                    */
+  let clipEl = null
+  let playToken = 0
+  function stopClip() {
+    if (!clipEl) return
+    try { clipEl.pause(); clipEl.currentTime = 0 } catch { /* not loaded yet */ }
+  }
+  function finnishVoice() {
+    return (window.speechSynthesis?.getVoices?.() ?? []).some((v) => /^fi/i.test(v.lang))
+  }
+  /** Explicit warning instead of silently reading Finnish with a wrong voice. */
+  function voiceHint(hasClip) {
+    if (hasClip || finnishVoice() || !window.speechSynthesis) return ''
+    return '<p class="hintline">⚠ 本机未检测到 fi-FI 语音，当前是系统合成音回退，长短音与 ä/ö/å 可能不准；可在设置里查看</p>'
+  }
+  function ttsSpeak(text, slow) {
     if (!window.speechSynthesis) { toast('当前浏览器不支持语音合成'); return }
     try {
       window.speechSynthesis.cancel()
-      const slow = speed === 'slow'
       const raw = String(text)
+      // Syllable commas force a real pause on engines that clamp `rate`.
       const spoken = slow && !/\s/.test(raw.trim()) ? FI.syllabify(raw).join(', ') : raw
       const u = new SpeechSynthesisUtterance(spoken)
       u.lang = 'fi-FI'
@@ -126,7 +144,26 @@
       const voice = (window.speechSynthesis.getVoices?.() ?? []).find((v) => /^fi/i.test(v.lang))
       if (voice) u.voice = voice
       window.speechSynthesis.speak(u)
-    } catch { /* TTS is a best-effort fallback for the planned mp3 audio */ }
+    } catch { /* speech synthesis is best-effort */ }
+  }
+  function speak(text, speed, audioPath) {
+    const slow = speed === 'slow'
+    const token = ++playToken
+    stopClip()
+    if (window.speechSynthesis) { try { window.speechSynthesis.cancel() } catch { /* noop */ } }
+    const fallback = () => { if (token === playToken) ttsSpeak(text, slow) }
+    // Browser regression stubs window.Audio, so this path is exercised there
+    // without touching the network or a real sound device.
+    if (!audioPath) return fallback()
+    try {
+      if (!clipEl) { clipEl = new Audio(); clipEl.preload = 'auto' }
+      clipEl.src = audioPath
+      clipEl.playbackRate = slow ? FI.SPEECH_RATE.slow : FI.SPEECH_RATE.normal
+      clipEl.preservesPitch = true
+      clipEl.onerror = fallback
+      const playing = clipEl.play()
+      if (playing && typeof playing.catch === 'function') playing.catch(fallback)
+    } catch { fallback() }
   }
   function autoSpeak() {
     if (FAST || !session || !['listen', 'dictation'].includes(session.phase)) return
@@ -136,7 +173,7 @@
     const key = `${session.phase}:${r.mode}:${r.attempt}:${r.index}`
     if (session._spoken === key) return
     session._spoken = key
-    speak(q.audioText, r.speed ?? 'normal')
+    speak(q.audioText, r.speed ?? 'normal', q.audioFile)
   }
 
   /* ── session lifecycle ────────────────────────────────────── */
@@ -617,7 +654,7 @@
       ${picture(s.image, item.id, 'mem-pic', s.image.altZh)}
       <div>
         <p class="lemma">${esc(item.lemma)}</p>
-        <p class="ipa">${esc(item.ipa)} <button class="btn sm ghost" data-act="speak" data-text="${esc(item.lemma)}" title="朗读">🔊 发音</button></p>
+        <p class="ipa">${esc(item.ipa)} <button class="btn sm ghost" data-act="speak" data-text="${esc(item.lemma)}" data-audio="${esc(item.audio?.path ?? '')}" title="朗读">🔊 发音</button></p>
         <div class="badges"><span class="badge blue">${esc(item.cefr)}</span><span class="badge">${esc(item.posZh)}</span>${verbBadge}<span class="badge teal">auto-derived</span></div>
         <dl class="kv">${numberBlock}<dt>形态类</dt><dd>${isVerb ? `Kotus ${item.verb.kotusType ?? '—'}` : esc(item.nominal.declensionClass)}</dd></dl>
         <div class="gloss-box">${meaningLines(s.zh, s.en)}</div>
@@ -629,7 +666,7 @@
   function memorizeSentence(item) {
     const caseNames = { nom: '主格', gen: '属格', par: '部分格', ine: '内格', ela: '出格', ill: '入格', ade: '接格', abl: '离格', all: '向格', ess: '样格', tra: '转格', acc: '宾格', ins: '具格', abe: '欠格', com: '共格' }
     return `<div class="cloze-q" style="text-align:left">
-        <div class="fi" style="font-size:26px">${esc(item.fiText)} <button class="btn sm ghost" data-act="speak" data-text="${esc(item.fiText)}">🔊</button></div>
+        <div class="fi" style="font-size:26px">${esc(item.fiText)} <button class="btn sm ghost" data-act="speak" data-text="${esc(item.fiText)}" data-audio="${esc(item.audio?.path ?? '')}">🔊</button></div>
         ${meaningLines(item.zhText, item.enText)}
       </div>
       <div class="badges"><span class="badge blue">${esc(item.cefr)}</span>${item.grammarPoints.map((c) => `<span class="badge amber">${esc(caseNames[c] ?? c)}</span>`).join('')}</div>
@@ -708,9 +745,10 @@
           <div class="audio-big">🎧</div>
           <p class="tip">听发音，从下面 4 张「图片 + 释义」卡里选出对应的一项</p>
           <div class="audio-row">
-            <button class="btn primary" data-act="speak" data-text="${esc(q.audioText)}" data-speed="normal" data-rate="${FI.SPEECH_RATE.normal}">🔊 正常语速</button>
-            <button class="btn sm" data-act="speak" data-text="${esc(q.audioText)}" data-speed="slow" data-rate="${FI.SPEECH_RATE.slow}">🐢 慢速 · 0.5× + 音节停顿</button>
+            <button class="btn primary" data-act="speak" data-text="${esc(q.audioText)}" data-audio="${esc(q.audioFile ?? '')}" data-speed="normal" data-rate="${FI.SPEECH_RATE.normal}">🔊 正常语速</button>
+            <button class="btn sm" data-act="speak" data-text="${esc(q.audioText)}" data-audio="${esc(q.audioFile ?? '')}" data-speed="slow" data-rate="${FI.SPEECH_RATE.slow}">🐢 慢速 · 0.5×${q.audioFile ? '' : ' + 音节停顿'}</button>
           </div>
+          ${voiceHint(q.audioFile)}
           <p class="hintline">选项不显示芬兰语单词，只能靠听懂发音来判断 · 按 1–4 键作答</p>
         </div>`
       : `<div class="quiz-prompt">
@@ -781,9 +819,9 @@
     ]
     const hints = hintTexts.slice(0, r.hintsUsed).map((h) => `<div>· ${esc(h)}</div>`).join('')
     const audio = `<div class="audio-row">
-        <button class="btn primary" data-act="speak" data-text="${esc(q.audioText)}" data-speed="normal" data-rate="${FI.SPEECH_RATE.normal}">🔊 正常语速</button>
-        <button class="btn" data-act="speak" data-text="${esc(q.audioText)}" data-speed="slow" data-rate="${FI.SPEECH_RATE.slow}">🐢 慢速 · 0.5×</button>
-      </div>`
+        <button class="btn primary" data-act="speak" data-text="${esc(q.audioText)}" data-audio="${esc(q.audioFile ?? '')}" data-speed="normal" data-rate="${FI.SPEECH_RATE.normal}">🔊 正常语速</button>
+        <button class="btn" data-act="speak" data-text="${esc(q.audioText)}" data-audio="${esc(q.audioFile ?? '')}" data-speed="slow" data-rate="${FI.SPEECH_RATE.slow}">🐢 慢速 · 0.5×</button>
+      </div>${voiceHint(q.audioFile)}`
     const clozePrompt = `<div class="cloze-q cloze-with-pic">
         ${picture(q.image, q.itemId, 'cloze-pic', q.image?.altZh)}
         ${meaningLines(q.promptZh, q.promptEn)}
@@ -923,6 +961,13 @@
     }).join('')
     const segment = (name, list, labels, current) => `<div class="seg">${list.map((v) => `
       <label class="${v === current ? 'active' : ''}"><input type="radio" name="${name}" value="${v}" ${v === current ? 'checked' : ''}><span>${esc(labels[v])}</span></label>`).join('')}</div>`
+    const itemCount = pack.words.length + pack.sentences.length
+    const clipCount = [...pack.words, ...pack.sentences].filter((x) => x.audio?.path).length
+    const voiceStatus = clipCount > 0
+      ? `词包已声明 ${clipCount} / ${itemCount} 条音频；其余条目仍走浏览器合成语音。`
+      : (finnishVoice()
+        ? '已检测到本机 fi-FI 语音，可用合成发音，但音质取决于系统语音；建议为词条补齐音频文件。'
+        : '⚠ 本机未检测到 fi-FI 语音，合成发音会用其他语言的嗓音读芬兰语，长短音与 ä/ö/å 容易失真。词包目前也没有预录音频，补齐后会自动优先播放。')
     showModal(`<h3>设置</h3>
       <p>释义语言、外观与音乐的偏好都保存在本机，并随进度文件一起导出/导入。</p>
 
@@ -943,6 +988,12 @@
           <input type="checkbox" data-bgm ${p.bgm ? 'checked' : ''}>
           <span><b>播放低音量环境音</b><small>由浏览器实时合成的五声音阶衬底，无需联网、无音频文件；默认关闭，浏览器要求首次点击后才可发声。</small></span>
         </label>
+      </div>
+
+      <div class="pref-group">
+        <div class="pref-title">发音来源</div>
+        <p class="tip" style="margin:0 0 6px">优先播放词包声明的预录音频（正常 1.0× / 慢速 0.5×，保持音高不失真）；没有音频的条目才回退到浏览器语音合成。</p>
+        <p class="tip" style="margin:0">${voiceStatus}</p>
       </div>
 
       <div class="pref-title">练习流程</div>
@@ -1027,7 +1078,7 @@
           session.round.speed = speed
           persist()
         }
-        speak(el.dataset.text, speed)
+        speak(el.dataset.text, speed, el.dataset.audio)
         break
       }
       case 'theme-toggle': {

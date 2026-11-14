@@ -221,6 +221,9 @@
       ? item.senses[0].image
       : { path: null, motif: 'speech', altZh: item.zhText, altEn: item.enText, status: 'pending' }
   }
+  /** Optional pre-recorded clip declared in the content pack (from CSV).
+      null means the UI must fall back to browser speech synthesis. */
+  FI.itemAudio = function (item) { return item?.audio?.path || null }
 
   /* ── choice questions: meaning + image → pick from FOUR words ───
      The correct item is always present; the other three are sampled from
@@ -242,6 +245,7 @@
         promptZh: meaning.zh,
         promptEn: meaning.en,
         image: FI.itemImage(item, group.kind),
+        audioFile: FI.itemAudio(item),
         label: FI.itemLabel(item, group.kind),
         options: FI.shuffle([target, ...distractors], seed + i * 104729 + 17),
       }
@@ -293,6 +297,7 @@
         promptZh: meaning.zh,
         promptEn: meaning.en,
         audioText: group.kind === 'word' ? item.lemma : item.fiText,
+        audioFile: FI.itemAudio(item),
         image: FI.itemImage(item, group.kind),
         options: FI.shuffle([target, ...distractors], seed + i * 104729 + 17),
       }
@@ -367,6 +372,7 @@
         fiLine,
         image: FI.itemImage(item, group.kind),
         audioText: group.kind === 'word' ? item.lemma : item.fiText,
+        audioFile: FI.itemAudio(item),
         hints: [
           `首字母：${letters[0]}`,
           `共 ${letters.length} 个字母 · ${FI.countSyllables(answer)} 个音节`,

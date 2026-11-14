@@ -5,9 +5,10 @@
  *
  *   node scripts/validate-content.mjs --self-test
  */
-import { readFileSync, existsSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync, unlinkSync, existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
+import { ASSET_REVIEW_STATES, AUDIO_SOURCES } from './csv-pack.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const pack = JSON.parse(readFileSync(join(root, 'data', 'packs', 'a1-core.json'), 'utf8'))
@@ -23,11 +24,39 @@ const CASE_CEFR = {
 }
 const rank = (level) => LEVELS.indexOf(level)
 
+/** A declared clip must be complete, physically present and licensed. The
+    human-review state is a warning, not an error: generated assets are usable
+    during production but must not be mistaken for proofread content. */
+function validateAudio(audio, tag, stats) {
+  const errors = []
+  const warnings = []
+  if (!audio) return { errors, warnings }
+  stats.audioDeclared++
+  for (const key of ['path', 'source', 'license', 'durationSec', 'reviewStatus']) {
+    if (!(key in audio)) errors.push(`${tag}: audio.${key} missing`)
+  }
+  if (!audio.path) errors.push(`${tag}: audio.path missing`)
+  else if (!existsSync(join(root, audio.path))) errors.push(`${tag}: audio file not found: ${audio.path}`)
+  if (!AUDIO_SOURCES.includes(audio.source)) errors.push(`${tag}: invalid audio.source "${audio.source}"`)
+  if (!audio.license) errors.push(`${tag}: audio.license missing`)
+  if (audio.durationSec !== null && !(Number.isFinite(audio.durationSec) && audio.durationSec > 0)) {
+    errors.push(`${tag}: audio.durationSec must be null or a positive number`)
+  }
+  if (!ASSET_REVIEW_STATES.includes(audio.reviewStatus)) {
+    errors.push(`${tag}: invalid audio.reviewStatus "${audio.reviewStatus}"`)
+  } else if (audio.reviewStatus === 'human-verified') stats.audioReviewed++
+  return { errors, warnings }
+}
+
 function validatePack(p) {
   const errors = []
   const warnings = []
   const senses = new Map()
-  const stats = { words: 0, senses: 0, imagesReady: 0, imagesPending: 0, verbTypes: new Set(), basicCases: 0, withIpa: 0, withNumber: 0 }
+  const stats = {
+    words: 0, senses: 0, imagesReady: 0, imagesPending: 0, imagesReviewed: 0,
+    audioDeclared: 0, audioReviewed: 0,
+    verbTypes: new Set(), basicCases: 0, withIpa: 0, withNumber: 0,
+  }
 
   if (p.format !== 'finnish-learn-content') errors.push('pack.format must be finnish-learn-content')
   if (!p.version) errors.push('pack.version missing')
@@ -54,14 +83,22 @@ function validatePack(p) {
         if (sense.image.status === 'ready') {
           stats.imagesReady++
           if (!sense.image.path) errors.push(`${word.id}/${sense.id}: ready image has no path`)
-          else if (!existsSync(join(root, sense.image.path))) warnings.push(`${sense.image.path}: file not found`)
+          else if (!existsSync(join(root, sense.image.path))) {
+            errors.push(`${word.id}/${sense.id}: image file not found: ${sense.image.path}`)
+          }
         } else {
           stats.imagesPending++
           if (!sense.image.motif) errors.push(`${word.id}/${sense.id}: pending image needs a motif placeholder`)
         }
+        if (!ASSET_REVIEW_STATES.includes(sense.image.reviewStatus)) {
+          errors.push(`${word.id}/${sense.id}: invalid image.reviewStatus "${sense.image.reviewStatus}"`)
+        } else if (sense.image.reviewStatus === 'human-verified') stats.imagesReviewed++
         if (!sense.image.altZh || !sense.image.altEn) errors.push(`${word.id}/${sense.id}: image alt text missing`)
       }
     }
+    const wordAudio = validateAudio(word.audio, word.id, stats)
+    errors.push(...wordAudio.errors)
+    warnings.push(...wordAudio.warnings)
 
     const minRank = Math.min(...word.senses.map((s) => rank(s.cefr)))
     const derived = LEVELS[minRank]
@@ -133,7 +170,14 @@ function validatePack(p) {
     if (rank(sentence.cefr) < requiredRank) {
       errors.push(`${sentence.id}: cefr ${sentence.cefr} too low, requires ${LEVELS[requiredRank]}`)
     }
+    const sentenceAudio = validateAudio(sentence.audio, sentence.id, stats)
+    errors.push(...sentenceAudio.errors)
+    warnings.push(...sentenceAudio.warnings)
   }
+  const imagesAwaitingReview = stats.senses - stats.imagesReviewed
+  const audioAwaitingReview = stats.audioDeclared - stats.audioReviewed
+  if (imagesAwaitingReview > 0) warnings.push(`${imagesAwaitingReview} illustration(s) still awaiting human review`)
+  if (audioAwaitingReview > 0) warnings.push(`${audioAwaitingReview} audio clip(s) still awaiting human review`)
   return { errors, warnings, stats }
 }
 
@@ -172,6 +216,9 @@ function runSelfTest(p, gi) {
   const findSentence = (q, id) => q.sentences.find((s) => s.id === id)
   const findGroup = (q, id) => q.groups.find((g) => g.id === id)
   const base = { words: p.words, sentences: p.sentences, groups: gi.groups }
+  const audioFixture = (path = 'assets/audio/_validate-selftest.mp3') => ({
+    path, source: 'tts', license: 'own', durationSec: 1.2, reviewStatus: 'human-verified',
+  })
   const cases = [
     ['句子等级门槛', (q) => { findSentence(q, 'a2-s01').cefr = 'A1' }, 'too low'],
     ['词条等级派生', (q) => { findWord(q, 'talo').cefr = 'A2' }, 'min(senses)'],
@@ -184,6 +231,14 @@ function runSelfTest(p, gi) {
     ['分组不得超 5 条', (q) => { findGroup(q, 'A1-W-01').itemIds.push('kirja'); findGroup(q, 'A1-W-01').size = 6 }, 'group size'],
     ['分组等级一致', (q) => { findGroup(q, 'A1-W-01').level = 'B2' }, 'group level'],
     ['分组引用有效', (q) => { findGroup(q, 'A1-W-01').itemIds[0] = 'ghost' }, 'unknown item'],
+    ['成品图文件必须存在', (q) => { findWord(q, 'talo').senses[0].image.path = 'assets/illustrations/missing.png' }, 'image file not found'],
+    ['配图复核状态合法', (q) => { findWord(q, 'talo').senses[0].image.reviewStatus = 'approved' }, 'image.reviewStatus'],
+    ['音频文件必须存在', (q) => { findWord(q, 'talo').audio = audioFixture('assets/audio/missing.mp3') }, 'audio file not found'],
+    ['音频来源合法', (q) => { findWord(q, 'talo').audio = audioFixture(); findWord(q, 'talo').audio.source = 'radio' }, 'audio.source'],
+    ['音频许可证必填', (q) => { findWord(q, 'talo').audio = audioFixture(); findWord(q, 'talo').audio.license = '' }, 'audio.license'],
+    ['音频复核状态合法', (q) => { findWord(q, 'talo').audio = audioFixture(); findWord(q, 'talo').audio.reviewStatus = 'approved' }, 'audio.reviewStatus'],
+    ['音频时长合法', (q) => { findWord(q, 'talo').audio = audioFixture(); findWord(q, 'talo').audio.durationSec = -1 }, 'audio.durationSec'],
+    ['句子音频文件必须存在', (q) => { findSentence(q, 'a1-s01').audio = audioFixture('assets/audio/missing.mp3') }, 'audio file not found'],
   ]
   let passed = 0
   for (const [name, mutate, expected] of cases) {
@@ -197,8 +252,27 @@ function runSelfTest(p, gi) {
     if (hit) passed++
     else process.exitCode = 1
   }
-  console.log(`  self-test: ${passed}/${cases.length} negative cases rejected as expected`)
-  if (passed !== cases.length) process.exitCode = 1
+  const total = cases.length + 1
+  // Positive path: a complete clip with a real file passes cleanly. The stub
+  // exists only for the duration of this check and is never shipped.
+  const stubDir = join(root, 'assets', 'audio')
+  const stub = join(stubDir, '_validate-selftest.mp3')
+  mkdirSync(stubDir, { recursive: true })
+  writeFileSync(stub, 'ID3')
+  try {
+    const positive = { ...p, words: JSON.parse(JSON.stringify(p.words)), sentences: JSON.parse(JSON.stringify(p.sentences)) }
+    findWord(positive, 'talo').audio = audioFixture()
+    findSentence(positive, 'a1-s01').audio = audioFixture()
+    const res = validatePack(positive)
+    const clean = res.errors.length === 0
+    console.log(`  ${clean ? 'PASS' : 'FAIL'}  音频文件齐全时通过校验${clean ? '' : ' :: ' + res.errors.slice(0, 2).join('; ')}`)
+    if (clean) passed++
+    else process.exitCode = 1
+  } finally {
+    unlinkSync(stub)
+  }
+  console.log(`  content self-test: ${passed}/${total} checks passed`)
+  if (passed !== total) process.exitCode = 1
 }
 
 const { errors, warnings, stats } = validatePack(pack)
@@ -208,14 +282,15 @@ const allErrors = [...errors, ...groupErrors]
 console.log('Content pack:', pack.version)
 console.log(`  words ${stats.words} | senses ${stats.senses} | basic case forms ${stats.basicCases}`)
 console.log(`  ipa ${stats.withIpa} | noun/adjective number ${stats.withNumber}`)
-console.log(`  images ready ${stats.imagesReady} / motif placeholder ${stats.imagesPending}`)
+console.log(`  images ready ${stats.imagesReady} / motif placeholder ${stats.imagesPending} / human-reviewed ${stats.imagesReviewed}`)
+console.log(`  audio clips ${stats.audioDeclared} / human-reviewed ${stats.audioReviewed}`)
 console.log(`  verb types covered: ${[...stats.verbTypes].sort().join(', ')}`)
 console.log(`  sentences ${(pack.sentences ?? []).length} | groups ${groupIndex?.groups.length ?? 0}`)
 for (const warning of warnings) console.log(`  WARN  ${warning}`)
 for (const error of allErrors) console.log(`  ERROR ${error}`)
 
 if (process.argv.includes('--self-test')) {
-  console.log('Self-test (negative cases):')
+  console.log('Self-test (negative cases + audio positive case):')
   runSelfTest(pack, groupIndex)
 }
 

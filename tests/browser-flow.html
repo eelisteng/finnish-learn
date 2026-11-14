@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><title>浏览器端到端回归 · 6 种练习模式</title><link rel="stylesheet" href="../app/styles.css"></head>
+<body>
+<div id="app"></div><div id="modal-root"></div><div id="toast" class="toast"></div>
+<pre id="smoke" style="padding:20px;font:13px monospace">RUNNING</pre>
+<script>localStorage.removeItem('finnish-learn:v1'); window.FI_FAST_TEST = true</script>
+<script src="../app/data.js"></script>
+<script src="../app/grouping.js"></script>
+<script src="../app/store.js"></script>
+<script src="../app/bgm.js"></script>
+<script src="../app/main.js"></script>
+<script>
+(async function () {
+  const out = []
+  const ok = (name, cond, extra = '') => out.push(`${cond ? 'PASS' : 'FAIL'} ${name}${cond ? '' : ' :: ' + extra}`)
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms))
+  const $ = (s) => document.querySelector(s)
+  const $$ = (s) => [...document.querySelectorAll(s)]
+  const click = (s) => { const el = $(s); if (!el) { out.push('FAIL missing ' + s); return false } el.click(); return true }
+  const TICK = 32 // FI_FAST_TEST collapses all transition timers to ~6ms
+  const pack = window.FI_DATA.pack
+  const wordById = (id) => pack.words.find((w) => w.id === id)
+  const zhToLemma = (zh) => pack.words.find((w) => w.senses[0].zh === zh)?.lemma
+  const lemmaToZh = (lemma) => pack.words.find((w) => w.lemma === lemma)?.senses[0].zh
+  const headIs = (text) => $('.stage-head h3')?.textContent.includes(text)
+  const audioWord = () => $('[data-act="speak"][data-text]')?.dataset.text
+  const groupLemmas = window.FI_DATA.groups.groups
+    .find((g) => g.id === 'A1-W-01').itemIds.map((id) => wordById(id).lemma)
+
+  // Fill one underline per letter, dispatching real input events.
+  function fillSlots(lemma) {
+    const chars = Array.from(lemma)
+    $$('input.slot').forEach((el) => {
+      const i = Number(el.dataset.slot)
+      el.value = chars[i] ?? ''
+      el.dispatchEvent(new Event('input', { bubbles: true }))
+    })
+  }
+  // Answer every question of a select-style round.
+  async function driveSelect(count, targetFn, optionSel, labelFn, wrongFirst = false) {
+    let green = false, red = false, firstFeedback = ''
+    for (let i = 0; i < count; i++) {
+      const target = targetFn()
+      const opts = $$(optionSel)
+      const correctIdx = opts.findIndex((o) => labelFn(o).includes(target))
+      if (correctIdx < 0) { out.push('FAIL target not in options :: ' + target); return { green, red, firstFeedback } }
+      const pickIdx = wrongFirst && i === 0 ? (correctIdx + 1) % opts.length : correctIdx
+      opts[pickIdx].click()
+      if ($(optionSel + '.correct')) green = true
+      if ($(optionSel + '.wrong')) red = true
+      if (wrongFirst && i === 0) {
+        firstFeedback = $('.feedback')?.textContent ?? ''
+        ok(optionSel + ': wrong pick turns red and reveals correct', $(optionSel + '.wrong') !== null && $(optionSel + '.reveal') !== null)
+      }
+      await wait(TICK)
+    }
+    return { green, red, firstFeedback }
+  }
+  async function driveLetters(count, targetFn, opts = {}) {
+    for (let i = 0; i < count; i++) {
+      const lemma = targetFn()
+      if (opts.wrongFirst && i === 0) fillSlots('x'.repeat(Array.from(lemma).length))
+      else {
+        if (opts.hintOn === i) click('[data-act="hint"]')
+        fillSlots(lemma)
+      }
+      click('[data-act="submit"]')
+      if (opts.wrongFirst && i === 0) ok('letter round: wrong spelling rejected', $('.feedback.no') !== null)
+      else if (!$('.feedback.ok')) ok('letter answer accepted #' + (i + 1), false, 'expected ok feedback for ' + lemma)
+      await wait(TICK)
+    }
+  }
+  function matchAll() {
+    let guard = 0
+    while ($$('.mtile').length && guard++ < 20) {
+      const left = $('[data-act="match-left"]')
+      if (!left) break
+      const id = left.dataset.id
+      left.click() // render() replaces the DOM, so re-query the right tile
+      const right = $(`[data-act="match-right"][data-id="${id}"]`)
+      if (!right) { out.push('FAIL unmatched right tile :: ' + id); break }
+      right.click()
+    }
+  }
+  // Open the settings modal, click a radio/checkbox, then save.
+  function setPref(name, value) {
+    click('[data-act="settings"]')
+    const radio = $(`input[name="${name}"][value="${value}"]`)
+    if (radio) radio.click()
+    click('[data-modal="settings-save"]')
+  }
+
+  try {
+    /* ── home & settings ───────────────────────────────────── */
+    ok('home: 6 level tabs', $$('.leveltab').length === 6)
+    ok('home: A1 shows 5 group cards', $$('.gcard').length === 5)
+    ok('home: hero shows the pipeline', $('.hero p')?.textContent.includes('听选') && $('.hero p')?.textContent.includes('听写'))
+    ok('home: hero no longer mentions 拼写', !$('.hero p')?.textContent.includes('拼写'))
+    ok('home: quick theme + music toggles', $('[data-act="theme-toggle"]') && $('[data-act="bgm-toggle"]'))
+    ok('home: B1 has both word and sentence groups', (() => { $$('.leveltab').find((b) => b.dataset.level === 'B1').click(); return $$('.gcard').length === 3 && $$('.gid').some((x) => x.textContent === 'B1-S-01') })())
+    $$('.leveltab').find((b) => b.dataset.level === 'A1').click()
+
+    click('[data-act="settings"]')
+    ok('settings: six modes listed', $$('.mode-list .mode-row').length === 6)
+    ok('settings: spelling mode removed', !$('.mode-list')?.textContent.includes('单词拼写'))
+    ok('settings: word-only modes flagged', $('.mode-list')?.textContent.includes('仅单词组'))
+    ok('settings: dictation enabled by default', $('[data-mode="dictation"]')?.checked === true)
+    ok('settings: three meaning-language options', $$('input[name="meaningLang"]').length === 3)
+    ok('settings: three theme options', $$('input[name="theme"]').length === 3)
+    ok('settings: background music switch', $('[data-bgm]') !== null && $('[data-bgm]').checked === false)
+    click('[data-modal="preset-slim"]')
+    ok('settings: slim preset drops find-image', !$('.hero p')?.textContent.includes('找图片'))
+    click('[data-act="settings"]')
+    click('[data-modal="preset-full"]')
+    ok('settings: full preset restored', $('.hero p')?.textContent.includes('找图片') && window.FI.Store.load().preferences.enabledModes.length === 6)
+
+    /* ── quick theme / music toggles ───────────────────────── */
+    const initialTheme = window.FI.Store.load().preferences.theme
+    click('[data-act="theme-toggle"]')
+    const cycledTheme = window.FI.Store.load().preferences.theme
+    ok('theme: quick toggle changes the saved preference', cycledTheme !== initialTheme)
+    ok('theme: html data-theme is applied', ['light', 'dark'].includes(document.documentElement.dataset.theme))
+    setPref('theme', 'dark')
+    ok('theme: dark setting paints the page dark', document.documentElement.dataset.theme === 'dark' && window.FI.Store.load().preferences.theme === 'dark')
+    setPref('theme', 'system')
+    ok('theme: system setting persisted', window.FI.Store.load().preferences.theme === 'system')
+
+    click('[data-act="bgm-toggle"]')
+    ok('music: toggle turns the preference on', window.FI.Store.load().preferences.bgm === true)
+    ok('music: audio engine is running or unavailable', window.FI.Bgm.isOn() === true || window.FI.Bgm.available === false)
+    ok('music: button reflects the on state', /音乐\s*开/.test($('[data-act="bgm-toggle"]')?.textContent ?? ''))
+    click('[data-act="bgm-toggle"]')
+    ok('music: toggle turns it back off', window.FI.Store.load().preferences.bgm === false && window.FI.Bgm.isOn() === false)
+
+    /* ── ① memorize ─────────────────────────────────────────── */
+    click('[data-act="start-group"][data-id="A1-W-01"]')
+    ok('memorize: lemma talo', $('.lemma')?.textContent.trim() === 'talo')
+    ok('memorize: ipa shown', $('.ipa')?.textContent.includes('ˈtɑlo'))
+    ok('memorize: 单复数 shown', $('.kv')?.textContent.includes('单数') && $('.kv')?.textContent.includes('复数'))
+    ok('memorize: zh + en gloss', $('.gloss-box .zh')?.textContent.length > 0 && $('.gloss-box .en')?.textContent.length > 0)
+    ok('memorize: pos badge', $('.badges')?.textContent.includes('名词'))
+    ok('memorize: case table collapsed by default', $('.cases') !== null && $('details.more').open === false)
+    ok('learn head: 8 stage chips', $$('.learn-head .step').length === 8)
+
+    for (let i = 0; i < 5; i++) { click('[data-act="mem-next"]'); if (i < 4) await wait(TICK / 2) }
+    ok('auto transition banner', $('.stage')?.textContent.includes('自动进入选词模式'))
+    await wait(TICK)
+    ok('auto-entered choice phase', headIs('选词模式'))
+
+    /* ── ② choice: exactly four options ─────────────────────── */
+    ok('choice: 4 in-group options', $$('.opt').length === 4)
+    ok('choice: image present', $('.quiz-pic') !== null)
+    ok('choice: no ipa/pos/case on card', !$('.stage')?.textContent.includes('音标') && !$('.stage')?.textContent.includes('强词干'))
+    let cr = await driveSelect(5, () => zhToLemma($('.quiz-prompt .zh')?.textContent), '.opt', (o) => o.textContent, true)
+    ok('choice: saw green and red feedback', cr.green && cr.red)
+    ok('choice result: 4/5 with one wrong', $('.score-txt h4')?.textContent.includes('4 / 5'))
+    ok('choice result: both continue and retry available', $('[data-act="result-continue"]') && $('[data-act="result-retry"]'))
+
+    click('[data-act="result-retry"]')
+    ok('retry stays inside the same mode (choice)', headIs('选词模式') && $('.stage-head .pill')?.textContent.includes('1 / 1'))
+    ok('retry marked as targeted round', $('.learn-head')?.textContent.includes('只练错词'))
+    cr = await driveSelect(1, () => zhToLemma($('.quiz-prompt .zh')?.textContent), '.opt', (o) => o.textContent, false)
+    ok('choice retry: perfect hides retry button', $('.score-txt h4')?.textContent.includes('1 / 1') && !$('[data-act="result-retry"]'))
+    click('[data-act="result-continue"]')
+
+    /* ── ③ listen: four picture+meaning cards, no Finnish word ── */
+    ok('entered listen round', headIs('听选模式'))
+    ok('listen: audio button carries the spoken word', audioWord() === 'talo')
+    ok('listen: normal + slow playback buttons', $$('.listen-hero [data-act="speak"]').length === 2 &&
+      $$('.listen-hero [data-act="speak"]').some((b) => b.dataset.speed === 'slow'))
+    const listenSpeeds = $$('.listen-hero [data-act="speak"]').map((b) => Number(b.dataset.rate))
+    ok('listen: slow rate is at most half the normal rate', Math.min(...listenSpeeds) <= Math.max(...listenSpeeds) / 2)
+    ok('listen: four options', $$('.optcard').length === 4)
+    ok('listen: every option has a picture', $$('.optcard-pic').length === 4)
+    ok('listen: every option has a meaning', $$('.optcard-meaning').length === 4 &&
+      $$('.optcard-meaning').every((m) => m.textContent.trim().length > 0))
+    ok('listen: NO option shows a Finnish word', $$('.optcard-label').length === 0 &&
+      $$('.optcard').every((o) => groupLemmas.every((l) => !o.textContent.includes(l))))
+    ok('listen: meaning is not shown in the prompt', $('.quiz-prompt .zh') === null)
+    cr = await driveSelect(5, () => lemmaToZh(audioWord()), '.optcard', (o) => o.querySelector('.optcard-meaning')?.textContent ?? '', true)
+    ok('listen: green/red feedback on picture cards', cr.green && cr.red)
+    ok('listen: feedback does not print the answer word', cr.firstFeedback.length > 0 && !cr.firstFeedback.includes('talo'))
+    ok('listen result shown', headIs('本轮结果'))
+    click('[data-act="result-continue"]')
+
+    /* ── ④ find-image ──────────────────────────────────────── */
+    ok('entered find-image round', headIs('找图片模式'))
+    ok('find-image: exactly four text-only options', $$('.optcard').length === 4 && $('.optcards.text-only') !== null)
+    ok('find-image: options carry no pictures', $$('.optcard .optcard-pic').length === 0)
+    ok('find-image: one picture shown in the prompt', $$('.quiz-prompt .quiz-pic').length === 1)
+    ok('find-image: zh + en meaning prompt', $('.quiz-prompt .zh')?.textContent.length > 0 && $('.quiz-prompt .en')?.textContent.length > 0)
+    await driveSelect(5, () => zhToLemma($('.quiz-prompt .zh')?.textContent), '.optcard', (o) => o.querySelector('.optcard-label')?.textContent ?? '', false)
+    ok('find-image result: all correct', $('.score-txt h4')?.textContent.includes('5 / 5'))
+    click('[data-act="result-continue"]')
+
+    /* ── ⑤ match ───────────────────────────────────────────── */
+    ok('entered match round', headIs('单词匹配模式'))
+    ok('match: two rows of five tiles', $$('.match-row').length === 2 && $$('.mtile').length === 10)
+    ok('match: rows are not pre-aligned', (() => {
+      const l = $$('[data-act="match-left"]').map((x) => x.dataset.id)
+      const r = $$('[data-act="match-right"]').map((x) => x.dataset.id)
+      return l.some((id, i) => id !== r[i])
+    })())
+    const firstId = $('[data-act="match-left"]')?.dataset.id
+    $('[data-act="match-left"]').click()
+    const wrongRight = $$('[data-act="match-right"]').find((x) => x.dataset.id !== firstId)
+    wrongRight?.click()
+    ok('match: wrong pair flashes red and stays on board', $('.mtile.wrong') !== null && $$('.mtile').length === 10)
+    await wait(TICK)
+    ok('match: red flash clears', $('.mtile.wrong') === null)
+    matchAll()
+    ok('match: all tiles disappeared', $$('.mtile').length === 0 && $('.stage')?.textContent.includes('都消失了'))
+    await wait(TICK)
+    ok('match result: score below 100 after a mismatch', Number($('.score-ring i')?.textContent.replace('%', '')) < 100)
+    ok('match result: retry offered for mismatched words', $('[data-act="result-retry"]') !== null)
+    click('[data-act="result-retry"]')
+    ok('match retry: only mismatched words remain', headIs('单词匹配模式') && $$('.mtile').length < 10)
+    matchAll()
+    await wait(TICK)
+    ok('match retry: perfect result hides retry', !$('[data-act="result-retry"]'))
+    click('[data-act="result-continue"]')
+
+    /* ── ⑥ cloze: letter slots + illustration ────────────────── */
+    ok('entered cloze round', headIs('填空模式'))
+    ok('cloze: whole-word input is gone', $('#answer-input') === null)
+    ok('cloze: underlines plus some revealed letters', $$('input.slot').length > 0 && $$('.slot.fixed').length > 0)
+    ok('cloze: not every letter is revealed', $$('input.slot').length < Array.from(zhToLemma($('.cloze-q .zh')?.textContent) ?? '').length)
+    ok('cloze: illustration added beside the meaning', $('.cloze-with-pic .cloze-pic') !== null)
+    ok('cloze: virtual Finnish letter bar', $$('[data-act="slot-letter"]').length === 5)
+    ok('cloze: zh/en meaning shown', $('.cloze-q .zh')?.textContent.length > 0)
+    await driveLetters(5, () => zhToLemma($('.cloze-q .zh')?.textContent))
+    ok('cloze result shown', headIs('本轮结果'))
+    click('[data-act="result-continue"]')
+
+    /* ── ⑦ dictation ───────────────────────────────────────── */
+    ok('entered dictation round', headIs('听写模式'))
+    ok('dictation: every letter is an underline', $$('.slot.fixed').length === 0 && $$('input.slot').length === 4)
+    ok('dictation: normal + slow speed', $$('.audio-row [data-act="speak"]').length === 2 &&
+      $$('.audio-row [data-act="speak"]').some((b) => b.dataset.speed === 'slow'))
+    ok('dictation: picture shown', $('.dictation-prompt .quiz-pic') !== null)
+    ok('dictation: meaning not shown before hints', $('.cloze-q .zh') === null)
+    await driveLetters(5, () => audioWord(), { wrongFirst: true, hintOn: 1 })
+    ok('dictation result: 4/5 with one wrong and one hint', $('.score-txt h4')?.textContent.includes('4 / 5'))
+    ok('dictation result: wrong + hinted words both listed', $('.wrong-list')?.textContent.includes('答错') && $('.wrong-list')?.textContent.includes('用过提示'))
+    ok('dictation result: retry covers 2 words', $('[data-act="result-retry"]')?.textContent.includes('2 个词'))
+    click('[data-act="result-retry"]')
+    ok('dictation retry: 2 questions, no hints used', headIs('听写模式') && $('.stage-head .pill')?.textContent.includes('1 / 2'))
+    await driveLetters(2, () => audioWord())
+    ok('dictation retry: perfect hides retry', !$('[data-act="result-retry"]'))
+    click('[data-act="result-continue"]')
+
+    /* ── complete & persistence ────────────────────────────── */
+    ok('complete: summary shown', headIs('本组完成'))
+    ok('complete: all six mode scores shown', $$('.complete-grid div').length >= 7)
+    ok('complete: next group offered', $('[data-act="complete-next"]')?.textContent.includes('A1-W-02'))
+    ok('complete: pause offered', $('[data-act="complete-pause"]') !== null)
+    click('[data-act="complete-pause"]')
+    ok('home: group marked completed', $('.gcard.done') !== null && $('.gcard.done .gid')?.textContent === 'A1-W-01')
+    ok('home: stats show 1 completed', $('.stat b')?.textContent.includes('1'))
+
+    const st = window.FI.Store.load()
+    ok('store: completed group persisted', st.groups['A1-W-01']?.status === 'completed')
+    ok('store: mistake book has wrong words', Object.keys(st.mistakes).length >= 2)
+    ok('store: events per mode recorded', ['choice_round', 'listen_round', 'findImage_round', 'match_round', 'cloze_round', 'dictation_round', 'group_completed']
+      .every((t) => st.eventLog.some((e) => e.type === t)))
+    ok('store: no spelling event exists', !st.eventLog.some((e) => e.type.includes('spelling')))
+    ok('store: completion event carries per-mode scores', Object.keys(st.eventLog.at(-1).payload.modes ?? {}).length === 6)
+    ok('store: display preferences persisted', st.preferences.meaningLang === 'both' && st.preferences.theme === 'system' && st.preferences.bgm === false)
+
+    /* ── meaning-language preference actually changes the UI ─── */
+    setPref('meaningLang', 'zh')
+    click('[data-act="start-group"][data-id="A1-W-02"]')
+    ok('zh-only: memorize shows Chinese but no English', $('.gloss-box .zh') !== null && $('.gloss-box .en') === null)
+    click('[data-act="pause"]')
+    click('[data-act="discard"]')
+    setPref('meaningLang', 'en')
+    click('[data-act="start-group"][data-id="A1-W-02"]')
+    ok('en-only: memorize shows English but no Chinese', $('.gloss-box .en.solo') !== null && $('.gloss-box .zh') === null)
+    for (let i = 0; i < 5; i++) { click('[data-act="mem-next"]'); if (i < 4) await wait(TICK / 2) }
+    await wait(TICK)
+    ok('en-only: choice prompt also shows English only', headIs('选词模式') && $('.quiz-prompt .en.solo') !== null && $('.quiz-prompt .zh') === null)
+    click('[data-act="pause"]')
+    click('[data-act="discard"]')
+    setPref('meaningLang', 'both')
+    ok('meaning language restored', window.FI.Store.load().preferences.meaningLang === 'both')
+
+    /* ── pause / resume of a mid-pipeline session ───────────── */
+    click('[data-act="start-group"][data-id="A1-W-02"]')
+    click('[data-act="mem-next"]')
+    click('[data-act="pause"]')
+    ok('pause: resume banner shown', $('.resume')?.textContent.includes('背词模式'))
+    click('[data-act="resume"]')
+    ok('resume: back in memorize at card 2', headIs('背词模式') && $('.stage-head .pill')?.textContent.includes('2 / 5'))
+    click('[data-act="pause"]')
+    click('[data-act="discard"]')
+    ok('discard: resume banner gone', $('.resume') === null)
+  } catch (err) {
+    out.push('FAIL exception :: ' + (err && err.stack ? err.stack : String(err)))
+  }
+  document.getElementById('smoke').textContent = out.join('\n') + `\n\nTOTAL ${out.filter((x) => x.startsWith('PASS')).length} passed, ${out.filter((x) => x.startsWith('FAIL')).length} failed`
+})()
+</script>
+</body>
+</html>

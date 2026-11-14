@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finnish Learn · 词卡预览 · A1–C2 分级 / 每义项一图 / 动词 6 类型</title>
+<style>
+  :root{--bg:#F5F7FA;--card:#FFFFFF;--line:#E2E8F0;--text:#1E293B;--muted:#64748B;--blue:#185FA5;--blue-bg:#E6F1FB;--teal:#0F6E56;--teal-bg:#E1F5EE;--amber:#BA7517;--amber-bg:#FAEEDA}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.6}
+  .wrap{max-width:1120px;margin:0 auto;padding:32px 20px 56px}
+  h1{font-size:22px;font-weight:500;margin:0 0 6px}
+  h2{font-size:16px;font-weight:500;margin:36px 0 14px}
+  .sub{color:var(--muted);font-size:13px;margin:0 0 18px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+  .chip{font-size:12px;padding:3px 10px;border-radius:999px;background:var(--blue-bg);color:var(--blue)}
+  .chip.teal{background:var(--teal-bg);color:var(--teal)}
+  .chip.amber{background:var(--amber-bg);color:var(--amber)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .head{display:flex;gap:14px;align-items:flex-start}
+  .pic{width:112px;height:112px;flex:0 0 112px;border-radius:10px;background:var(--bg);border:1px solid var(--line);object-fit:contain}
+  .pic-empty{width:112px;height:112px;flex:0 0 112px;border-radius:10px;border:1px dashed #B4B2A9;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;text-align:center;padding:8px}
+  .lemma{font-size:26px;font-weight:500;letter-spacing:.5px;margin:0 0 4px}
+  .gloss{font-size:13px;color:var(--muted);margin:0 0 8px}
+  .badges{display:flex;flex-wrap:wrap;gap:6px}
+  .badge{font-size:11px;padding:2px 8px;border-radius:6px;background:var(--blue-bg);color:var(--blue)}
+  .badge.type{background:var(--amber-bg);color:var(--amber)}
+  .badge.level{background:var(--teal-bg);color:var(--teal)}
+  .stems{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;background:var(--bg);border-radius:10px;padding:12px;margin:16px 0 12px}
+  .stems div span{display:block;font-size:11px;color:var(--muted)}
+  .stems div b{font-size:14px;font-weight:500;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .label{font-size:12px;color:var(--muted);margin:0 0 6px}
+  table{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
+  th{text-align:left;font-size:11px;color:var(--muted);font-weight:400;padding:5px 4px;border-bottom:1px solid var(--line)}
+  td{padding:5px 4px;border-bottom:1px solid #F1F5F9}
+  td.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .rowline{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px;margin:14px 0 0}
+  .rowline div{background:var(--bg);border-radius:8px;padding:8px 10px}
+  .rowline span{display:block;font-size:11px;color:var(--muted)}
+  .rowline b{font-size:13px;font-weight:500;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .note{font-size:12px;color:var(--muted);margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line)}
+  .wide{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .wide table{font-size:13px}
+  .wide th{font-size:12px}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .foot{margin-top:28px;font-size:12px;color:var(--muted);line-height:1.9}
+  .foot b{font-weight:500;color:var(--text)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Finnish Learn · 词卡预览</h1>
+  <p class="sub">A1–C2 分级 · 每个义项配一幅图 · 名词显示词干与基本格 · 动词显示 6 种类型</p>
+  <div class="chips">
+    <span class="chip">决策已按推荐锁定</span>
+    <span class="chip teal">本地优先 + 文件导入导出</span>
+    <span class="chip amber">3 张样例插画已生成</span>
+    <span class="chip">V1 零后端</span>
+    <span class="chip teal">6 种练习模式</span>
+    <a class="chip" href="index.html" style="text-decoration:none;font-weight:600">→ 打开分级学习流程</a>
+  </div>
+
+  <h2>词条卡</h2>
+  <div class="grid">
+
+    <div class="card">
+      <div class="head">
+        <img class="pic" src="assets/illustrations/talo.png" alt="一栋浅蓝色屋顶的北欧小房子">
+        <div>
+          <p class="lemma">talo</p>
+          <p class="gloss">房子；房屋 · house</p>
+          <div class="badges"><span class="badge level">A1</span><span class="badge">名词</span></div>
+        </div>
+      </div>
+      <div class="stems">
+        <div><span>强词干</span><b>talo-</b></div>
+        <div><span>弱词干</span><b>talo-</b></div>
+        <div><span>元音和谐</span><b>back</b></div>
+        <div><span>变格类</span><b>valo / Kotus 1</b></div>
+      </div>
+      <p class="label">基本格 · A1（6 个）</p>
+      <table>
+        <tr><th style="width:34%">格</th><th style="width:28%">形式</th><th style="width:18%">后缀</th><th style="width:20%">词干</th></tr>
+        <tr><td>主格 nominatiivi</td><td class="mono">talo</td><td class="mono">—</td><td>强</td></tr>
+        <tr><td>属格 genetiivi</td><td class="mono">talon</td><td class="mono">-n</td><td>弱</td></tr>
+        <tr><td>部分格 partitiivi</td><td class="mono">taloa</td><td class="mono">-a</td><td>强</td></tr>
+        <tr><td>内格 inessiivi</td><td class="mono">talossa</td><td class="mono">-ssa</td><td>弱</td></tr>
+        <tr><td>出格 elatiivi</td><td class="mono">talosta</td><td class="mono">-sta</td><td>弱</td></tr>
+        <tr><td>入格 illatiivi</td><td class="mono">taloon</td><td class="mono">-Vn</td><td>强</td></tr>
+      </table>
+      <p class="note">插画：generated / own · 已裁掉平台水印 · 中文释义待人工校对</p>
+    </div>
+
+    <div class="card">
+      <div class="head">
+        <img class="pic" src="assets/illustrations/kauppa.png" alt="一间带条纹遮阳篷的小商店">
+        <div>
+          <p class="lemma">kauppa</p>
+          <p class="gloss">商店；店铺 · shop, store</p>
+          <div class="badges"><span class="badge level">A1</span><span class="badge">名词</span><span class="badge type">强弱变换 pp~p</span></div>
+        </div>
+      </div>
+      <div class="stems">
+        <div><span>强词干</span><b>kauppa-</b></div>
+        <div><span>弱词干</span><b>kaupa-</b></div>
+        <div><span>元音和谐</span><b>back</b></div>
+        <div><span>变格类</span><b>koira / Kotus 10</b></div>
+      </div>
+      <p class="label">基本格 · A1（6 个）</p>
+      <table>
+        <tr><th style="width:34%">格</th><th style="width:28%">形式</th><th style="width:18%">后缀</th><th style="width:20%">词干</th></tr>
+        <tr><td>主格 nominatiivi</td><td class="mono">kauppa</td><td class="mono">—</td><td>强</td></tr>
+        <tr><td>属格 genetiivi</td><td class="mono">kaupan</td><td class="mono">-n</td><td>弱</td></tr>
+        <tr><td>部分格 partitiivi</td><td class="mono">kauppaa</td><td class="mono">-a</td><td>强</td></tr>
+        <tr><td>内格 inessiivi</td><td class="mono">kaupassa</td><td class="mono">-ssa</td><td>弱</td></tr>
+        <tr><td>出格 elatiivi</td><td class="mono">kaupasta</td><td class="mono">-sta</td><td>弱</td></tr>
+        <tr><td>入格 illatiivi</td><td class="mono">kauppaan</td><td class="mono">-Vn</td><td>强</td></tr>
+      </table>
+      <p class="note">只存 lemma 生成不出 kaupassa —— 强弱词干是必需字段</p>
+    </div>
+
+    <div class="card">
+      <div class="head">
+        <img class="pic" src="assets/illustrations/puhua.png" alt="两个人坐着交谈，上方有空白对话框">
+        <div>
+          <p class="lemma">puhua</p>
+          <p class="gloss">说；讲话 · to speak</p>
+          <div class="badges"><span class="badge level">A1</span><span class="badge">动词</span><span class="badge type">类型 1</span></div>
+        </div>
+      </div>
+      <div class="stems">
+        <div><span>不定式词尾</span><b>V + -a/-ä</b></div>
+        <div><span>现在时词干</span><b>puhu-</b></div>
+        <div><span>词干规则</span><b>去 -a/-ä</b></div>
+        <div><span>Kotus 变位类</span><b>52</b></div>
+      </div>
+      <div class="rowline">
+        <div><span>1sg 现在</span><b>puhun</b></div>
+        <div><span>3sg 过去</span><b>puhui</b></div>
+        <div><span>NUT 分词</span><b>puhunut</b></div>
+      </div>
+      <p class="note">动词不显示格表，改为「类型 + 变位」卡；情境图用于动作类词，而非物件图</p>
+    </div>
+
+    <div class="card">
+      <div class="head">
+        <div class="pic-empty">插画待生成<br>status: pending</div>
+        <div>
+          <p class="lemma">tarvita</p>
+          <p class="gloss">需要 · to need</p>
+          <div class="badges"><span class="badge level">A2</span><span class="badge">动词</span><span class="badge type">类型 5</span></div>
+        </div>
+      </div>
+      <div class="stems">
+        <div><span>不定式词尾</span><b>-ita/-itä</b></div>
+        <div><span>现在时词干</span><b>tarvitse-</b></div>
+        <div><span>词干规则</span><b>加 -itse-</b></div>
+        <div><span>Kotus 变位类</span><b>69</b></div>
+      </div>
+      <div class="rowline">
+        <div><span>1sg 现在</span><b>tarvitsen</b></div>
+        <div><span>3sg 过去</span><b>tarvitsi</b></div>
+        <div><span>NUT 分词</span><b>tarvinnut</b></div>
+      </div>
+      <p class="note">未配图时显示占位卡，不影响学习；alt 文本已预置，游戏模式下隐藏图片避免露答案</p>
+    </div>
+  </div>
+
+  <h2>动词 6 种类型速查</h2>
+  <div class="wide">
+    <table>
+      <tr><th style="width:8%">类型</th><th style="width:26%">不定式词尾</th><th style="width:28%">现在时词干规则</th><th style="width:28%">例词</th><th style="width:10%">Kotus</th></tr>
+      <tr><td>1</td><td class="mono">元音 + -a/-ä</td><td>去掉词尾 -a/-ä</td><td class="mono">puhua → puhu- → puhun</td><td>52</td></tr>
+      <tr><td>2</td><td class="mono">-da/-dä</td><td>去掉 -da/-dä</td><td class="mono">syödä → syö- → syön</td><td>64</td></tr>
+      <tr><td>3</td><td class="mono">辅音 + -la/-na/-ra/-sta</td><td>去词尾，加 -e-</td><td class="mono">tulla → tule- → tulen</td><td>67</td></tr>
+      <tr><td>4</td><td class="mono">元音 + -ta/-tä</td><td>去 -ta/-tä，加 -a/-ä-</td><td class="mono">haluta → halua- → haluan</td><td>73</td></tr>
+      <tr><td>5</td><td class="mono">-ita/-itä</td><td>去 -ta/-tä，加 -itse-</td><td class="mono">tarvita → tarvitse- → tarvitsen</td><td>69</td></tr>
+      <tr><td>6</td><td class="mono">-eta/-etä</td><td>去 -ta/-tä，加 -ne-</td><td class="mono">vanheta → vanhene- → vanhenen</td><td>72</td></tr>
+    </table>
+    <p class="note">教学上的 6 类给用户看；Kotus 27 个变位类（编号 52–78）给词形生成器用。上一轮更正的 78 类 = 51 名词变格类 + 27 动词变位类。不规则动词 olla 单独标 irregular。</p>
+  </div>
+
+  <div class="foot">
+    <b>内容来源</b>：Kotus / Kielipankki 词表（CC BY 4.0）取 lemma 与形态，Wiktionary（CC BY-SA）取释义与变格表，语料词频定顺序，YKI/OPH 等级描述与 9 类主题作分级参照，中文释义与句子自产并人工校对。CEFR 与 YKI 都不发布官方词表，级别由本产品派生。<br>
+    <b>插画流水线</b>：固定风格模板 + 固定 seed → 按 sense 生成 prompt → 人工审核队列 → WebP 多尺寸 / 懒加载 → 游戏模式隐藏图片。样例 3 张已生成并裁掉平台水印，其余词为 pending 占位。<br>
+    <b>学习流程</b>：每组 5 条，背词 → 选词 → 听选 → 找图片 → 单词匹配 → 填空 → 听写 → 完成；「单词拼写」因与逐字母填空重复已移除。选词/听选/找图均为 4 个选项，听选选项只给图片与释义、不显示芬兰语单词。流程可在首页「设置」里开关，句子组自动跳过仅适用于单词的模式。每个模式结束都可「继续下一个流程」或「只练错词重来」。<br>
+    <b>个人化设置</b>：释义可选「只显示中文 / 只显示英文 / 中英文都显示」，另有浅色 / 深色 / 跟随系统三档主题，以及可开关的低音量背景音乐（浏览器实时合成，无需音频文件）。偏好全部存在本机并随进度 JSON 一起导出。<br>
+    <b>校验</b>：<span class="mono">node scripts/validate-content.mjs --self-test</span> 检查分级派生、句子等级门槛、每义项配图、6 基本格、动词类型范围与反例；<span class="mono">node scripts/test-flow.mjs</span> 与 <span class="mono">tests/browser-flow.html</span> 覆盖 6 种模式的出题与交互、偏好与主题。
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,330 @@
+{
+  "format": "finnish-learn-groups",
+  "schema": 1,
+  "contentVersion": "fi-core-2026.11-demo",
+  "groupSize": 5,
+  "levels": [
+    {
+      "level": "A1",
+      "wordCount": 15,
+      "sentenceCount": 10,
+      "wordGroups": 3,
+      "sentenceGroups": 2,
+      "sentenceStatus": "ready"
+    },
+    {
+      "level": "A2",
+      "wordCount": 10,
+      "sentenceCount": 5,
+      "wordGroups": 2,
+      "sentenceGroups": 1,
+      "sentenceStatus": "ready"
+    },
+    {
+      "level": "B1",
+      "wordCount": 10,
+      "sentenceCount": 5,
+      "wordGroups": 2,
+      "sentenceGroups": 1,
+      "sentenceStatus": "ready"
+    },
+    {
+      "level": "B2",
+      "wordCount": 5,
+      "sentenceCount": 5,
+      "wordGroups": 1,
+      "sentenceGroups": 1,
+      "sentenceStatus": "ready"
+    },
+    {
+      "level": "C1",
+      "wordCount": 5,
+      "sentenceCount": 5,
+      "wordGroups": 1,
+      "sentenceGroups": 1,
+      "sentenceStatus": "ready"
+    },
+    {
+      "level": "C2",
+      "wordCount": 5,
+      "sentenceCount": 5,
+      "wordGroups": 1,
+      "sentenceGroups": 1,
+      "sentenceStatus": "ready"
+    }
+  ],
+  "groups": [
+    {
+      "id": "A1-W-01",
+      "level": "A1",
+      "kind": "word",
+      "index": 1,
+      "size": 5,
+      "partial": false,
+      "title": "生活场所与物件",
+      "itemIds": [
+        "talo",
+        "kauppa",
+        "katu",
+        "kirja",
+        "auto"
+      ]
+    },
+    {
+      "id": "A1-W-02",
+      "level": "A1",
+      "kind": "word",
+      "index": 2,
+      "size": 5,
+      "partial": false,
+      "title": "饮食",
+      "itemIds": [
+        "vesi",
+        "kahvi",
+        "maito",
+        "leipa",
+        "ruoka"
+      ]
+    },
+    {
+      "id": "A1-W-03",
+      "level": "A1",
+      "kind": "word",
+      "index": 3,
+      "size": 5,
+      "partial": false,
+      "title": "常用动词",
+      "itemIds": [
+        "olla",
+        "puhua",
+        "syoda",
+        "tulla",
+        "haluta"
+      ]
+    },
+    {
+      "id": "A1-S-01",
+      "level": "A1",
+      "kind": "sentence",
+      "index": 1,
+      "size": 5,
+      "partial": false,
+      "title": "A1 日常句 · 上",
+      "itemIds": [
+        "a1-s01",
+        "a1-s02",
+        "a1-s03",
+        "a1-s04",
+        "a1-s05"
+      ]
+    },
+    {
+      "id": "A1-S-02",
+      "level": "A1",
+      "kind": "sentence",
+      "index": 2,
+      "size": 5,
+      "partial": false,
+      "title": "A1 日常句 · 下",
+      "itemIds": [
+        "a1-s06",
+        "a1-s07",
+        "a1-s08",
+        "a1-s09",
+        "a1-s10"
+      ]
+    },
+    {
+      "id": "A2-W-01",
+      "level": "A2",
+      "kind": "word",
+      "index": 1,
+      "size": 5,
+      "partial": false,
+      "title": "日常动作",
+      "itemIds": [
+        "tarvita",
+        "kysya",
+        "vastata",
+        "asua",
+        "opiskella"
+      ]
+    },
+    {
+      "id": "A2-W-02",
+      "level": "A2",
+      "kind": "word",
+      "index": 2,
+      "size": 5,
+      "partial": false,
+      "title": "人与时间",
+      "itemIds": [
+        "ystava",
+        "perhe",
+        "aika",
+        "tyo",
+        "kaupunki"
+      ]
+    },
+    {
+      "id": "A2-S-01",
+      "level": "A2",
+      "kind": "sentence",
+      "index": 1,
+      "size": 5,
+      "partial": false,
+      "title": "A2 场景句",
+      "itemIds": [
+        "a2-s01",
+        "a2-s02",
+        "a2-s03",
+        "a2-s04",
+        "a2-s05"
+      ]
+    },
+    {
+      "id": "B1-W-01",
+      "level": "B1",
+      "kind": "word",
+      "index": 1,
+      "size": 5,
+      "partial": false,
+      "title": "语言与思维",
+      "itemIds": [
+        "kieli",
+        "ihminen",
+        "vuosi",
+        "muistaa",
+        "kertoa"
+      ]
+    },
+    {
+      "id": "B1-W-02",
+      "level": "B1",
+      "kind": "word",
+      "index": 2,
+      "size": 5,
+      "partial": false,
+      "title": "动词类型 2–6",
+      "itemIds": [
+        "juoda",
+        "nousta",
+        "tavata",
+        "valita",
+        "vanheta"
+      ]
+    },
+    {
+      "id": "B1-S-01",
+      "level": "B1",
+      "kind": "sentence",
+      "index": 1,
+      "size": 5,
+      "partial": false,
+      "title": "B1 叙述句",
+      "itemIds": [
+        "b1-s01",
+        "b1-s02",
+        "b1-s03",
+        "b1-s04",
+        "b1-s05"
+      ]
+    },
+    {
+      "id": "B2-W-01",
+      "level": "B2",
+      "kind": "word",
+      "index": 1,
+      "size": 5,
+      "partial": false,
+      "title": "社会与研究",
+      "itemIds": [
+        "mahdollisuus",
+        "tutkimus",
+        "yhteiskunta",
+        "vaikutus",
+        "arvioida"
+      ]
+    },
+    {
+      "id": "B2-S-01",
+      "level": "B2",
+      "kind": "sentence",
+      "index": 1,
+      "size": 5,
+      "partial": false,
+      "title": "B2 论述句",
+      "itemIds": [
+        "b2-s01",
+        "b2-s02",
+        "b2-s03",
+        "b2-s04",
+        "b2-s05"
+      ]
+    },
+    {
+      "id": "C1-W-01",
+      "level": "C1",
+      "kind": "word",
+      "index": 1,
+      "size": 5,
+      "partial": false,
+      "title": "抽象概念",
+      "itemIds": [
+        "kasite",
+        "ilmio",
+        "nakokulma",
+        "perustella",
+        "pohtia"
+      ]
+    },
+    {
+      "id": "C1-S-01",
+      "level": "C1",
+      "kind": "sentence",
+      "index": 1,
+      "size": 5,
+      "partial": false,
+      "title": "C1 抽象句",
+      "itemIds": [
+        "c1-s01",
+        "c1-s02",
+        "c1-s03",
+        "c1-s04",
+        "c1-s05"
+      ]
+    },
+    {
+      "id": "C2-W-01",
+      "level": "C2",
+      "kind": "word",
+      "index": 1,
+      "size": 5,
+      "partial": false,
+      "title": "精细表达",
+      "itemIds": [
+        "vivahteinen",
+        "monitulkintainen",
+        "yhteisymmarrys",
+        "kriittinen",
+        "soveltaa"
+      ]
+    },
+    {
+      "id": "C2-S-01",
+      "level": "C2",
+      "kind": "sentence",
+      "index": 1,
+      "size": 5,
+      "partial": false,
+      "title": "C2 精微句",
+      "itemIds": [
+        "c2-s01",
+        "c2-s02",
+        "c2-s03",
+        "c2-s04",
+        "c2-s05"
+      ]
+    }
+  ]
+}

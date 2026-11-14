@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs and temp files
+*.log
+*.tmp
+*.bak
+
+# Local tooling (this project has no build step and no dependencies)
+node_modules/
+
+# NOTE: app/data.js, data/groups.json and data/packs/*.json are GENERATED but
+# intentionally committed. The app must also run by double-clicking index.html
+# under file://, where fetching JSON is blocked by CORS.

@@ -1,0 +1,4990 @@
+{
+  "format": "finnish-learn-content",
+  "schema": 2,
+  "version": "fi-core-2026.11-demo",
+  "reviewNote": "Demo pack. Every paradigm, IPA transcription and Chinese gloss is auto-derived and MUST be human-verified before production. CEFR grading is an internal product convention, not an official word list.",
+  "levels": [
+    "A1",
+    "A2",
+    "B1",
+    "B2",
+    "C1",
+    "C2"
+  ],
+  "words": [
+    {
+      "id": "talo",
+      "lemma": "talo",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "A1",
+      "topicId": "home",
+      "ipa": "/ˈtɑlo/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "talo-1",
+          "cefr": "A1",
+          "zh": "房子；房屋",
+          "en": "house",
+          "posZh": "名词",
+          "image": {
+            "id": "img-talo-1",
+            "path": "assets/illustrations/talo.png",
+            "motif": "house",
+            "altZh": "房子；房屋的情境示意图",
+            "altEn": "Illustration for house",
+            "source": "generated",
+            "license": "own",
+            "status": "ready",
+            "reviewStatus": "pending",
+            "note": "AI 生成样例，已裁掉平台水印，待人工审核"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 1,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "talo-",
+          "weak": "talo-"
+        },
+        "gradation": null,
+        "harmony": "back",
+        "declensionClass": "valo 型",
+        "kotusType": 1,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "talo",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "talon",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "taloa",
+            "suffix": "-a",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "talossa",
+            "suffix": "-ssa",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "talosta",
+            "suffix": "-sta",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "taloon",
+            "suffix": "-Vn",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "talo",
+        "plural": "talot",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "kauppa",
+      "lemma": "kauppa",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "A1",
+      "topicId": "shops-and-services",
+      "ipa": "/ˈkɑupːɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "kauppa-1",
+          "cefr": "A1",
+          "zh": "商店；店铺",
+          "en": "shop, store",
+          "posZh": "名词",
+          "image": {
+            "id": "img-kauppa-1",
+            "path": "assets/illustrations/kauppa.png",
+            "motif": "shop",
+            "altZh": "商店；店铺的情境示意图",
+            "altEn": "Illustration for shop, store",
+            "source": "generated",
+            "license": "own",
+            "status": "ready",
+            "reviewStatus": "pending",
+            "note": "AI 生成样例，已裁掉平台水印，待人工审核"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 1,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "kauppa-",
+          "weak": "kaupa-"
+        },
+        "gradation": "pp~p",
+        "harmony": "back",
+        "declensionClass": "koira 型",
+        "kotusType": 10,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "kauppa",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "kaupan",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "kauppaa",
+            "suffix": "-a",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "kaupassa",
+            "suffix": "-ssa",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "kaupasta",
+            "suffix": "-sta",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "kauppaan",
+            "suffix": "-Vn",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "kauppa",
+        "plural": "kaupat",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "katu",
+      "lemma": "katu",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "A1",
+      "topicId": "travelling",
+      "ipa": "/ˈkɑtu/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "katu-1",
+          "cefr": "A1",
+          "zh": "街道",
+          "en": "street",
+          "posZh": "名词",
+          "image": {
+            "id": "img-katu-1",
+            "path": null,
+            "motif": "street",
+            "altZh": "街道的情境示意图",
+            "altEn": "Illustration for street",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 1,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "katu-",
+          "weak": "kadu-"
+        },
+        "gradation": "t~d",
+        "harmony": "back",
+        "declensionClass": "valo 型（带强弱变换）",
+        "kotusType": 1,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "katu",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "kadun",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "katua",
+            "suffix": "-a",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "kadussa",
+            "suffix": "-ssa",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "kadusta",
+            "suffix": "-sta",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "katuun",
+            "suffix": "-Vn",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "katu",
+        "plural": "kadut",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "kirja",
+      "lemma": "kirja",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "A1",
+      "topicId": "objects",
+      "ipa": "/ˈkirjɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "kirja-1",
+          "cefr": "A1",
+          "zh": "书；书本",
+          "en": "book",
+          "posZh": "名词",
+          "image": {
+            "id": "img-kirja-1",
+            "path": null,
+            "motif": "book",
+            "altZh": "书；书本的情境示意图",
+            "altEn": "Illustration for book",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 1,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "kirja-",
+          "weak": "kirja-"
+        },
+        "gradation": null,
+        "harmony": "back",
+        "declensionClass": "kala 型",
+        "kotusType": 9,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "kirja",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "kirjan",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "kirjaa",
+            "suffix": "-a",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "kirjassa",
+            "suffix": "-ssa",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "kirjasta",
+            "suffix": "-sta",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "kirjaan",
+            "suffix": "-Vn",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "kirja",
+        "plural": "kirjat",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "auto",
+      "lemma": "auto",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "A1",
+      "topicId": "travelling",
+      "ipa": "/ˈɑuto/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "auto-1",
+          "cefr": "A1",
+          "zh": "汽车",
+          "en": "car",
+          "posZh": "名词",
+          "image": {
+            "id": "img-auto-1",
+            "path": null,
+            "motif": "car",
+            "altZh": "汽车的情境示意图",
+            "altEn": "Illustration for car",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 1,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "auto-",
+          "weak": "auto-"
+        },
+        "gradation": null,
+        "harmony": "back",
+        "declensionClass": "valo 型",
+        "kotusType": 1,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "auto",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "auton",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "autoa",
+            "suffix": "-a",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "autossa",
+            "suffix": "-ssa",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "autosta",
+            "suffix": "-sta",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "autoon",
+            "suffix": "-Vn",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "auto",
+        "plural": "autot",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "vesi",
+      "lemma": "vesi",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "A1",
+      "topicId": "food",
+      "ipa": "/ˈʋesi/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "vesi-1",
+          "cefr": "A1",
+          "zh": "水",
+          "en": "water",
+          "posZh": "名词",
+          "image": {
+            "id": "img-vesi-1",
+            "path": null,
+            "motif": "water",
+            "altZh": "水的情境示意图",
+            "altEn": "Illustration for water",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 1,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "vesi-",
+          "weak": "vede-"
+        },
+        "gradation": "t~d",
+        "harmony": "front",
+        "declensionClass": "vesi 型",
+        "kotusType": 27,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "vesi",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "veden",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "vettä",
+            "suffix": "-ttä",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "vedessä",
+            "suffix": "-ssä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "vedestä",
+            "suffix": "-stä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "veteen",
+            "suffix": "-Vn",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "vesi",
+        "plural": "vedet",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "kahvi",
+      "lemma": "kahvi",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "A1",
+      "topicId": "food",
+      "ipa": "/ˈkɑhʋi/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "kahvi-1",
+          "cefr": "A1",
+          "zh": "咖啡",
+          "en": "coffee",
+          "posZh": "名词",
+          "image": {
+            "id": "img-kahvi-1",
+            "path": null,
+            "motif": "coffee",
+            "altZh": "咖啡的情境示意图",
+            "altEn": "Illustration for coffee",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 1,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "kahvi-",
+          "weak": "kahvi-"
+        },
+        "gradation": null,
+        "harmony": "back",
+        "declensionClass": "risti 型",
+        "kotusType": 5,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "kahvi",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "kahvin",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "kahvia",
+            "suffix": "-a",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "kahvissa",
+            "suffix": "-ssa",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "kahvista",
+            "suffix": "-sta",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "kahviin",
+            "suffix": "-Vn",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "kahvi",
+        "plural": "kahvit",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "maito",
+      "lemma": "maito",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "A1",
+      "topicId": "food",
+      "ipa": "/ˈmɑito/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "maito-1",
+          "cefr": "A1",
+          "zh": "牛奶",
+          "en": "milk",
+          "posZh": "名词",
+          "image": {
+            "id": "img-maito-1",
+            "path": null,
+            "motif": "milk",
+            "altZh": "牛奶的情境示意图",
+            "altEn": "Illustration for milk",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 1,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "maito-",
+          "weak": "maido-"
+        },
+        "gradation": "t~d",
+        "harmony": "back",
+        "declensionClass": "valo 型（带强弱变换）",
+        "kotusType": 1,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "maito",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "maidon",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "maitoa",
+            "suffix": "-a",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "maidossa",
+            "suffix": "-ssa",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "maidosta",
+            "suffix": "-sta",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "maitoon",
+            "suffix": "-Vn",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "maito",
+        "plural": "maidot",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "leipa",
+      "lemma": "leipä",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "A1",
+      "topicId": "food",
+      "ipa": "/ˈleipæ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "leipa-1",
+          "cefr": "A1",
+          "zh": "面包",
+          "en": "bread",
+          "posZh": "名词",
+          "image": {
+            "id": "img-leipa-1",
+            "path": null,
+            "motif": "bread",
+            "altZh": "面包的情境示意图",
+            "altEn": "Illustration for bread",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 1,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "leipä-",
+          "weak": "leivä-"
+        },
+        "gradation": "p~v",
+        "harmony": "front",
+        "declensionClass": "koira 型",
+        "kotusType": 10,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "leipä",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "leivän",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "leipää",
+            "suffix": "-ä",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "leivässä",
+            "suffix": "-ssä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "leivästä",
+            "suffix": "-stä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "leipään",
+            "suffix": "-Vn",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "leipä",
+        "plural": "leivät",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "ruoka",
+      "lemma": "ruoka",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "A1",
+      "topicId": "food",
+      "ipa": "/ˈruokɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "ruoka-1",
+          "cefr": "A1",
+          "zh": "食物；饭菜",
+          "en": "food, meal",
+          "posZh": "名词",
+          "image": {
+            "id": "img-ruoka-1",
+            "path": null,
+            "motif": "food",
+            "altZh": "食物；饭菜的情境示意图",
+            "altEn": "Illustration for food, meal",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 1,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "ruoka-",
+          "weak": "ruoa-"
+        },
+        "gradation": "k~∅",
+        "harmony": "back",
+        "declensionClass": "kala 型（带强弱变换）",
+        "kotusType": 9,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "ruoka",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "ruoan",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "ruokaa",
+            "suffix": "-a",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "ruoassa",
+            "suffix": "-ssa",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "ruoasta",
+            "suffix": "-sta",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "ruokaan",
+            "suffix": "-Vn",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "ruoka",
+        "plural": "ruoat",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "olla",
+      "lemma": "olla",
+      "pos": "verb",
+      "posZh": "动词",
+      "cefr": "A1",
+      "topicId": "actions",
+      "ipa": "/ˈolːɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "olla-1",
+          "cefr": "A1",
+          "zh": "是；在；有",
+          "en": "to be",
+          "posZh": "动词",
+          "image": {
+            "id": "img-olla-1",
+            "path": null,
+            "motif": "being",
+            "altZh": "是；在；有的情境示意图",
+            "altEn": "Illustration for to be",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 1,
+        "gradingSignals": [
+          "frequency",
+          "verb-type"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "verb": {
+        "verbType": 3,
+        "kotusType": null,
+        "infinitiveEnding": "-lla",
+        "presentStem": "ole-",
+        "present1sg": "olen",
+        "past3sg": "oli",
+        "nutParticiple": "ollut",
+        "irregular": true,
+        "note": "不规则动词，on / olen / olla 需单独记忆，不走 6 类规则派生"
+      },
+      "number": null
+    },
+    {
+      "id": "puhua",
+      "lemma": "puhua",
+      "pos": "verb",
+      "posZh": "动词",
+      "cefr": "A1",
+      "topicId": "actions",
+      "ipa": "/ˈpuhuɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "puhua-1",
+          "cefr": "A1",
+          "zh": "说；讲话",
+          "en": "to speak",
+          "posZh": "动词",
+          "image": {
+            "id": "img-puhua-1",
+            "path": "assets/illustrations/puhua.png",
+            "motif": "speech",
+            "altZh": "说；讲话的情境示意图",
+            "altEn": "Illustration for to speak",
+            "source": "generated",
+            "license": "own",
+            "status": "ready",
+            "reviewStatus": "pending",
+            "note": "AI 生成样例，已裁掉平台水印，待人工审核"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 1,
+        "gradingSignals": [
+          "frequency",
+          "verb-type"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "verb": {
+        "verbType": 1,
+        "kotusType": 52,
+        "infinitiveEnding": "元音 + -a/-ä",
+        "presentStem": "puhu-",
+        "present1sg": "puhun",
+        "past3sg": "puhui",
+        "nutParticiple": "puhunut"
+      },
+      "number": null
+    },
+    {
+      "id": "syoda",
+      "lemma": "syödä",
+      "pos": "verb",
+      "posZh": "动词",
+      "cefr": "A1",
+      "topicId": "food",
+      "ipa": "/ˈsyø̯dæ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "syoda-1",
+          "cefr": "A1",
+          "zh": "吃",
+          "en": "to eat",
+          "posZh": "动词",
+          "image": {
+            "id": "img-syoda-1",
+            "path": null,
+            "motif": "eat",
+            "altZh": "吃的情境示意图",
+            "altEn": "Illustration for to eat",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 1,
+        "gradingSignals": [
+          "frequency",
+          "verb-type"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "verb": {
+        "verbType": 2,
+        "kotusType": 64,
+        "infinitiveEnding": "-da/-dä",
+        "presentStem": "syö-",
+        "present1sg": "syön",
+        "past3sg": "söi",
+        "nutParticiple": "syönyt"
+      },
+      "number": null
+    },
+    {
+      "id": "tulla",
+      "lemma": "tulla",
+      "pos": "verb",
+      "posZh": "动词",
+      "cefr": "A1",
+      "topicId": "actions",
+      "ipa": "/ˈtulːɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "tulla-1",
+          "cefr": "A1",
+          "zh": "来；到来",
+          "en": "to come",
+          "posZh": "动词",
+          "image": {
+            "id": "img-tulla-1",
+            "path": null,
+            "motif": "come",
+            "altZh": "来；到来的情境示意图",
+            "altEn": "Illustration for to come",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 1,
+        "gradingSignals": [
+          "frequency",
+          "verb-type"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "verb": {
+        "verbType": 3,
+        "kotusType": 67,
+        "infinitiveEnding": "辅音 + -la/-na/-ra/-sta",
+        "presentStem": "tule-",
+        "present1sg": "tulen",
+        "past3sg": "tuli",
+        "nutParticiple": "tullut"
+      },
+      "number": null
+    },
+    {
+      "id": "haluta",
+      "lemma": "haluta",
+      "pos": "verb",
+      "posZh": "动词",
+      "cefr": "A1",
+      "topicId": "actions",
+      "ipa": "/ˈhɑlutɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "haluta-1",
+          "cefr": "A1",
+          "zh": "想要；希望",
+          "en": "to want",
+          "posZh": "动词",
+          "image": {
+            "id": "img-haluta-1",
+            "path": null,
+            "motif": "want",
+            "altZh": "想要；希望的情境示意图",
+            "altEn": "Illustration for to want",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 1,
+        "gradingSignals": [
+          "frequency",
+          "verb-type"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "verb": {
+        "verbType": 4,
+        "kotusType": 73,
+        "infinitiveEnding": "元音 + -ta/-tä",
+        "presentStem": "halua-",
+        "present1sg": "haluan",
+        "past3sg": "halusi",
+        "nutParticiple": "halunnut"
+      },
+      "number": null
+    },
+    {
+      "id": "tarvita",
+      "lemma": "tarvita",
+      "pos": "verb",
+      "posZh": "动词",
+      "cefr": "A2",
+      "topicId": "actions",
+      "ipa": "/ˈtɑrʋitɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "tarvita-1",
+          "cefr": "A2",
+          "zh": "需要",
+          "en": "to need",
+          "posZh": "动词",
+          "image": {
+            "id": "img-tarvita-1",
+            "path": null,
+            "motif": "need",
+            "altZh": "需要的情境示意图",
+            "altEn": "Illustration for to need",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 2,
+        "gradingSignals": [
+          "frequency",
+          "verb-type"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "verb": {
+        "verbType": 5,
+        "kotusType": 69,
+        "infinitiveEnding": "-ita/-itä",
+        "presentStem": "tarvitse-",
+        "present1sg": "tarvitsen",
+        "past3sg": "tarvitsi",
+        "nutParticiple": "tarvinnut"
+      },
+      "number": null
+    },
+    {
+      "id": "kysya",
+      "lemma": "kysyä",
+      "pos": "verb",
+      "posZh": "动词",
+      "cefr": "A2",
+      "topicId": "communication",
+      "ipa": "/ˈkysyæ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "kysya-1",
+          "cefr": "A2",
+          "zh": "问；询问",
+          "en": "to ask",
+          "posZh": "动词",
+          "image": {
+            "id": "img-kysya-1",
+            "path": null,
+            "motif": "ask",
+            "altZh": "问；询问的情境示意图",
+            "altEn": "Illustration for to ask",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 2,
+        "gradingSignals": [
+          "frequency",
+          "verb-type"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "verb": {
+        "verbType": 1,
+        "kotusType": 52,
+        "infinitiveEnding": "元音 + -a/-ä",
+        "presentStem": "kysy-",
+        "present1sg": "kysyn",
+        "past3sg": "kysyi",
+        "nutParticiple": "kysynyt"
+      },
+      "number": null
+    },
+    {
+      "id": "vastata",
+      "lemma": "vastata",
+      "pos": "verb",
+      "posZh": "动词",
+      "cefr": "A2",
+      "topicId": "communication",
+      "ipa": "/ˈʋɑstɑtɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "vastata-1",
+          "cefr": "A2",
+          "zh": "回答；答复",
+          "en": "to answer",
+          "posZh": "动词",
+          "image": {
+            "id": "img-vastata-1",
+            "path": null,
+            "motif": "answer",
+            "altZh": "回答；答复的情境示意图",
+            "altEn": "Illustration for to answer",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 2,
+        "gradingSignals": [
+          "frequency",
+          "verb-type"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "verb": {
+        "verbType": 4,
+        "kotusType": 73,
+        "infinitiveEnding": "元音 + -ta/-tä",
+        "presentStem": "vastaa-",
+        "present1sg": "vastaan",
+        "past3sg": "vastasi",
+        "nutParticiple": "vastannut"
+      },
+      "number": null
+    },
+    {
+      "id": "asua",
+      "lemma": "asua",
+      "pos": "verb",
+      "posZh": "动词",
+      "cefr": "A2",
+      "topicId": "home",
+      "ipa": "/ˈɑsuɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "asua-1",
+          "cefr": "A2",
+          "zh": "居住；住在",
+          "en": "to live (in)",
+          "posZh": "动词",
+          "image": {
+            "id": "img-asua-1",
+            "path": null,
+            "motif": "house",
+            "altZh": "居住；住在的情境示意图",
+            "altEn": "Illustration for to live (in)",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 2,
+        "gradingSignals": [
+          "frequency",
+          "verb-type"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "verb": {
+        "verbType": 1,
+        "kotusType": 52,
+        "infinitiveEnding": "元音 + -a/-ä",
+        "presentStem": "asu-",
+        "present1sg": "asun",
+        "past3sg": "asui",
+        "nutParticiple": "asunut"
+      },
+      "number": null
+    },
+    {
+      "id": "opiskella",
+      "lemma": "opiskella",
+      "pos": "verb",
+      "posZh": "动词",
+      "cefr": "A2",
+      "topicId": "study",
+      "ipa": "/ˈopiskelːɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "opiskella-1",
+          "cefr": "A2",
+          "zh": "学习；求学",
+          "en": "to study",
+          "posZh": "动词",
+          "image": {
+            "id": "img-opiskella-1",
+            "path": null,
+            "motif": "school",
+            "altZh": "学习；求学的情境示意图",
+            "altEn": "Illustration for to study",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 2,
+        "gradingSignals": [
+          "frequency",
+          "verb-type"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "verb": {
+        "verbType": 3,
+        "kotusType": 67,
+        "infinitiveEnding": "辅音 + -la/-na/-ra/-sta",
+        "presentStem": "opiskele-",
+        "present1sg": "opiskelen",
+        "past3sg": "opiskeli",
+        "nutParticiple": "opiskellut"
+      },
+      "number": null
+    },
+    {
+      "id": "ystava",
+      "lemma": "ystävä",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "A2",
+      "topicId": "people",
+      "ipa": "/ˈystæʋæ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "ystava-1",
+          "cefr": "A2",
+          "zh": "朋友",
+          "en": "friend",
+          "posZh": "名词",
+          "image": {
+            "id": "img-ystava-1",
+            "path": null,
+            "motif": "friend",
+            "altZh": "朋友的情境示意图",
+            "altEn": "Illustration for friend",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 2,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "ystävä-",
+          "weak": "ystävä-"
+        },
+        "gradation": null,
+        "harmony": "front",
+        "declensionClass": "koira 型",
+        "kotusType": 10,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "ystävä",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "ystävän",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "ystävää",
+            "suffix": "-ä",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "ystävässä",
+            "suffix": "-ssä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "ystävästä",
+            "suffix": "-stä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "ystävään",
+            "suffix": "-Vn",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "ystävä",
+        "plural": "ystävät",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "perhe",
+      "lemma": "perhe",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "A2",
+      "topicId": "people",
+      "ipa": "/ˈperhe/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "perhe-1",
+          "cefr": "A2",
+          "zh": "家庭；家人",
+          "en": "family",
+          "posZh": "名词",
+          "image": {
+            "id": "img-perhe-1",
+            "path": null,
+            "motif": "family",
+            "altZh": "家庭；家人的情境示意图",
+            "altEn": "Illustration for family",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 2,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "perhe-",
+          "weak": "perhe-"
+        },
+        "gradation": null,
+        "harmony": "front",
+        "declensionClass": "nalle 型",
+        "kotusType": 8,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "perhe",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "perheen",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "perhettä",
+            "suffix": "-ttä",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "perheessä",
+            "suffix": "-ssä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "perheestä",
+            "suffix": "-stä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "perheeseen",
+            "suffix": "-seen",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "perhe",
+        "plural": "perheet",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "aika",
+      "lemma": "aika",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "A2",
+      "topicId": "time",
+      "ipa": "/ˈɑikɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "aika-1",
+          "cefr": "A2",
+          "zh": "时间",
+          "en": "time",
+          "posZh": "名词",
+          "image": {
+            "id": "img-aika-1",
+            "path": null,
+            "motif": "clock",
+            "altZh": "时间的情境示意图",
+            "altEn": "Illustration for time",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 2,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "aika-",
+          "weak": "aja-"
+        },
+        "gradation": "k~∅",
+        "harmony": "back",
+        "declensionClass": "kala 型（带强弱变换）",
+        "kotusType": 9,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "aika",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "ajan",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "aikaa",
+            "suffix": "-a",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "ajassa",
+            "suffix": "-ssa",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "ajasta",
+            "suffix": "-sta",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "aikaan",
+            "suffix": "-Vn",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "aika",
+        "plural": "ajat",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "tyo",
+      "lemma": "työ",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "A2",
+      "topicId": "work",
+      "ipa": "/ˈtyø̯/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "tyo-1",
+          "cefr": "A2",
+          "zh": "工作；劳动",
+          "en": "work, job",
+          "posZh": "名词",
+          "image": {
+            "id": "img-tyo-1",
+            "path": null,
+            "motif": "work",
+            "altZh": "工作；劳动的情境示意图",
+            "altEn": "Illustration for work, job",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 2,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "työ-",
+          "weak": "työ-"
+        },
+        "gradation": null,
+        "harmony": "front",
+        "declensionClass": "työ 型",
+        "kotusType": 19,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "työ",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "työn",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "työtä",
+            "suffix": "-tä",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "työssä",
+            "suffix": "-ssä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "työstä",
+            "suffix": "-stä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "työhön",
+            "suffix": "-hön",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "työ",
+        "plural": "työt",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "kaupunki",
+      "lemma": "kaupunki",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "A2",
+      "topicId": "travelling",
+      "ipa": "/ˈkɑupuŋki/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "kaupunki-1",
+          "cefr": "A2",
+          "zh": "城市",
+          "en": "city, town",
+          "posZh": "名词",
+          "image": {
+            "id": "img-kaupunki-1",
+            "path": null,
+            "motif": "city",
+            "altZh": "城市的情境示意图",
+            "altEn": "Illustration for city, town",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 2,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "kaupunki-",
+          "weak": "kaupungi-"
+        },
+        "gradation": "nk~ng",
+        "harmony": "back",
+        "declensionClass": "risti 型",
+        "kotusType": 5,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "kaupunki",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "kaupungin",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "kaupunkia",
+            "suffix": "-a",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "kaupungissa",
+            "suffix": "-ssa",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "kaupungista",
+            "suffix": "-sta",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "kaupunkiin",
+            "suffix": "-Vn",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "kaupunki",
+        "plural": "kaupungit",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "kieli",
+      "lemma": "kieli",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "B1",
+      "topicId": "language",
+      "ipa": "/ˈkieli/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "kieli-1",
+          "cefr": "B1",
+          "zh": "语言；舌头",
+          "en": "language, tongue",
+          "posZh": "名词",
+          "image": {
+            "id": "img-kieli-1",
+            "path": null,
+            "motif": "language",
+            "altZh": "语言；舌头的情境示意图",
+            "altEn": "Illustration for language, tongue",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 3,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "kieli-",
+          "weak": "kiele-"
+        },
+        "gradation": null,
+        "harmony": "front",
+        "declensionClass": "kieli 型",
+        "kotusType": 28,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "kieli",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "kielen",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "kieltä",
+            "suffix": "-tä",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "kielessä",
+            "suffix": "-ssä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "kielestä",
+            "suffix": "-stä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "kieleen",
+            "suffix": "-Vn",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "kieli",
+        "plural": "kielet",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "ihminen",
+      "lemma": "ihminen",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "B1",
+      "topicId": "people",
+      "ipa": "/ˈihminen/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "ihminen-1",
+          "cefr": "B1",
+          "zh": "人；人类",
+          "en": "human being",
+          "posZh": "名词",
+          "image": {
+            "id": "img-ihminen-1",
+            "path": null,
+            "motif": "person",
+            "altZh": "人；人类的情境示意图",
+            "altEn": "Illustration for human being",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 3,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "ihminen-",
+          "weak": "ihmise-"
+        },
+        "gradation": null,
+        "harmony": "front",
+        "declensionClass": "nainen 型",
+        "kotusType": 38,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "ihminen",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "ihmisen",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "ihmistä",
+            "suffix": "-tä",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "ihmisessä",
+            "suffix": "-ssä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "ihmisestä",
+            "suffix": "-stä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "ihmiseen",
+            "suffix": "-seen",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "ihminen",
+        "plural": "ihmiset",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "vuosi",
+      "lemma": "vuosi",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "B1",
+      "topicId": "time",
+      "ipa": "/ˈʋuosi/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "vuosi-1",
+          "cefr": "B1",
+          "zh": "年；年份",
+          "en": "year",
+          "posZh": "名词",
+          "image": {
+            "id": "img-vuosi-1",
+            "path": null,
+            "motif": "calendar",
+            "altZh": "年；年份的情境示意图",
+            "altEn": "Illustration for year",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 3,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "vuosi-",
+          "weak": "vuode-"
+        },
+        "gradation": "t~d",
+        "harmony": "back",
+        "declensionClass": "vesi 型",
+        "kotusType": 27,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "vuosi",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "vuoden",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "vuotta",
+            "suffix": "-tta",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "vuodessa",
+            "suffix": "-ssa",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "vuodesta",
+            "suffix": "-sta",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "vuoteen",
+            "suffix": "-Vn",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "vuosi",
+        "plural": "vuodet",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "muistaa",
+      "lemma": "muistaa",
+      "pos": "verb",
+      "posZh": "动词",
+      "cefr": "B1",
+      "topicId": "cognition",
+      "ipa": "/ˈmuistɑː/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "muistaa-1",
+          "cefr": "B1",
+          "zh": "记得；记住",
+          "en": "to remember",
+          "posZh": "动词",
+          "image": {
+            "id": "img-muistaa-1",
+            "path": null,
+            "motif": "brain",
+            "altZh": "记得；记住的情境示意图",
+            "altEn": "Illustration for to remember",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 3,
+        "gradingSignals": [
+          "frequency",
+          "verb-type"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "verb": {
+        "verbType": 1,
+        "kotusType": 53,
+        "infinitiveEnding": "元音 + -a/-ä（-aa）",
+        "presentStem": "muista-",
+        "present1sg": "muistan",
+        "past3sg": "muisti",
+        "nutParticiple": "muistanut"
+      },
+      "number": null
+    },
+    {
+      "id": "kertoa",
+      "lemma": "kertoa",
+      "pos": "verb",
+      "posZh": "动词",
+      "cefr": "B1",
+      "topicId": "communication",
+      "ipa": "/ˈkertoɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "kertoa-1",
+          "cefr": "B1",
+          "zh": "讲述；告诉",
+          "en": "to tell",
+          "posZh": "动词",
+          "image": {
+            "id": "img-kertoa-1",
+            "path": null,
+            "motif": "speech",
+            "altZh": "讲述；告诉的情境示意图",
+            "altEn": "Illustration for to tell",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 3,
+        "gradingSignals": [
+          "frequency",
+          "verb-type"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "verb": {
+        "verbType": 1,
+        "kotusType": 52,
+        "infinitiveEnding": "元音 + -a/-ä",
+        "presentStem": "kerro-",
+        "present1sg": "kerron",
+        "past3sg": "kertoi",
+        "nutParticiple": "kertonut"
+      },
+      "number": null
+    },
+    {
+      "id": "juoda",
+      "lemma": "juoda",
+      "pos": "verb",
+      "posZh": "动词",
+      "cefr": "B1",
+      "topicId": "food",
+      "ipa": "/ˈjuodɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "juoda-1",
+          "cefr": "B1",
+          "zh": "喝",
+          "en": "to drink",
+          "posZh": "动词",
+          "image": {
+            "id": "img-juoda-1",
+            "path": null,
+            "motif": "water",
+            "altZh": "喝的情境示意图",
+            "altEn": "Illustration for to drink",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 3,
+        "gradingSignals": [
+          "frequency",
+          "verb-type"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "verb": {
+        "verbType": 2,
+        "kotusType": 64,
+        "infinitiveEnding": "-da/-dä",
+        "presentStem": "juo-",
+        "present1sg": "juon",
+        "past3sg": "joi",
+        "nutParticiple": "juonut"
+      },
+      "number": null
+    },
+    {
+      "id": "nousta",
+      "lemma": "nousta",
+      "pos": "verb",
+      "posZh": "动词",
+      "cefr": "B1",
+      "topicId": "actions",
+      "ipa": "/ˈnounstɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "nousta-1",
+          "cefr": "B1",
+          "zh": "起身；上升",
+          "en": "to rise, to get up",
+          "posZh": "动词",
+          "image": {
+            "id": "img-nousta-1",
+            "path": null,
+            "motif": "come",
+            "altZh": "起身；上升的情境示意图",
+            "altEn": "Illustration for to rise, to get up",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 3,
+        "gradingSignals": [
+          "frequency",
+          "verb-type"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "verb": {
+        "verbType": 3,
+        "kotusType": 67,
+        "infinitiveEnding": "辅音 + -la/-na/-ra/-sta",
+        "presentStem": "nouse-",
+        "present1sg": "nousen",
+        "past3sg": "nousi",
+        "nutParticiple": "noussut"
+      },
+      "number": null
+    },
+    {
+      "id": "tavata",
+      "lemma": "tavata",
+      "pos": "verb",
+      "posZh": "动词",
+      "cefr": "B1",
+      "topicId": "people",
+      "ipa": "/ˈtɑʋɑtɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "tavata-1",
+          "cefr": "B1",
+          "zh": "遇见；会面",
+          "en": "to meet",
+          "posZh": "动词",
+          "image": {
+            "id": "img-tavata-1",
+            "path": null,
+            "motif": "friend",
+            "altZh": "遇见；会面的情境示意图",
+            "altEn": "Illustration for to meet",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 3,
+        "gradingSignals": [
+          "frequency",
+          "verb-type"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "verb": {
+        "verbType": 4,
+        "kotusType": 73,
+        "infinitiveEnding": "元音 + -ta/-tä",
+        "presentStem": "tapaa-",
+        "present1sg": "tapaan",
+        "past3sg": "tapasi",
+        "nutParticiple": "tavannut"
+      },
+      "number": null
+    },
+    {
+      "id": "valita",
+      "lemma": "valita",
+      "pos": "verb",
+      "posZh": "动词",
+      "cefr": "B1",
+      "topicId": "cognition",
+      "ipa": "/ˈʋɑlitɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "valita-1",
+          "cefr": "B1",
+          "zh": "选择",
+          "en": "to choose",
+          "posZh": "动词",
+          "image": {
+            "id": "img-valita-1",
+            "path": null,
+            "motif": "tools",
+            "altZh": "选择的情境示意图",
+            "altEn": "Illustration for to choose",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 3,
+        "gradingSignals": [
+          "frequency",
+          "verb-type"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "verb": {
+        "verbType": 5,
+        "kotusType": 69,
+        "infinitiveEnding": "-ita/-itä",
+        "presentStem": "valitse-",
+        "present1sg": "valitsen",
+        "past3sg": "valitsi",
+        "nutParticiple": "valinnut"
+      },
+      "number": null
+    },
+    {
+      "id": "vanheta",
+      "lemma": "vanheta",
+      "pos": "verb",
+      "posZh": "动词",
+      "cefr": "B1",
+      "topicId": "time",
+      "ipa": "/ˈʋɑnhetɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "vanheta-1",
+          "cefr": "B1",
+          "zh": "变老；老化",
+          "en": "to age, to get older",
+          "posZh": "动词",
+          "image": {
+            "id": "img-vanheta-1",
+            "path": null,
+            "motif": "calendar",
+            "altZh": "变老；老化的情境示意图",
+            "altEn": "Illustration for to age, to get older",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 3,
+        "gradingSignals": [
+          "frequency",
+          "verb-type"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "verb": {
+        "verbType": 6,
+        "kotusType": 72,
+        "infinitiveEnding": "-eta/-etä",
+        "presentStem": "vanhene-",
+        "present1sg": "vanhenen",
+        "past3sg": "vanheni",
+        "nutParticiple": "vanhennut"
+      },
+      "number": null
+    },
+    {
+      "id": "mahdollisuus",
+      "lemma": "mahdollisuus",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "B2",
+      "topicId": "society",
+      "ipa": "/ˈmɑhdolːisuːs/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "mahdollisuus-1",
+          "cefr": "B2",
+          "zh": "可能性；机会",
+          "en": "opportunity, possibility",
+          "posZh": "名词",
+          "image": {
+            "id": "img-mahdollisuus-1",
+            "path": null,
+            "motif": "idea",
+            "altZh": "可能性；机会的情境示意图",
+            "altEn": "Illustration for opportunity, possibility",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 4,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "mahdollisuus-",
+          "weak": "mahdollisuude-"
+        },
+        "gradation": "s~d",
+        "harmony": "back",
+        "declensionClass": "kalleus 型",
+        "kotusType": 40,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "mahdollisuus",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "mahdollisuuden",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "mahdollisuutta",
+            "suffix": "-tta",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "mahdollisuudessa",
+            "suffix": "-ssa",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "mahdollisuudesta",
+            "suffix": "-sta",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "mahdollisuuteen",
+            "suffix": "-seen",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "mahdollisuus",
+        "plural": "mahdollisuudet",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "tutkimus",
+      "lemma": "tutkimus",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "B2",
+      "topicId": "study",
+      "ipa": "/ˈtutkimus/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "tutkimus-1",
+          "cefr": "B2",
+          "zh": "研究；调查",
+          "en": "research, study",
+          "posZh": "名词",
+          "image": {
+            "id": "img-tutkimus-1",
+            "path": null,
+            "motif": "research",
+            "altZh": "研究；调查的情境示意图",
+            "altEn": "Illustration for research, study",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 4,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "tutkimus-",
+          "weak": "tutkimukse-"
+        },
+        "gradation": "s~ks",
+        "harmony": "back",
+        "declensionClass": "vastaus 型",
+        "kotusType": 39,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "tutkimus",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "tutkimuksen",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "tutkimusta",
+            "suffix": "-ta",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "tutkimuksessa",
+            "suffix": "-ssa",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "tutkimuksesta",
+            "suffix": "-sta",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "tutkimukseen",
+            "suffix": "-seen",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "tutkimus",
+        "plural": "tutkimukset",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "yhteiskunta",
+      "lemma": "yhteiskunta",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "B2",
+      "topicId": "society",
+      "ipa": "/ˈyhteiskuntɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "yhteiskunta-1",
+          "cefr": "B2",
+          "zh": "社会",
+          "en": "society",
+          "posZh": "名词",
+          "image": {
+            "id": "img-yhteiskunta-1",
+            "path": null,
+            "motif": "globe",
+            "altZh": "社会的情境示意图",
+            "altEn": "Illustration for society",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 4,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "yhteiskunta-",
+          "weak": "yhteiskunna-"
+        },
+        "gradation": "nt~nn",
+        "harmony": "back",
+        "declensionClass": "koira 型",
+        "kotusType": 10,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "yhteiskunta",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "yhteiskunnan",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "yhteiskuntaa",
+            "suffix": "-a",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "yhteiskunnassa",
+            "suffix": "-ssa",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "yhteiskunnasta",
+            "suffix": "-sta",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "yhteiskuntaan",
+            "suffix": "-Vn",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "yhteiskunta",
+        "plural": "yhteiskunnat",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "vaikutus",
+      "lemma": "vaikutus",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "B2",
+      "topicId": "society",
+      "ipa": "/ˈʋɑikutus/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "vaikutus-1",
+          "cefr": "B2",
+          "zh": "影响；作用",
+          "en": "effect, impact",
+          "posZh": "名词",
+          "image": {
+            "id": "img-vaikutus-1",
+            "path": null,
+            "motif": "chart",
+            "altZh": "影响；作用的情境示意图",
+            "altEn": "Illustration for effect, impact",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 4,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "vaikutus-",
+          "weak": "vaikutukse-"
+        },
+        "gradation": "s~ks",
+        "harmony": "back",
+        "declensionClass": "vastaus 型",
+        "kotusType": 39,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "vaikutus",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "vaikutuksen",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "vaikutusta",
+            "suffix": "-ta",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "vaikutuksessa",
+            "suffix": "-ssa",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "vaikutuksesta",
+            "suffix": "-sta",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "vaikutukseen",
+            "suffix": "-seen",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "vaikutus",
+        "plural": "vaikutukset",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "arvioida",
+      "lemma": "arvioida",
+      "pos": "verb",
+      "posZh": "动词",
+      "cefr": "B2",
+      "topicId": "cognition",
+      "ipa": "/ˈɑrʋioidɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "arvioida-1",
+          "cefr": "B2",
+          "zh": "评估；评价",
+          "en": "to evaluate, to assess",
+          "posZh": "动词",
+          "image": {
+            "id": "img-arvioida-1",
+            "path": null,
+            "motif": "chart",
+            "altZh": "评估；评价的情境示意图",
+            "altEn": "Illustration for to evaluate, to assess",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 4,
+        "gradingSignals": [
+          "frequency",
+          "verb-type"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "verb": {
+        "verbType": 2,
+        "kotusType": 62,
+        "infinitiveEnding": "-da/-dä",
+        "presentStem": "arvioi-",
+        "present1sg": "arvioin",
+        "past3sg": "arvioi",
+        "nutParticiple": "arvioinut"
+      },
+      "number": null
+    },
+    {
+      "id": "kasite",
+      "lemma": "käsite",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "C1",
+      "topicId": "abstract",
+      "ipa": "/ˈkæsite/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "kasite-1",
+          "cefr": "C1",
+          "zh": "概念",
+          "en": "concept",
+          "posZh": "名词",
+          "image": {
+            "id": "img-kasite-1",
+            "path": null,
+            "motif": "idea",
+            "altZh": "概念的情境示意图",
+            "altEn": "Illustration for concept",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 5,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "käsite-",
+          "weak": "käsitte-"
+        },
+        "gradation": "t~tt",
+        "harmony": "front",
+        "declensionClass": "nalle 型",
+        "kotusType": 8,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "käsite",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "käsitteen",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "käsitettä",
+            "suffix": "-ttä",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "käsitteessä",
+            "suffix": "-ssä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "käsitteestä",
+            "suffix": "-stä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "käsitteeseen",
+            "suffix": "-seen",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "käsite",
+        "plural": "käsitteet",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "ilmio",
+      "lemma": "ilmiö",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "C1",
+      "topicId": "abstract",
+      "ipa": "/ˈilmiø/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "ilmio-1",
+          "cefr": "C1",
+          "zh": "现象",
+          "en": "phenomenon",
+          "posZh": "名词",
+          "image": {
+            "id": "img-ilmio-1",
+            "path": null,
+            "motif": "globe",
+            "altZh": "现象的情境示意图",
+            "altEn": "Illustration for phenomenon",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 5,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "ilmiö-",
+          "weak": "ilmiö-"
+        },
+        "gradation": null,
+        "harmony": "front",
+        "declensionClass": "työ 型",
+        "kotusType": 19,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "ilmiö",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "ilmiön",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "ilmiötä",
+            "suffix": "-tä",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "ilmiössä",
+            "suffix": "-ssä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "ilmiöstä",
+            "suffix": "-stä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "ilmiöön",
+            "suffix": "-Vn",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "ilmiö",
+        "plural": "ilmiöt",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "nakokulma",
+      "lemma": "näkökulma",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "C1",
+      "topicId": "abstract",
+      "ipa": "/ˈnækøkulmɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "nakokulma-1",
+          "cefr": "C1",
+          "zh": "视角；角度",
+          "en": "point of view",
+          "posZh": "名词",
+          "image": {
+            "id": "img-nakokulma-1",
+            "path": null,
+            "motif": "eye",
+            "altZh": "视角；角度的情境示意图",
+            "altEn": "Illustration for point of view",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 5,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "näkökulma-",
+          "weak": "näkökulma-"
+        },
+        "gradation": null,
+        "harmony": "front",
+        "declensionClass": "koira 型（复合词按首部和谐）",
+        "kotusType": 10,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "näkökulma",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "näkökulman",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "näkökulmaa",
+            "suffix": "-a",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "näkökulmassa",
+            "suffix": "-ssa",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "näkökulmasta",
+            "suffix": "-sta",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "näkökulmaan",
+            "suffix": "-Vn",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "näkökulma",
+        "plural": "näkökulmat",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "perustella",
+      "lemma": "perustella",
+      "pos": "verb",
+      "posZh": "动词",
+      "cefr": "C1",
+      "topicId": "communication",
+      "ipa": "/ˈperustelːɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "perustella-1",
+          "cefr": "C1",
+          "zh": "论证；说明理由",
+          "en": "to justify, to give reasons",
+          "posZh": "动词",
+          "image": {
+            "id": "img-perustella-1",
+            "path": null,
+            "motif": "speech",
+            "altZh": "论证；说明理由的情境示意图",
+            "altEn": "Illustration for to justify, to give reasons",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 5,
+        "gradingSignals": [
+          "frequency",
+          "verb-type"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "verb": {
+        "verbType": 3,
+        "kotusType": 67,
+        "infinitiveEnding": "辅音 + -la/-na/-ra/-sta",
+        "presentStem": "perustele-",
+        "present1sg": "perustelen",
+        "past3sg": "perusteli",
+        "nutParticiple": "perustellut"
+      },
+      "number": null
+    },
+    {
+      "id": "pohtia",
+      "lemma": "pohtia",
+      "pos": "verb",
+      "posZh": "动词",
+      "cefr": "C1",
+      "topicId": "cognition",
+      "ipa": "/ˈpohtiɑ/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "pohtia-1",
+          "cefr": "C1",
+          "zh": "深思；琢磨",
+          "en": "to ponder, to reflect",
+          "posZh": "动词",
+          "image": {
+            "id": "img-pohtia-1",
+            "path": null,
+            "motif": "brain",
+            "altZh": "深思；琢磨的情境示意图",
+            "altEn": "Illustration for to ponder, to reflect",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 5,
+        "gradingSignals": [
+          "frequency",
+          "verb-type"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "verb": {
+        "verbType": 1,
+        "kotusType": 52,
+        "infinitiveEnding": "元音 + -a/-ä",
+        "presentStem": "pohdi-",
+        "present1sg": "pohdin",
+        "past3sg": "pohti",
+        "nutParticiple": "pohtinut"
+      },
+      "number": null
+    },
+    {
+      "id": "vivahteinen",
+      "lemma": "vivahteinen",
+      "pos": "adjective",
+      "posZh": "形容词",
+      "cefr": "C2",
+      "topicId": "abstract",
+      "ipa": "/ˈʋiʋɑhteinen/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "vivahteinen-1",
+          "cefr": "C2",
+          "zh": "有细微差别的",
+          "en": "nuanced",
+          "posZh": "形容词",
+          "image": {
+            "id": "img-vivahteinen-1",
+            "path": null,
+            "motif": "idea",
+            "altZh": "有细微差别的的情境示意图",
+            "altEn": "Illustration for nuanced",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 6,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "vivahteinen-",
+          "weak": "vivahteise-"
+        },
+        "gradation": null,
+        "harmony": "back",
+        "declensionClass": "nainen 型",
+        "kotusType": 38,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "vivahteinen",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "vivahteisen",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "vivahteista",
+            "suffix": "-ta",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "vivahteisessa",
+            "suffix": "-ssa",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "vivahteisesta",
+            "suffix": "-sta",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "vivahteiseen",
+            "suffix": "-seen",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "vivahteinen",
+        "plural": "vivahteiset",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "monitulkintainen",
+      "lemma": "monitulkintainen",
+      "pos": "adjective",
+      "posZh": "形容词",
+      "cefr": "C2",
+      "topicId": "abstract",
+      "ipa": "/ˈmonitulkintɑinen/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "monitulkintainen-1",
+          "cefr": "C2",
+          "zh": "可作多种解读的",
+          "en": "open to multiple interpretations",
+          "posZh": "形容词",
+          "image": {
+            "id": "img-monitulkintainen-1",
+            "path": null,
+            "motif": "eye",
+            "altZh": "可作多种解读的的情境示意图",
+            "altEn": "Illustration for open to multiple interpretations",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 6,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "monitulkintainen-",
+          "weak": "monitulkintaise-"
+        },
+        "gradation": null,
+        "harmony": "back",
+        "declensionClass": "nainen 型",
+        "kotusType": 38,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "monitulkintainen",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "monitulkintaisen",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "monitulkintaista",
+            "suffix": "-ta",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "monitulkintaisessa",
+            "suffix": "-ssa",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "monitulkintaisesta",
+            "suffix": "-sta",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "monitulkintaiseen",
+            "suffix": "-seen",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "monitulkintainen",
+        "plural": "monitulkintaiset",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "yhteisymmarrys",
+      "lemma": "yhteisymmärrys",
+      "pos": "noun",
+      "posZh": "名词",
+      "cefr": "C2",
+      "topicId": "society",
+      "ipa": "/ˈyhteisymːærːys/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "yhteisymmarrys-1",
+          "cefr": "C2",
+          "zh": "共识；相互理解",
+          "en": "mutual understanding, consensus",
+          "posZh": "名词",
+          "image": {
+            "id": "img-yhteisymmarrys-1",
+            "path": null,
+            "motif": "people",
+            "altZh": "共识；相互理解的情境示意图",
+            "altEn": "Illustration for mutual understanding, consensus",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 6,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "yhteisymmärrys-",
+          "weak": "yhteisymmärrykse-"
+        },
+        "gradation": "s~ks",
+        "harmony": "front",
+        "declensionClass": "vastaus 型",
+        "kotusType": 39,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "yhteisymmärrys",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "yhteisymmärryksen",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "yhteisymmärrystä",
+            "suffix": "-tä",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "yhteisymmärryksessä",
+            "suffix": "-ssä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "yhteisymmärryksestä",
+            "suffix": "-stä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "yhteisymmärrykseen",
+            "suffix": "-seen",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "yhteisymmärrys",
+        "plural": "yhteisymmärrykset",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "kriittinen",
+      "lemma": "kriittinen",
+      "pos": "adjective",
+      "posZh": "形容词",
+      "cefr": "C2",
+      "topicId": "abstract",
+      "ipa": "/ˈkriːtːinen/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "kriittinen-1",
+          "cefr": "C2",
+          "zh": "批判性的",
+          "en": "critical",
+          "posZh": "形容词",
+          "image": {
+            "id": "img-kriittinen-1",
+            "path": null,
+            "motif": "eye",
+            "altZh": "批判性的的情境示意图",
+            "altEn": "Illustration for critical",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 6,
+        "gradingSignals": [
+          "frequency",
+          "morphology"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "nominal": {
+        "stems": {
+          "strong": "kriittinen-",
+          "weak": "kriittise-"
+        },
+        "gradation": null,
+        "harmony": "front",
+        "declensionClass": "nainen 型",
+        "kotusType": 38,
+        "caseForms": [
+          {
+            "case": "nom",
+            "form": "kriittinen",
+            "suffix": "—",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "主格 nominatiivi"
+          },
+          {
+            "case": "gen",
+            "form": "kriittisen",
+            "suffix": "-n",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "属格 genetiivi"
+          },
+          {
+            "case": "par",
+            "form": "kriittistä",
+            "suffix": "-tä",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "部分格 partitiivi"
+          },
+          {
+            "case": "ine",
+            "form": "kriittisessä",
+            "suffix": "-ssä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "内格 inessiivi"
+          },
+          {
+            "case": "ela",
+            "form": "kriittisestä",
+            "suffix": "-stä",
+            "stemUsed": "weak",
+            "cefr": "A1",
+            "label": "出格 elatiivi"
+          },
+          {
+            "case": "ill",
+            "form": "kriittiseen",
+            "suffix": "-seen",
+            "stemUsed": "strong",
+            "cefr": "A1",
+            "label": "入格 illatiivi"
+          }
+        ]
+      },
+      "number": {
+        "singular": "kriittinen",
+        "plural": "kriittiset",
+        "note": "主格单复数；其他格另有复数形式，见完整变格表"
+      }
+    },
+    {
+      "id": "soveltaa",
+      "lemma": "soveltaa",
+      "pos": "verb",
+      "posZh": "动词",
+      "cefr": "C2",
+      "topicId": "cognition",
+      "ipa": "/ˈsoʋeltɑː/",
+      "ipaSource": "rule-derived",
+      "senses": [
+        {
+          "id": "soveltaa-1",
+          "cefr": "C2",
+          "zh": "应用；运用",
+          "en": "to apply, to adapt",
+          "posZh": "动词",
+          "image": {
+            "id": "img-soveltaa-1",
+            "path": null,
+            "motif": "tools",
+            "altZh": "应用；运用的情境示意图",
+            "altEn": "Illustration for to apply, to adapt",
+            "source": "hand-drawn",
+            "license": "own",
+            "status": "pending",
+            "reviewStatus": "pending",
+            "note": "几何占位图，正式插画待生成"
+          }
+        }
+      ],
+      "provenance": {
+        "lemmaSource": "kotus",
+        "glossSource": "wiktionary+own-review",
+        "frequencyBand": 6,
+        "gradingSignals": [
+          "frequency",
+          "verb-type"
+        ],
+        "reviewStatus": "auto-derived"
+      },
+      "verb": {
+        "verbType": 1,
+        "kotusType": 53,
+        "infinitiveEnding": "元音 + -a/-ä（-aa）",
+        "presentStem": "sovella-",
+        "present1sg": "sovellan",
+        "past3sg": "sovelsi",
+        "nutParticiple": "soveltanut"
+      },
+      "number": null
+    }
+  ],
+  "sentences": [
+    {
+      "id": "a1-s01",
+      "fiText": "Kirja on talossa.",
+      "zhText": "书在房子里。",
+      "enText": "The book is in the house.",
+      "cefr": "A1",
+      "grammarPoints": [
+        "ine"
+      ],
+      "gloss": [
+        {
+          "token": "Kirja",
+          "senseId": "kirja-1"
+        },
+        {
+          "token": "on",
+          "senseId": "olla-1"
+        },
+        {
+          "token": "talossa",
+          "senseId": "talo-1",
+          "caseForm": "ine"
+        }
+      ]
+    },
+    {
+      "id": "a1-s02",
+      "fiText": "Minä haluan kirjan.",
+      "zhText": "我想要一本书。",
+      "enText": "I want a book.",
+      "cefr": "A1",
+      "grammarPoints": [
+        "gen"
+      ],
+      "gloss": [
+        {
+          "token": "Minä",
+          "senseId": null
+        },
+        {
+          "token": "haluan",
+          "senseId": "haluta-1"
+        },
+        {
+          "token": "kirjan",
+          "senseId": "kirja-1",
+          "caseForm": "gen"
+        }
+      ]
+    },
+    {
+      "id": "a1-s03",
+      "fiText": "Minä juon kahvia.",
+      "zhText": "我喝咖啡。",
+      "enText": "I drink coffee.",
+      "cefr": "A1",
+      "grammarPoints": [
+        "par"
+      ],
+      "gloss": [
+        {
+          "token": "Minä",
+          "senseId": null
+        },
+        {
+          "token": "juon",
+          "senseId": null
+        },
+        {
+          "token": "kahvia",
+          "senseId": "kahvi-1",
+          "caseForm": "par"
+        }
+      ]
+    },
+    {
+      "id": "a1-s04",
+      "fiText": "Minä olen talossa.",
+      "zhText": "我在房子里。",
+      "enText": "I am in the house.",
+      "cefr": "A1",
+      "grammarPoints": [
+        "ine"
+      ],
+      "gloss": [
+        {
+          "token": "Minä",
+          "senseId": null
+        },
+        {
+          "token": "olen",
+          "senseId": "olla-1"
+        },
+        {
+          "token": "talossa",
+          "senseId": "talo-1",
+          "caseForm": "ine"
+        }
+      ]
+    },
+    {
+      "id": "a1-s05",
+      "fiText": "Minä juon vettä.",
+      "zhText": "我喝水。",
+      "enText": "I drink water.",
+      "cefr": "A1",
+      "grammarPoints": [
+        "par"
+      ],
+      "gloss": [
+        {
+          "token": "Minä",
+          "senseId": null
+        },
+        {
+          "token": "juon",
+          "senseId": null
+        },
+        {
+          "token": "vettä",
+          "senseId": "vesi-1",
+          "caseForm": "par"
+        }
+      ]
+    },
+    {
+      "id": "a1-s06",
+      "fiText": "Kirja on autossa.",
+      "zhText": "书在车里。",
+      "enText": "The book is in the car.",
+      "cefr": "A1",
+      "grammarPoints": [
+        "ine"
+      ],
+      "gloss": [
+        {
+          "token": "Kirja",
+          "senseId": "kirja-1"
+        },
+        {
+          "token": "on",
+          "senseId": "olla-1"
+        },
+        {
+          "token": "autossa",
+          "senseId": "auto-1",
+          "caseForm": "ine"
+        }
+      ]
+    },
+    {
+      "id": "a1-s07",
+      "fiText": "Minä tulen kaupasta.",
+      "zhText": "我从商店来。",
+      "enText": "I come from the shop.",
+      "cefr": "A1",
+      "grammarPoints": [
+        "ela"
+      ],
+      "gloss": [
+        {
+          "token": "Minä",
+          "senseId": null
+        },
+        {
+          "token": "tulen",
+          "senseId": "tulla-1"
+        },
+        {
+          "token": "kaupasta",
+          "senseId": "kauppa-1",
+          "caseForm": "ela"
+        }
+      ]
+    },
+    {
+      "id": "a1-s08",
+      "fiText": "Minä menen taloon.",
+      "zhText": "我走进房子。",
+      "enText": "I go into the house.",
+      "cefr": "A1",
+      "grammarPoints": [
+        "ill"
+      ],
+      "gloss": [
+        {
+          "token": "Minä",
+          "senseId": null
+        },
+        {
+          "token": "menen",
+          "senseId": null
+        },
+        {
+          "token": "taloon",
+          "senseId": "talo-1",
+          "caseForm": "ill"
+        }
+      ]
+    },
+    {
+      "id": "a1-s09",
+      "fiText": "Haluan leipää.",
+      "zhText": "我想要面包。",
+      "enText": "I want some bread.",
+      "cefr": "A1",
+      "grammarPoints": [
+        "par"
+      ],
+      "gloss": [
+        {
+          "token": "Haluan",
+          "senseId": "haluta-1"
+        },
+        {
+          "token": "leipää",
+          "senseId": "leipa-1",
+          "caseForm": "par"
+        }
+      ]
+    },
+    {
+      "id": "a1-s10",
+      "fiText": "Puhun kirjasta.",
+      "zhText": "我在谈这本书。",
+      "enText": "I am talking about the book.",
+      "cefr": "A1",
+      "grammarPoints": [
+        "ela"
+      ],
+      "gloss": [
+        {
+          "token": "Puhun",
+          "senseId": "puhua-1"
+        },
+        {
+          "token": "kirjasta",
+          "senseId": "kirja-1",
+          "caseForm": "ela"
+        }
+      ]
+    },
+    {
+      "id": "a2-s01",
+      "fiText": "Talo on kadulla.",
+      "zhText": "房子在街上。",
+      "enText": "The house is on the street.",
+      "cefr": "A2",
+      "grammarPoints": [
+        "ade"
+      ],
+      "gloss": [
+        {
+          "token": "Talo",
+          "senseId": "talo-1"
+        },
+        {
+          "token": "on",
+          "senseId": "olla-1"
+        },
+        {
+          "token": "kadulla",
+          "senseId": "katu-1",
+          "caseForm": "ade"
+        }
+      ]
+    },
+    {
+      "id": "a2-s02",
+      "fiText": "Minä asun kaupungissa.",
+      "zhText": "我住在城里。",
+      "enText": "I live in the city.",
+      "cefr": "A2",
+      "grammarPoints": [
+        "ine"
+      ],
+      "gloss": [
+        {
+          "token": "Minä",
+          "senseId": null
+        },
+        {
+          "token": "asun",
+          "senseId": "asua-1"
+        },
+        {
+          "token": "kaupungissa",
+          "senseId": "kaupunki-1",
+          "caseForm": "ine"
+        }
+      ]
+    },
+    {
+      "id": "a2-s03",
+      "fiText": "Ystävä tulee kaupasta.",
+      "zhText": "朋友从商店来。",
+      "enText": "A friend comes from the shop.",
+      "cefr": "A2",
+      "grammarPoints": [
+        "ela"
+      ],
+      "gloss": [
+        {
+          "token": "Ystävä",
+          "senseId": "ystava-1"
+        },
+        {
+          "token": "tulee",
+          "senseId": "tulla-1"
+        },
+        {
+          "token": "kaupasta",
+          "senseId": "kauppa-1",
+          "caseForm": "ela"
+        }
+      ]
+    },
+    {
+      "id": "a2-s04",
+      "fiText": "Minä vastaan ystävälle.",
+      "zhText": "我回答朋友。",
+      "enText": "I answer my friend.",
+      "cefr": "A2",
+      "grammarPoints": [
+        "all"
+      ],
+      "gloss": [
+        {
+          "token": "Minä",
+          "senseId": null
+        },
+        {
+          "token": "vastaan",
+          "senseId": "vastata-1"
+        },
+        {
+          "token": "ystävälle",
+          "senseId": "ystava-1",
+          "caseForm": "all"
+        }
+      ]
+    },
+    {
+      "id": "a2-s05",
+      "fiText": "Tarvitsen aikaa.",
+      "zhText": "我需要时间。",
+      "enText": "I need time.",
+      "cefr": "A2",
+      "grammarPoints": [
+        "par"
+      ],
+      "gloss": [
+        {
+          "token": "Tarvitsen",
+          "senseId": "tarvita-1"
+        },
+        {
+          "token": "aikaa",
+          "senseId": "aika-1",
+          "caseForm": "par"
+        }
+      ]
+    },
+    {
+      "id": "b1-s01",
+      "fiText": "Minä muistan kielen.",
+      "zhText": "我记得这门语言。",
+      "enText": "I remember the language.",
+      "cefr": "B1",
+      "grammarPoints": [
+        "gen"
+      ],
+      "gloss": [
+        {
+          "token": "Minä",
+          "senseId": null
+        },
+        {
+          "token": "muistan",
+          "senseId": "muistaa-1"
+        },
+        {
+          "token": "kielen",
+          "senseId": "kieli-1",
+          "caseForm": "gen"
+        }
+      ]
+    },
+    {
+      "id": "b1-s02",
+      "fiText": "Ihminen kertoo vuodesta.",
+      "zhText": "这个人讲述这一年。",
+      "enText": "The person tells about the year.",
+      "cefr": "B1",
+      "grammarPoints": [
+        "ela"
+      ],
+      "gloss": [
+        {
+          "token": "Ihminen",
+          "senseId": "ihminen-1"
+        },
+        {
+          "token": "kertoo",
+          "senseId": "kertoa-1"
+        },
+        {
+          "token": "vuodesta",
+          "senseId": "vuosi-1",
+          "caseForm": "ela"
+        }
+      ]
+    },
+    {
+      "id": "b1-s03",
+      "fiText": "Vuosi on pitkä.",
+      "zhText": "这一年很漫长。",
+      "enText": "The year is long.",
+      "cefr": "B1",
+      "grammarPoints": [],
+      "gloss": [
+        {
+          "token": "Vuosi",
+          "senseId": "vuosi-1"
+        },
+        {
+          "token": "on",
+          "senseId": "olla-1"
+        },
+        {
+          "token": "pitkä",
+          "senseId": null
+        }
+      ]
+    },
+    {
+      "id": "b1-s04",
+      "fiText": "Minä valitsen kirjan.",
+      "zhText": "我选一本书。",
+      "enText": "I choose a book.",
+      "cefr": "B1",
+      "grammarPoints": [
+        "gen"
+      ],
+      "gloss": [
+        {
+          "token": "Minä",
+          "senseId": null
+        },
+        {
+          "token": "valitsen",
+          "senseId": "valita-1"
+        },
+        {
+          "token": "kirjan",
+          "senseId": "kirja-1",
+          "caseForm": "gen"
+        }
+      ]
+    },
+    {
+      "id": "b1-s05",
+      "fiText": "Ystävä vanhenee.",
+      "zhText": "朋友渐渐变老。",
+      "enText": "The friend is getting older.",
+      "cefr": "B1",
+      "grammarPoints": [],
+      "gloss": [
+        {
+          "token": "Ystävä",
+          "senseId": "ystava-1"
+        },
+        {
+          "token": "vanhenee",
+          "senseId": "vanheta-1"
+        }
+      ]
+    },
+    {
+      "id": "b2-s01",
+      "fiText": "Tutkimus on mahdollisuus.",
+      "zhText": "这项研究是一个机会。",
+      "enText": "The study is an opportunity.",
+      "cefr": "B2",
+      "grammarPoints": [],
+      "gloss": [
+        {
+          "token": "Tutkimus",
+          "senseId": "tutkimus-1"
+        },
+        {
+          "token": "on",
+          "senseId": "olla-1"
+        },
+        {
+          "token": "mahdollisuus",
+          "senseId": "mahdollisuus-1"
+        }
+      ]
+    },
+    {
+      "id": "b2-s02",
+      "fiText": "Minä arvioin vaikutusta.",
+      "zhText": "我在评估影响。",
+      "enText": "I am assessing the impact.",
+      "cefr": "B2",
+      "grammarPoints": [
+        "par"
+      ],
+      "gloss": [
+        {
+          "token": "Minä",
+          "senseId": null
+        },
+        {
+          "token": "arvioin",
+          "senseId": "arvioida-1"
+        },
+        {
+          "token": "vaikutusta",
+          "senseId": "vaikutus-1",
+          "caseForm": "par"
+        }
+      ]
+    },
+    {
+      "id": "b2-s03",
+      "fiText": "Yhteiskunta muuttuu.",
+      "zhText": "社会在变化。",
+      "enText": "Society is changing.",
+      "cefr": "B2",
+      "grammarPoints": [],
+      "gloss": [
+        {
+          "token": "Yhteiskunta",
+          "senseId": "yhteiskunta-1"
+        },
+        {
+          "token": "muuttuu",
+          "senseId": null
+        }
+      ]
+    },
+    {
+      "id": "b2-s04",
+      "fiText": "Vaikutus on suuri.",
+      "zhText": "影响很大。",
+      "enText": "The impact is significant.",
+      "cefr": "B2",
+      "grammarPoints": [],
+      "gloss": [
+        {
+          "token": "Vaikutus",
+          "senseId": "vaikutus-1"
+        },
+        {
+          "token": "on",
+          "senseId": "olla-1"
+        },
+        {
+          "token": "suuri",
+          "senseId": null
+        }
+      ]
+    },
+    {
+      "id": "b2-s05",
+      "fiText": "Mahdollisuus on tutkimuksessa.",
+      "zhText": "机会存在于这项研究中。",
+      "enText": "The opportunity lies in the study.",
+      "cefr": "B2",
+      "grammarPoints": [
+        "ine"
+      ],
+      "gloss": [
+        {
+          "token": "Mahdollisuus",
+          "senseId": "mahdollisuus-1"
+        },
+        {
+          "token": "on",
+          "senseId": "olla-1"
+        },
+        {
+          "token": "tutkimuksessa",
+          "senseId": "tutkimus-1",
+          "caseForm": "ine"
+        }
+      ]
+    },
+    {
+      "id": "c1-s01",
+      "fiText": "Minä pohdin käsitettä.",
+      "zhText": "我在琢磨这个概念。",
+      "enText": "I am reflecting on the concept.",
+      "cefr": "C1",
+      "grammarPoints": [
+        "par"
+      ],
+      "gloss": [
+        {
+          "token": "Minä",
+          "senseId": null
+        },
+        {
+          "token": "pohdin",
+          "senseId": "pohtia-1"
+        },
+        {
+          "token": "käsitettä",
+          "senseId": "kasite-1",
+          "caseForm": "par"
+        }
+      ]
+    },
+    {
+      "id": "c1-s02",
+      "fiText": "Ilmiö on monimutkainen.",
+      "zhText": "这一现象很复杂。",
+      "enText": "The phenomenon is complex.",
+      "cefr": "C1",
+      "grammarPoints": [],
+      "gloss": [
+        {
+          "token": "Ilmiö",
+          "senseId": "ilmio-1"
+        },
+        {
+          "token": "on",
+          "senseId": "olla-1"
+        },
+        {
+          "token": "monimutkainen",
+          "senseId": null
+        }
+      ]
+    },
+    {
+      "id": "c1-s03",
+      "fiText": "Näkökulma on tärkeä.",
+      "zhText": "视角很重要。",
+      "enText": "The point of view matters.",
+      "cefr": "C1",
+      "grammarPoints": [],
+      "gloss": [
+        {
+          "token": "Näkökulma",
+          "senseId": "nakokulma-1"
+        },
+        {
+          "token": "on",
+          "senseId": "olla-1"
+        },
+        {
+          "token": "tärkeä",
+          "senseId": null
+        }
+      ]
+    },
+    {
+      "id": "c1-s04",
+      "fiText": "Minä perustelen vastausta.",
+      "zhText": "我为这个回答说明理由。",
+      "enText": "I justify the answer.",
+      "cefr": "C1",
+      "grammarPoints": [
+        "par"
+      ],
+      "gloss": [
+        {
+          "token": "Minä",
+          "senseId": null
+        },
+        {
+          "token": "perustelen",
+          "senseId": "perustella-1"
+        },
+        {
+          "token": "vastausta",
+          "senseId": null,
+          "caseForm": "par"
+        }
+      ]
+    },
+    {
+      "id": "c1-s05",
+      "fiText": "Käsite on ilmiössä.",
+      "zhText": "概念体现在现象之中。",
+      "enText": "The concept is present in the phenomenon.",
+      "cefr": "C1",
+      "grammarPoints": [
+        "ine"
+      ],
+      "gloss": [
+        {
+          "token": "Käsite",
+          "senseId": "kasite-1"
+        },
+        {
+          "token": "on",
+          "senseId": "olla-1"
+        },
+        {
+          "token": "ilmiössä",
+          "senseId": "ilmio-1",
+          "caseForm": "ine"
+        }
+      ]
+    },
+    {
+      "id": "c2-s01",
+      "fiText": "Minä sovellan käsitettä.",
+      "zhText": "我把这个概念加以运用。",
+      "enText": "I apply the concept.",
+      "cefr": "C2",
+      "grammarPoints": [
+        "par"
+      ],
+      "gloss": [
+        {
+          "token": "Minä",
+          "senseId": null
+        },
+        {
+          "token": "sovellan",
+          "senseId": "soveltaa-1"
+        },
+        {
+          "token": "käsitettä",
+          "senseId": "kasite-1",
+          "caseForm": "par"
+        }
+      ]
+    },
+    {
+      "id": "c2-s02",
+      "fiText": "Vastaus on monitulkintainen.",
+      "zhText": "这个回答可作多种解读。",
+      "enText": "The answer is open to multiple interpretations.",
+      "cefr": "C2",
+      "grammarPoints": [],
+      "gloss": [
+        {
+          "token": "Vastaus",
+          "senseId": null
+        },
+        {
+          "token": "on",
+          "senseId": "olla-1"
+        },
+        {
+          "token": "monitulkintainen",
+          "senseId": "monitulkintainen-1"
+        }
+      ]
+    },
+    {
+      "id": "c2-s03",
+      "fiText": "Yhteisymmärrys on tärkeää.",
+      "zhText": "达成共识很重要。",
+      "enText": "Mutual understanding is important.",
+      "cefr": "C2",
+      "grammarPoints": [
+        "par"
+      ],
+      "gloss": [
+        {
+          "token": "Yhteisymmärrys",
+          "senseId": "yhteisymmarrys-1"
+        },
+        {
+          "token": "on",
+          "senseId": "olla-1"
+        },
+        {
+          "token": "tärkeää",
+          "senseId": null,
+          "caseForm": "par"
+        }
+      ]
+    },
+    {
+      "id": "c2-s04",
+      "fiText": "Minä olen kriittinen.",
+      "zhText": "我持批判态度。",
+      "enText": "I take a critical stance.",
+      "cefr": "C2",
+      "grammarPoints": [],
+      "gloss": [
+        {
+          "token": "Minä",
+          "senseId": null
+        },
+        {
+          "token": "olen",
+          "senseId": "olla-1"
+        },
+        {
+          "token": "kriittinen",
+          "senseId": "kriittinen-1"
+        }
+      ]
+    },
+    {
+      "id": "c2-s05",
+      "fiText": "Kieli on vivahteinen.",
+      "zhText": "语言充满细微差别。",
+      "enText": "Language is nuanced.",
+      "cefr": "C2",
+      "grammarPoints": [],
+      "gloss": [
+        {
+          "token": "Kieli",
+          "senseId": "kieli-1"
+        },
+        {
+          "token": "on",
+          "senseId": "olla-1"
+        },
+        {
+          "token": "vivahteinen",
+          "senseId": "vivahteinen-1"
+        }
+      ]
+    }
+  ]
+}

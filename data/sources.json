@@ -1,0 +1,59 @@
+{
+  "note": "CEFR defines can-do descriptors, not word lists. Finland's YKI/OPH publishes level descriptions and nine topic categories, not an official A1-C2 vocabulary. All levels in this project are derived in-house and must carry provenance.",
+  "sources": [
+    {
+      "id": "kotus",
+      "name": "Kotus / Kielipankki Nykysuomen sanalista + Enriched Kotus word list (Zenodo)",
+      "url": "https://www.kielipankki.fi/lexical-conceptual-resources/nykysuomi-sanalista",
+      "license": "CC BY 4.0",
+      "provides": ["lemma", "nominal declension type 1-51", "verb conjugation type 52-78", "consonant gradation class"],
+      "caveat": "No translations and no CEFR levels."
+    },
+    {
+      "id": "wiktionary",
+      "name": "Wiktionary Finnish declension / conjugation tables (incl. zh.wiktionary)",
+      "url": "https://en.wiktionary.org/wiki/Appendix:Finnish_declension",
+      "license": "CC BY-SA",
+      "provides": ["fi-en gloss", "fi-zh gloss", "full 15-case paradigm", "verb forms"],
+      "caveat": "Share-alike obligation; Chinese glosses require human review before publishing."
+    },
+    {
+      "id": "corpus",
+      "name": "Kielipankki corpora / Finnish Wikipedia dump / OPUS subtitles",
+      "license": "varies; derived statistics only",
+      "provides": ["frequency percentile"],
+      "caveat": "Ship derived counts only, never raw corpus text."
+    },
+    {
+      "id": "yki",
+      "name": "Opetushallitus YKI framework + Kielitaidon tasojen kuvausasteikko",
+      "url": "https://www.oph.fi/en/education-and-qualifications/yki-test",
+      "license": "public guidance",
+      "provides": ["can-do descriptors", "nine topic categories"],
+      "caveat": "Reference only. OPH states there is no official textbook or word list for YKI."
+    },
+    {
+      "id": "own",
+      "name": "In-house: graded sentences, Chinese gloss review, mp3 audio, illustrations",
+      "license": "own",
+      "provides": ["sentences", "reviewed zh gloss", "audio", "images"],
+      "caveat": "Human QA is our responsibility."
+    }
+  ],
+  "yki_topic_categories": [
+    "I and my background", "home and housing", "shops and services", "culture",
+    "travelling", "health and wellbeing", "work", "the environment", "society"
+  ],
+  "grading_recipe": [
+    "frequency percentile from corpus",
+    "morphology gate: unlocked cases, verb type 1-6, rektio",
+    "map to a YKI topic category",
+    "human spot-check 100 words per level"
+  ],
+  "forbidden": [
+    "Scraping FunEasyLearn word lists, illustrations or audio (proprietary)",
+    "Using CC BY-NC word lists in a product that may be commercialised",
+    "Publishing machine-translated Chinese glosses without human review",
+    "Copying commercial blog 'A1 word list' posts (copyrighted content)"
+  ]
+}

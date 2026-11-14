@@ -83,3 +83,7 @@ tests/                        浏览器回归
 - IPA、释义、屈折 / Kotus 类型等标注来源标记为 `auto-derived`，需人工校对；CEFR 分级是本产品的内部约定，CEFR / YKI 并无官方词表。
 - 无账号、无后端、无自动同步；换设备只能靠导出 / 导入 JSON。
 - 内部标识 `finnish-learn:v1`（存储键）与 `finnish-learn-progress`（导出格式）不要改，否则旧进度与已导出的文件会读不出来。
+
+## 许可
+
+MIT License，详见 [LICENSE](LICENSE)。

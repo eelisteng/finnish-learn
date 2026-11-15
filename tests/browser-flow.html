@@ -156,10 +156,11 @@
     ok('settings: pronunciation source is explained', $('.modal')?.textContent.includes('发音来源') &&
       $('.modal')?.textContent.includes('预录音频') && $('.modal')?.textContent.includes('fi-FI'))
     click('[data-modal="preset-slim"]')
-    ok('settings: slim preset drops find-image', !$('.hero p')?.textContent.includes('找图片'))
+    ok('settings: slim preset drops find-picture', !$('.hero p')?.textContent.includes('找图'))
     click('[data-act="settings"]')
     click('[data-modal="preset-full"]')
-    ok('settings: full preset restored', $('.hero p')?.textContent.includes('找图片') && window.FI.Store.load().preferences.enabledModes.length === 6)
+    ok('settings: full preset shows the renamed 找图 stage', $('.hero p')?.textContent.includes('找图') &&
+      !$('.hero p')?.textContent.includes('找图片') && window.FI.Store.load().preferences.enabledModes.length === 6)
 
     /* ── quick theme / music toggles ───────────────────────── */
     const initialTheme = window.FI.Store.load().preferences.theme
@@ -260,14 +261,54 @@
     ok('listen result shown', headIs('本轮结果'))
     click('[data-act="result-continue"]')
 
-    /* ── ④ find-image ──────────────────────────────────────── */
-    ok('entered find-image round', headIs('找图片模式'))
-    ok('find-image: exactly four text-only options', $$('.optcard').length === 4 && $('.optcards.text-only') !== null)
-    ok('find-image: options carry no pictures', $$('.optcard .optcard-pic').length === 0)
-    ok('find-image: one picture shown in the prompt', $$('.quiz-prompt .quiz-pic').length === 1)
-    ok('find-image: zh + en meaning prompt', $('.quiz-prompt .zh')?.textContent.length > 0 && $('.quiz-prompt .en')?.textContent.length > 0)
-    await driveSelect(5, () => zhToLemma($('.quiz-prompt .zh')?.textContent), '.optcard', (o) => o.querySelector('.optcard-label')?.textContent ?? '', false)
-    ok('find-image result: all correct', $('.score-txt h4')?.textContent.includes('5 / 5'))
+    /* ── ④ find-picture (找图) ─────────────────────────────── */
+    ok('entered find-picture round', headIs('找图模式'))
+    ok('find-image: exactly four word options', $$('.optcard').length === 4 && $('.optcards.find-image') !== null)
+    ok('find-image: options carry no pictures before answering',
+      $$('.optcard .optcard-pic').length === 0 && $$('.flip-back').length === 0)
+    ok('find-image: prompt shows ONE meaning and no picture', $$('.quiz-prompt .quiz-pic').length === 0 &&
+      $$('.quiz-prompt .zh').length === 1 && $('.quiz-prompt .zh')?.textContent.length > 0 &&
+      $('.quiz-prompt .en')?.textContent.length > 0)
+    const findTarget = () => zhToLemma($('.quiz-prompt .zh')?.textContent)
+    const findCorrect = () => {
+      const target = findTarget()
+      return $$('.optcard').findIndex((o) => o.querySelector('.optcard-label')?.textContent === target)
+    }
+    // A wrong pick: red + highlighted right option, but no flip and no sound.
+    let playsBefore = window.__audioCalls.length + window.__ttsCalls.length
+    const wrongIdx = (findCorrect() + 1) % 4
+    $$('.optcard')[wrongIdx].click()
+    ok('find-image: wrong pick turns red and reveals correct', $('.optcard.wrong') !== null && $('.optcard.reveal') !== null)
+    ok('find-image: wrong pick does NOT flip any card', $('.optcard.flipped') === null && $$('.flip-back').length === 0)
+    ok('find-image: wrong pick does NOT play audio', window.__audioCalls.length + window.__ttsCalls.length === playsBefore)
+    ok('find-image: wrong pick has no text feedback label', $('.feedback') === null)
+    await wait(TICK)
+    // A correct pick: the card flips to that word's picture and plays it once.
+    const audioBefore = window.__audioCalls.length
+    const ttsBefore = window.__ttsCalls.length
+    playsBefore = audioBefore + ttsBefore
+    const correctIdx = findCorrect()
+    const chosenWord = $$('.optcard')[correctIdx].querySelector('.optcard-label')?.textContent
+    $$('.optcard')[correctIdx].click()
+    ok('find-image: correct card flips to its picture', $('.optcard.flipped .flip-back .optcard-pic') !== null)
+    ok('find-image: flipped card is green and keeps the word visible',
+      $('.optcard.flipped.correct') !== null && $('.optcard.flipped .flip-word')?.textContent === chosenWord)
+    ok('find-image: flipped back really shows the chosen word illustration', (() => {
+      const pic = $('.optcard.flipped .flip-back .optcard-pic')
+      return pic && (pic.tagName === 'IMG' ? String(pic.getAttribute('src')).includes(chosenWord) : pic.querySelector('svg') !== null)
+    })())
+    ok('find-image: the other three cards stay word-only', $$('.optcard:not(.flipped) .optcard-pic').length === 0)
+    ok('find-image: correct pick auto-plays exactly once',
+      window.__audioCalls.length + window.__ttsCalls.length === playsBefore + 1)
+    ok('find-image: autoplay uses the chosen word (clip or TTS text)', (() => {
+      const declared = pack.words.find((w) => w.lemma === chosenWord)?.audio?.path
+      return window.__audioCalls.length > audioBefore
+        ? Boolean(declared) && window.__audioCalls.at(-1)?.src === declared
+        : window.__ttsCalls.at(-1) === chosenWord
+    })())
+    await wait(TICK)
+    await driveSelect(3, findTarget, '.optcard', (o) => o.querySelector('.optcard-label')?.textContent ?? '', false)
+    ok('find-image result: 4/5 after one wrong', $('.score-txt h4')?.textContent.includes('4 / 5'))
     click('[data-act="result-continue"]')
 
     /* ── ⑤ match ───────────────────────────────────────────── */

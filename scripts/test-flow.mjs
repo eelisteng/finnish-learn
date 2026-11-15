@@ -147,8 +147,10 @@ ok('slim preset keeps four rounds', FI.buildPipeline('word', FI.SLIM_MODES).leng
 ok('unknown modes are filtered out', FI.sanitizeModes(['listen', 'bogus', 'listen']).join(',') === 'listen')
 ok('empty mode list falls back to choice', FI.sanitizeModes([]).join(',') === 'choice')
 ok('preferences default to the full flow', st2.preferences.enabledModes.length === 6)
+ok('find-image mode is named 找图 in Chinese', FI.MODE_META.findImage.short === '找图' && FI.MODE_META.findImage.label === '找图模式')
+ok('find-image mode has an English name', FI.modeShort('findImage', 'en') === 'Find pic' && FI.modeLabel('findImage', 'en') === 'Find the picture')
 
-console.log('Listen / find-image rounds')
+console.log('Listen / find-picture rounds')
 const listenQs = FI.buildSelectQuestions(wg, pack, { seed: 11, optionCount: 4, hideLabel: true })
 ok('listen: one question per word', listenQs.length === 5)
 ok('listen: exactly four options', listenQs.every((q) => q.options.length === 4))
@@ -161,7 +163,9 @@ ok('find-image: exactly four options', imageQs.every((q) => q.options.length ===
 ok('find-image: prompt has zh + en meaning', imageQs.every((q) => q.promptZh && q.promptEn))
 ok('find-image: options carry no pictures', imageQs.every((q) => q.options.every((o) => !o.image)))
 ok('find-image: options are plain Finnish words', imageQs.every((q) => q.options.every((o) => typeof o.label === 'string')))
-ok('find-image: the picture stays in the prompt', imageQs.every((q) => q.image))
+ok('find-image: one meaning in the question payload', imageQs.every((q) => q.promptZh && q.promptEn))
+ok('find-image: picture reserved for the flip reveal', imageQs.every((q) => q.image))
+ok('find-image: correct flip can replay the target word', imageQs.every((q) => q.audioText === q.label))
 const narrowQs = FI.buildSelectQuestions(wg, pack, { scopeIds: ['talo'], seed: 11, optionCount: 4, hideLabel: true })
 ok('retry keeps a four-option pool even with one target', narrowQs.length === 1 && narrowQs[0].options.length === 4)
 ok('option order is deterministic for the same seed',

@@ -16,7 +16,7 @@
     memorize: { short: '背词', label: '背词模式', desc: '看词形、音标、词性、单复数与释义', word: true, sentence: true },
     choice: { short: '选词', label: '选词模式', desc: '看配图与释义，从 4 个词里选择', word: true, sentence: true },
     listen: { short: '听选', label: '听选模式', desc: '听发音，从 4 张「图片 + 释义」卡里选择；不显示芬兰语单词', word: true, sentence: true },
-    findImage: { short: '找图片', label: '找图片模式', desc: '题干给释义与配图，选项是 4 个纯文字单词', word: true, sentence: false },
+    findImage: { short: '找图', label: '找图模式', desc: '题干只给释义，选项是 4 个纯文字单词；选对后卡片翻面显示配图并朗读一次', word: true, sentence: false },
     match: { short: '匹配', label: '单词匹配模式', desc: '两排打乱，配对成功即消失', word: true, sentence: true },
     cloze: { short: '填空', label: '填空模式', desc: '配图 + 释义，逐字母填空：随机露出若干字母', word: true, sentence: true },
     dictation: { short: '听写', label: '听写模式', desc: '听音（正常/慢速）+ 看图，每字母一个下划线，全对才算通过', word: true, sentence: false },
@@ -272,11 +272,15 @@
     return FI.buildLetterQuestions(group, pack, scopeIds, 'cloze', meaningLang)
   }
 
-  /* ── 听选 / 找图片: FOUR options per question ───────────────────
+  /* ── 听选 / 找图: FOUR options per question ─────────────────────
      listen    → audio prompt; every option is picture + zh/en meaning,
                  and NEVER exposes the Finnish word (otherwise matching
                  the sound to the spelling bypasses comprehension).
-     findImage → meaning + one picture in the prompt; four plain words.  */
+     findImage → ONE meaning in the prompt, no picture; four plain words.
+                 q.image / q.audioText / q.audioFile are the reveal payload:
+                 only the correctly picked card flips to that picture and
+                 plays that word once. Options themselves stay picture-free,
+                 otherwise the answer can be guessed by looking at the art. */
   FI.buildSelectQuestions = function (group, pack, options) {
     const maps = FI.itemMaps(pack)
     const source = group.kind === 'word' ? maps.words : maps.sentences
@@ -290,8 +294,8 @@
         id,
         // Listen hides the word entirely; find-image needs plain text words.
         ...(options.hideLabel ? {} : { label: FI.itemLabel(item, group.kind) }),
-        // Find-image deliberately keeps the picture in the prompt only:
-        // a picture on every option gives the answer away.
+        // A picture on every option gives the answer away. Find-image keeps
+        // its single picture on the question (revealed only after a flip).
         ...(options.textOnly ? {} : { image: FI.itemImage(item, group.kind) }),
         zh: meaning.zh,
         en: meaning.en,
@@ -306,8 +310,10 @@
         itemId,
         label: FI.itemLabel(item, group.kind), // only used for feedback in find-image
         correctMeaning: FI.formatMeaning(meaning.zh, meaning.en, options.meaningLang ?? 'both'),
+        // One meaning only: the picture is NOT in the prompt for find-image.
         promptZh: meaning.zh,
         promptEn: meaning.en,
+        // Reveal payload for the flip + one-shot autoplay on a correct pick.
         audioText: group.kind === 'word' ? item.lemma : item.fiText,
         audioFile: FI.itemAudio(item),
         image: FI.itemImage(item, group.kind),

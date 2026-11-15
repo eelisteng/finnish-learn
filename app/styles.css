@@ -198,7 +198,7 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .complete-grid span{display:block;font-size:11px;color:var(--muted)}
 .complete-grid b{font-size:19px;font-weight:600}
 
-/* ── 听选 / 找图片：带图选项卡 ─────────────────────────────── */
+/* ── 听选 / 找图：带图选项卡 ───────────────────────────────── */
 .listen-hero{text-align:center;padding:10px 0 20px}
 .audio-big{font-size:46px;line-height:1.2;margin-bottom:8px}
 .audio-row{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin:12px 0 4px}
@@ -212,10 +212,29 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .optcard.correct,.optcard.reveal{background:var(--ok-bg);border-color:var(--ok-line);color:var(--ok-text)}
 .optcard.wrong{background:var(--no-bg);border-color:var(--no-line);color:var(--no-text)}
 .optcard:disabled{cursor:default}
-/* 找图片模式：只有题干有图，选项一律为纯文字单词 */
-.optcards.text-only,.optcards.with-meaning{grid-template-columns:repeat(4,1fr)}
-.optcards.text-only .optcard{min-height:0;padding:22px 8px;justify-content:center;gap:0}
-.optcards.text-only .optcard-label{font-size:17px}
+/* 找图模式：题干只有一条释义、没有配图；选项是纯文字单词，
+   答对的卡片原地翻面，背面才显示该词的配图。 */
+.optcards.find-image,.optcards.with-meaning{grid-template-columns:repeat(4,1fr)}
+.find-prompt{min-height:118px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.optcards.find-image .optcard{min-height:0;height:132px;padding:0;border:0;background:transparent;box-shadow:none;display:block;overflow:visible;perspective:820px}
+.optcards.find-image .optcard:hover:not(:disabled){border:0;background:transparent;transform:none}
+.optcards.find-image .optcard:hover:not(:disabled) .flip-front{border-color:var(--blue);background:var(--blue-soft)}
+.optcards.find-image .optcard.correct,.optcards.find-image .optcard.reveal,
+.optcards.find-image .optcard.wrong{background:transparent;border-color:transparent;color:inherit}
+.optcards.find-image .optcard.correct .flip-face,
+.optcards.find-image .optcard.reveal .flip-face{background:var(--ok-bg);border-color:var(--ok-line);color:var(--ok-text)}
+.optcards.find-image .optcard.wrong .flip-face{background:var(--no-bg);border-color:var(--no-line);color:var(--no-text)}
+.optcards.find-image .optcard-label{font-size:17px}
+.flip-inner{position:relative;display:block;width:100%;height:100%;transform-style:preserve-3d}
+.flip-face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:10px 8px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
+.flip-front .num{position:absolute;top:5px;left:7px;font-size:10px;color:var(--muted)}
+.flip-back{transform:rotateY(180deg)}
+.flip-back .optcard-pic{width:100%;height:auto;flex:1;min-height:0;border:0;border-radius:8px;background:var(--pic-bg);object-fit:contain;overflow:hidden}
+.flip-back .optcard-pic svg{width:100%;height:100%;display:block}
+.flip-word{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;font-weight:600;line-height:1.1;word-break:break-word}
+.optcards.find-image .optcard.flipped .flip-inner{transform:rotateY(180deg);animation:fi-flip .58s cubic-bezier(.2,.75,.3,1) both}
+@keyframes fi-flip{from{transform:rotateY(0deg)}to{transform:rotateY(180deg)}}
+@media (prefers-reduced-motion:reduce){.optcards.find-image .optcard.flipped .flip-inner{animation:none}}
 .quiz-prompt .quiz-pic{width:118px;height:118px;margin-bottom:10px}
 /* 听选模式：每个选项是「图片 + 释义」，绝不显示芬兰语单词 */
 .optcard-meaning{display:flex;flex-direction:column;gap:1px;width:100%;min-width:0;text-align:center}
@@ -288,7 +307,7 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
   .lemma{font-size:28px}
   .quiz-prompt .zh{font-size:20px}
   .opts{grid-template-columns:repeat(2,1fr)}
-  .optcards,.optcards.text-only,.optcards.with-meaning{grid-template-columns:repeat(2,1fr)}
+  .optcards,.optcards.find-image,.optcards.with-meaning{grid-template-columns:repeat(2,1fr)}
   .optcard-pic{width:72px;height:72px}
   .match-row{grid-template-columns:repeat(2,1fr)}
   .slot{width:25px;height:36px;font-size:19px}

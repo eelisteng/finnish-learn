@@ -10,7 +10,9 @@
 
    Feedback is intentionally colour-only: a correct option turns green, a
    wrong one turns red (and the right option is highlighted). No status label
-   is printed under the options, and the stage itself no longer flashes. */
+   is printed under the options, and the stage itself no longer flashes.
+   Find-image adds one extra, non-textual reward: the correctly picked word
+   card flips over to its illustration and the word is read aloud once. */
 (function () {
   const FI = window.FI
   const { pack, groups: groupIndex } = window.FI_DATA
@@ -293,6 +295,7 @@
       lastWrongIds: [],
       startedAt: new Date().toISOString(),
       _spoken: null,
+      _flipSpoken: null,
     }
     session.round = makeRound('memorize', session.scopeIds, false)
     ui.view = 'learn'
@@ -432,6 +435,16 @@
     const correct = opt.id === q.itemId
     r.answers.push({ itemId: q.itemId, chosenId: opt.id, correct, hintUsed: false })
     r.feedback = { idx, correct, correctIdx: q.options.findIndex((o) => o.id === q.itemId) }
+    // Find-image reward: flip the correct card to its picture and read the
+    // word once. This is user-triggered (a click), so no autoplay gate; a
+    // per-question key prevents a second sound on re-render / resume.
+    if (correct && session.phase === 'findImage') {
+      const flipKey = `findImage:${session.groupId}:${r.attempt}:${r.index}`
+      if (session._flipSpoken !== flipKey) {
+        session._flipSpoken = flipKey
+        speak(q.audioText, 'normal', q.audioFile)
+      }
+    }
     persist()
     render()
     later(nextQuestion, DELAY.feedback)
@@ -789,6 +802,7 @@
     const q = r.questions[r.index]
     const fb = r.feedback
     const isListen = mode === 'listen'
+    const isFind = mode === 'findImage'
     const cards = q.options.map((o, i) => {
       let cls = 'optcard'
       if (fb) {
@@ -797,12 +811,20 @@
       }
       // Listen: picture + meaning, never the Finnish word. Showing the word
       // would let learners match sound→spelling without understanding it.
-      // Find-image: one picture lives in the prompt; options are plain words.
+      // Find-image: the prompt holds ONE meaning and no picture; the four
+      // options are plain words. Only a correctly picked card turns over to
+      // reveal the target illustration, so pictures never give the answer away.
+      const flipped = isFind && Boolean(fb?.correct) && i === fb.idx
+      if (flipped) cls += ' flipped'
+      const front = `<span class="flip-face flip-front"><span class="num">${i + 1}</span><span class="optcard-label fi">${esc(o.label)}</span></span>`
+      const back = flipped
+        ? `<span class="flip-face flip-back">${picture(q.image, q.itemId, 'optcard-pic')}<span class="flip-word fi">${esc(o.label)}</span></span>`
+        : ''
       const body = isListen
         ? `${picture(o.image, o.id, 'optcard-pic')}${meaningOption(o.zh, o.en)}`
-        : `<span class="optcard-label fi">${esc(o.label)}</span>`
+        : `<span class="flip-inner">${front}${back}</span>`
       return `<button class="${cls}" data-act="pick" data-idx="${i}" ${fb ? 'disabled' : ''}>
-        <span class="num">${i + 1}</span>${body}
+        ${isListen ? `<span class="num">${i + 1}</span>` : ''}${body}
       </button>`
     }).join('')
     const prompt = isListen
@@ -816,15 +838,14 @@
           ${voiceHint(q.audioFile)}
           <p class="hintline">${th('listen.hint')}</p>
         </div>`
-      : `<div class="quiz-prompt">
-          ${picture(q.image, q.itemId, 'quiz-pic')}
+      : `<div class="quiz-prompt find-prompt">
           ${meaningLines(q.promptZh, q.promptEn)}
           <p class="hintline">${th('findImage.hint')}</p>
         </div>`
     return `<div class="stage">
       <div class="stage-head"><h3>${esc(modeLabel(mode))}</h3><span class="pill">${r.index + 1} / ${r.questions.length}</span><span class="pill teal">${isListen ? th('listen.pill', { meaning: meaningName() }) : th('findImage.pill')}</span></div>
       ${prompt}
-      <div class="optcards ${isListen ? 'with-meaning' : 'text-only'}">${cards}</div>
+      <div class="optcards ${isListen ? 'with-meaning' : 'find-image'}">${cards}</div>
       <div class="stage-foot"><span class="tip">${th(isListen ? 'select.foot.listen' : 'select.foot.findImage')}</span><span class="spacer"></span><button class="btn sm ghost" data-act="pause">${th('common.pause')}</button></div>
     </div>`
   }

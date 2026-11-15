@@ -22,7 +22,7 @@ const sandbox = {
 }
 sandbox.window.window = sandbox.window
 vm.createContext(sandbox)
-for (const file of ['app/data.js', 'app/grouping.js', 'app/store.js']) {
+for (const file of ['app/data.js', 'app/grouping.js', 'app/i18n.js', 'app/store.js']) {
   vm.runInContext(readFileSync(join(root, file), 'utf8'), sandbox, { filename: file })
 }
 const FI = sandbox.window.FI
@@ -198,12 +198,39 @@ ok('formatMeaning: zh only', FI.formatMeaning('房屋', 'a home', 'zh') === '房
 ok('formatMeaning: en only', FI.formatMeaning('房屋', 'a home', 'en') === 'a home')
 ok('theme options', FI.THEMES.join(',') === 'light,dark,system')
 const cleanPrefs = FI.sanitizePrefs({
-  meaningLang: 'bogus', theme: 'neon', bgm: 'yes', targetLevel: 'Z9',
+  meaningLang: 'bogus', theme: 'neon', bgm: 'yes', targetLevel: 'Z9', uiLang: 'fr',
   enabledModes: ['choice', 'spelling'],
 })
-ok('sanitizePrefs clamps invalid meaning/theme/level/bgm',
-  cleanPrefs.meaningLang === 'both' && cleanPrefs.theme === 'system' && cleanPrefs.bgm === false && cleanPrefs.targetLevel === 'A1')
+ok('sanitizePrefs clamps invalid meaning/theme/level/bgm/uiLang',
+  cleanPrefs.meaningLang === 'both' && cleanPrefs.theme === 'system' && cleanPrefs.bgm === false &&
+  cleanPrefs.targetLevel === 'A1' && cleanPrefs.uiLang === 'zh')
 ok('sanitizePrefs drops the removed spelling mode', cleanPrefs.enabledModes.join(',') === 'choice')
+ok('sanitizePrefs keeps a valid English interface', FI.sanitizePrefs({ uiLang: 'en' }).uiLang === 'en')
+ok('store defaults to a Chinese interface', st2.preferences.uiLang === 'zh')
+
+console.log('Interface language')
+ok('two interface languages', (FI.UI_LANGS ?? []).join(',') === 'zh,en')
+const zhKeys = Object.keys(FI.I18N.zh), enKeys = Object.keys(FI.I18N.en)
+ok('zh/en dictionaries have identical keys', zhKeys.length === enKeys.length &&
+  zhKeys.every((k) => k in FI.I18N.en), `zh=${zhKeys.length} en=${enKeys.length}`)
+ok('tr resolves both languages', FI.tr('zh', 'toast.retry', { n: 2, mode: '选词模式' }) === '只练 2 个词 · 选词模式' &&
+  FI.tr('en', 'toast.retry', { n: 2, mode: 'Word choice' }) === 'Review 2 items · Word choice')
+ok('trHtml escapes interpolated values', FI.trHtml('en', 'import.source', { file: '<x>&', date: 'd' }) ===
+  'Source: &lt;x&gt;&amp; · exported d')
+ok('tr falls back to zh for an unknown key', FI.tr('en', 'no.such.key') === 'no.such.key')
+ok('mode labels are localised', FI.modeLabel('choice') === '选词模式' && FI.modeLabel('choice', 'en') === 'Word choice')
+ok('mode short names are localised', FI.modeShort('listen') === '听选' && FI.modeShort('listen', 'en') === 'Listen')
+ok('mode descriptions are localised', FI.modeDesc('match', 'en').includes('shuffled'))
+ok('group titles have an English variant', FI.groupTitle(g('A1-W-01'), 'en') === 'Places & objects' &&
+  FI.groupTitle(g('A1-W-01'), 'zh') === '生活场所与物件')
+ok('unknown group title falls back to generic English', FI.groupTitle({ id: 'Z9-W-99', level: 'Z9', kind: 'word', index: 9, title: '?' }, 'en') === 'Z9 Words · 9')
+ok('part-of-speech labels are localised', FI.posText({ posZh: '名词', pos: 'noun' }, 'en') === 'Noun' &&
+  FI.posText({ posZh: '名词', pos: 'noun' }, 'zh') === '名词')
+ok('case names are localised', FI.caseName('ine', 'zh') === '内格' && FI.caseName('ine', 'en') === 'Inessive')
+ok('case table keeps the Finnish term in English', FI.caseText({ case: 'nom', label: '主格 nominatiivi' }, 'en') === 'Nominative · nominatiivi')
+ok('declension class suffix is translated', FI.declText('valo 型', 'en') === 'valo type')
+ok('import errors carry a localisable key', FI.Store.parseImport('{broken').errorKey === 'import.err.notJson' &&
+  FI.Store.parseImport('{}').errorKey === 'import.err.format')
 ok('speech rates are clearly distinct', FI.SPEECH_RATE.slow <= FI.SPEECH_RATE.normal / 2)
 ok('syllabify talo → ta/lo', FI.syllabify('talo').join('-') === 'ta-lo')
 ok('syllabify kauppa → kau/ppa', FI.syllabify('kauppa').join('-') === 'kau-ppa')

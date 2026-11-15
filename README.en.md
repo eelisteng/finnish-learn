@@ -24,15 +24,18 @@ python3 -m http.server 8000
 | Area | What it does |
 | --- | --- |
 | Levels & groups | A1–C2, exactly 5 items per group, word and sentence tracks kept separate; continue to the next group or pause at any time |
-| Memorize cards | Lemma, IPA, part of speech, singular/plural, stems and basic cases, CEFR tags on cases and senses, verb-type badge, one image per sense, Chinese and English glosses |
+| Memorize cards | Lemma, IPA, part of speech, singular/plural, stems and basic cases, CEFR tags on cases and senses, verb-type badge, one image per sense, Chinese and English glosses; each card is read aloud once on entry |
 | Practice flow | Words: memorize → choice → listen → find image → match → cloze → dictation → complete. Sentences: memorize → choice → listen → match → cloze → complete. All 6 practice modes can be toggled in Settings |
-| Choice / listen / find image | 4 options; correct answers turn green, wrong ones red; a retry covers only the missed items |
+| Choice / listen / find image | 4 options; a correct pick turns green, a wrong one turns red and highlights the right option — no text status label; a retry covers only the missed items |
 | Dictation | Normal 1.0x and slow 0.5x playback; falls back to syllable-separated speech when no clip exists; a retry also includes items solved with a hint |
 | Pronunciation | Pre-recorded clips are played first when declared (slow = `playbackRate=0.5` with pitch preserved); items without a clip fall back to browser TTS, and Settings reports whether a `fi-FI` voice is installed |
 | Cloze | A few letters revealed at random, underline slots for the rest, an image hint, and a virtual Finnish letter bar (ä/ö/å) |
-| Gloss language | Chinese only / English only / both |
+| Interface language | Chinese / English, switched from the topbar quick toggle or Settings; buttons, headings, tips, dialogs, mode names, group titles, parts of speech and case names all follow. Word glosses are unaffected |
+| Gloss language | Chinese only / English only / both — independent of the interface language |
 | Appearance | Light / dark / follow-system theme, plus optional ambient background music (Web Audio, off by default) |
 | Progress | `localStorage` holds group progress, a mistake book, an event log (capped at 2000) and game scores. JSON export includes a checksum and a diff preview; import supports merge or overwrite and deduplicates by `anonId + clientSeq` |
+
+`preferences.uiLang` (default `zh`) and `meaningLang` are independent settings; both stay on the device and travel with the exported progress file. The `zh` and `en` dictionaries in `app/i18n.js` must have identical keys (checked by the domain tests), so any new interface string needs both languages. Finnish lemmas, glosses, IPA and example sentences are content and are never translated here.
 
 ## Content & data
 
@@ -83,6 +86,7 @@ For the browser end-to-end regression, open `tests/browser-flow.html` in headles
 index.html / preview.html     app entry and word-card prototype
 app/data.js                   embedded content pack (window.FI_DATA)
 app/grouping.js               grouping, question generation, scoring (pure domain logic)
+app/i18n.js                   zh/en UI strings and mode/group/POS/case name maps
 app/store.js                  local progress, import/export, preferences
 app/main.js                   UI and flow controller
 app/styles.css                light / dark themes

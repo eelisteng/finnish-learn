@@ -15,6 +15,7 @@ try {
   var dark = choice === 'dark' || (choice === 'system' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
   document.documentElement.dataset.theme = dark ? 'dark' : 'light'
   document.querySelector('meta[name="theme-color"]').setAttribute('content', dark ? '#101922' : '#F4F7FA')
+  document.documentElement.lang = ((saved.preferences || {}).uiLang === 'en') ? 'en' : 'zh-CN'
 } catch (e) { document.documentElement.dataset.theme = 'light' }
 </script>
 <link rel="stylesheet" href="app/styles.css">
@@ -23,9 +24,10 @@ try {
 <div id="app"></div>
 <div id="modal-root"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<noscript>此学习页面需要启用 JavaScript。</noscript>
+<noscript>此学习页面需要启用 JavaScript。 / JavaScript is required to use this learning page.</noscript>
 <script src="app/data.js"></script>
 <script src="app/grouping.js"></script>
+<script src="app/i18n.js"></script>
 <script src="app/store.js"></script>
 <script src="app/bgm.js"></script>
 <script src="app/main.js"></script>

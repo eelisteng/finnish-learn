@@ -25,6 +25,18 @@
   }
   FI.PHASE_LABEL = Object.fromEntries(Object.entries(FI.MODE_META).map(([k, v]) => [k, v.label]))
   FI.PHASES = ['memorize', ...FI.PRACTICE_MODES, 'complete']
+  /* Mode labels are UI text, so they have an English variant in app/i18n.js.
+     The Chinese MODE_META remains the fallback for older saves and for the
+     Node domain harness, which does not load the interface dictionary. */
+  FI.modeLabel = function (mode, lang) {
+    return (lang === 'en' ? FI.MODE_I18N?.en?.[mode]?.label : null) ?? FI.MODE_META[mode]?.label ?? mode
+  }
+  FI.modeShort = function (mode, lang) {
+    return (lang === 'en' ? FI.MODE_I18N?.en?.[mode]?.short : null) ?? FI.MODE_META[mode]?.short ?? mode
+  }
+  FI.modeDesc = function (mode, lang) {
+    return (lang === 'en' ? FI.MODE_I18N?.en?.[mode]?.desc : null) ?? FI.MODE_META[mode]?.desc ?? ''
+  }
   FI.modeApplies = function (mode, kind) {
     const m = FI.MODE_META[mode]
     return Boolean(m && (kind === 'word' ? m.word : m.sentence))
@@ -38,8 +50,6 @@
     const modes = FI.sanitizeModes(enabled).filter((m) => FI.modeApplies(m, kind))
     return ['memorize', ...modes, 'complete']
   }
-  FI.modeLabel = (mode) => FI.MODE_META[mode]?.label ?? mode
-  FI.modeShort = (mode) => FI.MODE_META[mode]?.short ?? mode
 
   /* ── display preferences ──────────────────────────────────── */
   FI.MEANING_LANGS = ['both', 'zh', 'en']
@@ -54,11 +64,13 @@
   /** Every preference has a bounded, documented domain. Imported files and
       older saves are normalised through here so the UI never sees junk. */
   FI.sanitizePrefs = function (p = {}) {
+    const uiLangs = FI.UI_LANGS ?? ['zh', 'en']
     return {
       ...p,
       targetLevel: FI.CEFR.includes(p.targetLevel) ? p.targetLevel : 'A1',
       enabledModes: FI.sanitizeModes(p.enabledModes),
       meaningLang: FI.MEANING_LANGS.includes(p.meaningLang) ? p.meaningLang : 'both',
+      uiLang: uiLangs.includes(p.uiLang) ? p.uiLang : 'zh',
       theme: FI.THEMES.includes(p.theme) ? p.theme : 'system',
       bgm: p.bgm === true,
     }

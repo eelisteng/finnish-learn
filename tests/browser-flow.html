@@ -4,11 +4,26 @@
 <body>
 <div id="app"></div><div id="modal-root"></div><div id="toast" class="toast"></div>
 <pre id="smoke" style="padding:20px;font:13px monospace">RUNNING</pre>
-<script>localStorage.removeItem('finnish-learn:v1'); window.FI_FAST_TEST = true</script>
+<script>localStorage.removeItem('finnish-learn:v1'); window.FI_FAST_TEST = true; window.FI_TEST_AUTOPLAY = true</script>
 <script>
   // Stub HTMLAudioElement so the clip-first playback path is asserted without
   // shipping or downloading a real recording in this regression page.
   window.__audioCalls = []
+  window.__ttsCalls = []
+  try {
+    Object.defineProperty(window, 'SpeechSynthesisUtterance', {
+      configurable: true,
+      value: class { constructor(text) { this.text = text; this.lang = ''; this.rate = 1; this.pitch = 1 } },
+    })
+    Object.defineProperty(window, 'speechSynthesis', {
+      configurable: true,
+      value: {
+        cancel() {},
+        speak(u) { window.__ttsCalls.push(u.text) },
+        getVoices() { return [] },
+      },
+    })
+  } catch (e) { /* built-ins are non-configurable in some engines */ }
   window.Audio = class {
     constructor() { this._src = ''; this.preload = ''; this.playbackRate = 1; this.preservesPitch = false }
     set src(v) { this._src = v }
@@ -24,6 +39,7 @@
 </script>
 <script src="../app/data.js"></script>
 <script src="../app/grouping.js"></script>
+<script src="../app/i18n.js"></script>
 <script src="../app/store.js"></script>
 <script src="../app/bgm.js"></script>
 <script src="../app/main.js"></script>
@@ -56,23 +72,24 @@
   }
   // Answer every question of a select-style round.
   async function driveSelect(count, targetFn, optionSel, labelFn, wrongFirst = false) {
-    let green = false, red = false, firstFeedback = ''
+    let green = false, red = false, textFeedback = false
     for (let i = 0; i < count; i++) {
       const target = targetFn()
       const opts = $$(optionSel)
       const correctIdx = opts.findIndex((o) => labelFn(o).includes(target))
-      if (correctIdx < 0) { out.push('FAIL target not in options :: ' + target); return { green, red, firstFeedback } }
+      if (correctIdx < 0) { out.push('FAIL target not in options :: ' + target); return { green, red, textFeedback } }
       const pickIdx = wrongFirst && i === 0 ? (correctIdx + 1) % opts.length : correctIdx
       opts[pickIdx].click()
       if ($(optionSel + '.correct')) green = true
       if ($(optionSel + '.wrong')) red = true
+      if ($('.feedback')) textFeedback = true
       if (wrongFirst && i === 0) {
-        firstFeedback = $('.feedback')?.textContent ?? ''
         ok(optionSel + ': wrong pick turns red and reveals correct', $(optionSel + '.wrong') !== null && $(optionSel + '.reveal') !== null)
+        ok(optionSel + ': no text feedback label under options', $('.feedback') === null && !$('.stage')?.textContent.includes('选对了'))
       }
       await wait(TICK)
     }
-    return { green, red, firstFeedback }
+    return { green, red, textFeedback }
   }
   async function driveLetters(count, targetFn, opts = {}) {
     for (let i = 0; i < count; i++) {
@@ -83,8 +100,13 @@
         fillSlots(lemma)
       }
       click('[data-act="submit"]')
-      if (opts.wrongFirst && i === 0) ok('letter round: wrong spelling rejected', $('.feedback.no') !== null)
-      else if (!$('.feedback.ok')) ok('letter answer accepted #' + (i + 1), false, 'expected ok feedback for ' + lemma)
+      // Colour-only feedback: the slots turn green/red and no .feedback
+      // status label is rendered anywhere on the stage.
+      if (opts.wrongFirst && i === 0) {
+        ok('letter round: wrong spelling rejected', $('input.slot.no') !== null)
+        ok('letter round: no text feedback label', $('.feedback') === null)
+        ok('letter round: correct letters shown in the slots', $$('input.slot').every((s, k) => s.value === Array.from(lemma)[k]))
+      } else if (!$('input.slot.ok')) ok('letter answer accepted #' + (i + 1), false, 'expected green slots for ' + lemma)
       await wait(TICK)
     }
   }
@@ -124,8 +146,13 @@
     ok('settings: word-only modes flagged', $('.mode-list')?.textContent.includes('仅单词组'))
     ok('settings: dictation enabled by default', $('[data-mode="dictation"]')?.checked === true)
     ok('settings: three meaning-language options', $$('input[name="meaningLang"]').length === 3)
+    ok('settings: two interface-language options', $$('input[name="uiLang"]').length === 2 &&
+      $('input[name="uiLang"][value="zh"]')?.checked === true)
+    ok('settings: interface language section explains the split', $('.modal')?.textContent.includes('界面语言') &&
+      $('.modal')?.textContent.includes('与界面语言互不影响'))
     ok('settings: three theme options', $$('input[name="theme"]').length === 3)
     ok('settings: background music switch', $('[data-bgm]') !== null && $('[data-bgm]').checked === false)
+    ok('home: quick interface-language toggle', $('[data-act="ui-toggle"]') !== null)
     ok('settings: pronunciation source is explained', $('.modal')?.textContent.includes('发音来源') &&
       $('.modal')?.textContent.includes('预录音频') && $('.modal')?.textContent.includes('fi-FI'))
     click('[data-modal="preset-slim"]')
@@ -159,8 +186,13 @@
     pack.words.find((w) => w.id === 'talo').audio = {
       path: stubClip, source: 'tts', license: 'own', durationSec: 1.2, reviewStatus: 'human-verified',
     }
+    const callsBeforeEntry = window.__audioCalls.length
     click('[data-act="start-group"][data-id="A1-W-01"]')
     ok('memorize: lemma talo', $('.lemma')?.textContent.trim() === 'talo')
+    ok('audio: entering memorize auto-plays the card once',
+      window.__audioCalls.length === callsBeforeEntry + 1 && window.__audioCalls.at(-1)?.src === stubClip)
+    ok('audio: the entry playback is normal speed',
+      window.__audioCalls.at(-1)?.playbackRate === 1 && window.__audioCalls.at(-1)?.preservesPitch === true)
     ok('audio: itemAudio reads the declared clip', window.FI.itemAudio(pack.words.find((w) => w.id === 'talo')) === stubClip)
     ok('audio: items without a clip return null', window.FI.itemAudio(pack.words.find((w) => w.id === 'katu')) === null)
     ok('audio: memorize button carries data-audio', $('.ipa [data-act="speak"]')?.dataset.audio === stubClip)
@@ -175,7 +207,11 @@
     ok('memorize: case table collapsed by default', $('.cases') !== null && $('details.more').open === false)
     ok('learn head: 8 stage chips', $$('.learn-head .step').length === 8)
 
-    for (let i = 0; i < 5; i++) { click('[data-act="mem-next"]'); if (i < 4) await wait(TICK / 2) }
+    const ttsBeforeCard2 = window.__ttsCalls.length
+    click('[data-act="mem-next"]')
+    ok('audio: each new memorize card auto-plays once',
+      window.__ttsCalls.length === ttsBeforeCard2 + 1 && window.__ttsCalls.at(-1)?.includes(groupLemmas[1]))
+    for (let i = 0; i < 4; i++) { click('[data-act="mem-next"]'); if (i < 3) await wait(TICK / 2) }
     ok('auto transition banner', $('.stage')?.textContent.includes('自动进入选词模式'))
     await wait(TICK)
     ok('auto-entered choice phase', headIs('选词模式'))
@@ -186,6 +222,7 @@
     ok('choice: no ipa/pos/case on card', !$('.stage')?.textContent.includes('音标') && !$('.stage')?.textContent.includes('强词干'))
     let cr = await driveSelect(5, () => zhToLemma($('.quiz-prompt .zh')?.textContent), '.opt', (o) => o.textContent, true)
     ok('choice: saw green and red feedback', cr.green && cr.red)
+    ok('choice: feedback stays colour-only for all five questions', cr.textFeedback === false)
     ok('choice result: 4/5 with one wrong', $('.score-txt h4')?.textContent.includes('4 / 5'))
     ok('choice result: both continue and retry available', $('[data-act="result-continue"]') && $('[data-act="result-retry"]'))
 
@@ -219,7 +256,7 @@
     ok('listen: meaning is not shown in the prompt', $('.quiz-prompt .zh') === null)
     cr = await driveSelect(5, () => lemmaToZh(audioWord()), '.optcard', (o) => o.querySelector('.optcard-meaning')?.textContent ?? '', true)
     ok('listen: green/red feedback on picture cards', cr.green && cr.red)
-    ok('listen: feedback does not print the answer word', cr.firstFeedback.length > 0 && !cr.firstFeedback.includes('talo'))
+    ok('listen: feedback is colour-only, no answer word printed', cr.textFeedback === false && !$('.stage')?.textContent.includes('✗'))
     ok('listen result shown', headIs('本轮结果'))
     click('[data-act="result-continue"]')
 
@@ -334,6 +371,35 @@
     click('[data-act="pause"]')
     click('[data-act="discard"]')
     ok('discard: resume banner gone', $('.resume') === null)
+
+    /* ── interface language switching (zh ⇄ en) ─────────────── */
+    setPref('uiLang', 'en')
+    ok('uiLang: preference persisted', window.FI.Store.load().preferences.uiLang === 'en')
+    ok('uiLang: html lang attribute follows', document.documentElement.lang === 'en')
+    ok('uiLang: document title translated', document.title.includes('One word, one image'))
+    ok('uiLang: home chrome is English', $('.hero h2')?.textContent.includes('CEFR levels') &&
+      !$('.hero h2')?.textContent.includes('按'))
+    ok('uiLang: group titles are English', $('.gcard h4')?.textContent.includes('Places & objects'))
+    ok('uiLang: foot preferences line is English', $('.footnote')?.textContent.includes('Current: interface'))
+    click('[data-act="start-group"][data-id="A1-W-01"]')
+    ok('uiLang: memorize chrome is English', $('.stage-head h3')?.textContent.includes('Memorise') &&
+      $('.kv')?.textContent.includes('Singular') && $('.kv')?.textContent.includes('Plural'))
+    ok('uiLang: meanings are still controlled by meaningLang',
+      $('.gloss-box .zh') !== null && $('.gloss-box .en') !== null)
+    ok('uiLang: case names are English', $('details.more')?.textContent.includes('Nominative'))
+    click('[data-act="pause"]')
+    click('[data-act="discard"]')
+    click('[data-act="ui-toggle"]')
+    ok('uiLang: quick toggle returns to Chinese',
+      window.FI.Store.load().preferences.uiLang === 'zh' && $('.hero h2')?.textContent.includes('按 CEFR 分级'))
+    click('[data-act="start-group"][data-id="A1-W-01"]')
+    click('[data-act="pause"]')
+    const playsBeforeResume = window.__audioCalls.length + window.__ttsCalls.length
+    click('[data-act="resume"]')
+    ok('audio: resuming a paused card auto-reads once again',
+      window.__audioCalls.length + window.__ttsCalls.length === playsBeforeResume + 1)
+    click('[data-act="pause"]')
+    click('[data-act="discard"]')
   } catch (err) {
     out.push('FAIL exception :: ' + (err && err.stack ? err.stack : String(err)))
   }

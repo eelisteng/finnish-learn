@@ -19,6 +19,7 @@
         targetLevel: 'A1',
         enabledModes: ['choice', 'listen', 'findImage', 'match', 'cloze', 'dictation'],
         meaningLang: 'both',
+        uiLang: 'zh',
         theme: 'system',
         bgm: false,
       },
@@ -204,12 +205,17 @@
     return { file, text: `${JSON.stringify(file, null, 2)}\n` }
   }
   function parseImport(text) {
+    // `errorKey` is resolved through the interface dictionary in main.js;
+    // `error` keeps the legacy Chinese text for callers without i18n.
+    const fail = (key, legacy) => ({ ok: false, errorKey: key, error: legacy })
     let file
-    try { file = JSON.parse(text) } catch { return { ok: false, error: '不是合法的 JSON 文件' } }
-    if (file.format !== 'finnish-learn-progress') return { ok: false, error: '不是本产品的进度文件（format 不匹配）' }
-    if (!file.data || typeof file.data !== 'object') return { ok: false, error: '缺少 data 字段' }
+    try { file = JSON.parse(text) } catch { return fail('import.err.notJson', '不是合法的 JSON 文件') }
+    if (file.format !== 'finnish-learn-progress') return fail('import.err.format', '不是本产品的进度文件（format 不匹配）')
+    if (!file.data || typeof file.data !== 'object') return fail('import.err.noData', '缺少 data 字段')
     for (const key of ['groups', 'mistakes', 'eventLog']) {
-      if (!file.data[key] || typeof file.data[key] !== 'object') return { ok: false, error: `缺少 data.${key}` }
+      if (!file.data[key] || typeof file.data[key] !== 'object') {
+        return { ok: false, errorKey: 'import.err.noField', errorParams: { key }, error: `缺少 data.${key}` }
+      }
     }
     return { ok: true, file }
   }

@@ -150,6 +150,40 @@ ok('preferences default to the full flow', st2.preferences.enabledModes.length =
 ok('find-image mode is named 找图 in Chinese', FI.MODE_META.findImage.short === '找图' && FI.MODE_META.findImage.label === '找图模式')
 ok('find-image mode has an English name', FI.modeShort('findImage', 'en') === 'Find pic' && FI.modeLabel('findImage', 'en') === 'Find the picture')
 
+console.log('Randomised mode & item order')
+const canonicalWord = FI.buildPipeline('word', FI.DEFAULT_MODES)
+const seededWord = FI.buildPipeline('word', FI.DEFAULT_MODES, 20261115)
+ok('seeded pipeline keeps memorize first and complete last',
+  seededWord[0] === 'memorize' && seededWord.at(-1) === 'complete')
+ok('seeded pipeline is a permutation of the canonical stages',
+  [...seededWord].sort().join(',') === [...canonicalWord].sort().join(','))
+ok('the same seed reproduces the same mode order',
+  FI.buildPipeline('word', FI.DEFAULT_MODES, 20261115).join(',') === seededWord.join(','))
+const seededOrders = new Set()
+for (let i = 1; i <= 40; i++) seededOrders.add(FI.buildPipeline('word', FI.DEFAULT_MODES, i * 7919).join(','))
+ok('different seeds produce many mode orders', seededOrders.size >= 6, `got ${seededOrders.size}`)
+ok('seeded sentence pipeline still skips word-only modes',
+  FI.buildPipeline('sentence', FI.DEFAULT_MODES, 42).slice(1, -1).sort().join(',') === 'choice,cloze,listen,match')
+ok('one enabled mode leaves nothing to shuffle',
+  FI.buildPipeline('word', ['dictation'], 7).join(',') === 'memorize,dictation,complete')
+const ids = wg.itemIds
+const firstOrder = FI.shuffleItems(ids, 123, ids)
+ok('shuffleItems returns a permutation of the five items',
+  [...firstOrder].sort().join(',') === [...ids].sort().join(','))
+ok('shuffleItems is deterministic for the same seed',
+  FI.shuffleItems(ids, 123, ids).join(',') === firstOrder.join(','))
+ok('shuffleItems does not repeat the canonical order',
+  firstOrder.join(',') !== ids.join(','))
+ok('shuffleItems rotates when a shuffle would repeat the previous round', (() => {
+  const a = FI.shuffleItems(ids, 999)
+  const b = FI.shuffleItems(ids, 999, a)
+  return b.join(',') !== a.join(',') && [...b].sort().join(',') === [...a].sort().join(',')
+})())
+const itemOrders = new Set()
+for (let i = 1; i <= 20; i++) itemOrders.add(FI.shuffleItems(ids, i * 104729, ids).join(','))
+ok('different seeds produce many item orders', itemOrders.size >= 4, `got ${itemOrders.size}`)
+ok('single-item retry is left alone', FI.shuffleItems(['talo'], 5, ids).join(',') === 'talo')
+
 console.log('Listen / find-picture rounds')
 const listenQs = FI.buildSelectQuestions(wg, pack, { seed: 11, optionCount: 4, hideLabel: true })
 ok('listen: one question per word', listenQs.length === 5)

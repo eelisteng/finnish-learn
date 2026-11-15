@@ -46,9 +46,16 @@
     const picked = [...new Set(list)].filter((m) => FI.PRACTICE_MODES.includes(m))
     return picked.length ? picked : ['choice']
   }
-  FI.buildPipeline = function (kind, enabled) {
+  /** Build one group's stage list. Without a seed the registry order is
+      returned (home preview / domain harness). A seed shuffles the practice
+      modes so each group starts with a fresh sequence; memorise always
+      introduces the words first and the completion screen always closes. */
+  FI.buildPipeline = function (kind, enabled, seed) {
     const modes = FI.sanitizeModes(enabled).filter((m) => FI.modeApplies(m, kind))
-    return ['memorize', ...modes, 'complete']
+    const middle = typeof seed === 'number' && Number.isFinite(seed)
+      ? FI.shuffle(modes, seed >>> 0)
+      : modes
+    return ['memorize', ...middle, 'complete']
   }
 
   /* ── display preferences ──────────────────────────────────── */
@@ -121,6 +128,19 @@
       ;[a[i], a[j]] = [a[j], a[i]]
     }
     return a
+  }
+  /** Presentation order of the five items in one round. Deterministic for a
+      given seed (so pause/resume and retries keep the same sequence), and
+      never identical to `avoid` — the canonical order for the first round,
+      the previous round's order afterwards. */
+  FI.shuffleItems = function (ids, seed, avoid) {
+    const list = Array.isArray(ids) ? ids.slice() : []
+    if (list.length < 2) return list
+    let out = FI.shuffle(list, seed >>> 0)
+    if (Array.isArray(avoid) && avoid.length === out.length && out.every((x, i) => x === avoid[i])) {
+      out = [...out.slice(1), out[0]]
+    }
+    return out
   }
 
   /* ── answer normalisation: NFKC → trim → lower → strip punctuation

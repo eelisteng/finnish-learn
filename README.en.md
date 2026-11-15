@@ -25,7 +25,7 @@ python3 -m http.server 8000
 | --- | --- |
 | Levels & groups | A1–C2, exactly 5 items per group, word and sentence tracks kept separate; continue to the next group or pause at any time |
 | Memorize cards | Lemma, IPA, part of speech, singular/plural, stems and basic cases, CEFR tags on cases and senses, verb-type badge, one image per sense, Chinese and English glosses; each card is read aloud once on entry |
-| Practice flow | Words: memorize → choice → listen → find picture → match → cloze → dictation → complete. Sentences: memorize → choice → listen → match → cloze → complete. All 6 practice modes can be toggled in Settings |
+| Practice flow | Every group opens with Memorise and closes with the summary; the checked modes in between are **shuffled per group**, and the five items are **shuffled in every round** (the order stays fixed inside a group, including after a pause, resume or retry). Word groups can use all 6 modes; sentence groups skip the word-only ones. Modes can be toggled in Settings |
 | Choice / listen | 4 options; a correct pick turns green, a wrong one turns red and highlights the right option — no text status label; a retry covers only the missed items |
 | Find picture | The prompt shows ONE meaning and no picture; four plain word options. A correct pick flips that card over to reveal the word's illustration and plays its pronunciation once; a wrong pick only turns red and highlights the right option — no flip, no sound |
 | Dictation | Normal 1.0x and slow 0.5x playback; falls back to syllable-separated speech when no clip exists; a retry also includes items solved with a hint |

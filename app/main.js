@@ -1,7 +1,9 @@
 /* Learning flow controller.
-   Configurable pipeline: memorise → choice → listen → find-image → match →
-   cloze → dictation → complete. Every practice round ends with a result
-   screen offering "continue" or "retry only the wrong items".
+   Configurable pipeline: memorise first, then the enabled practice modes in
+   a per-group random order, then complete. The five items inside every round
+   are shuffled too. Each session carries its seed, so a paused group resumes
+   with exactly the same mode and item order. Every practice round ends with
+   a result screen offering "continue" or "retry only the wrong items".
 
    All interface strings come from app/i18n.js and follow preferences.uiLang
    (zh / en). Word and sentence meanings follow the separate meaningLang
@@ -27,6 +29,10 @@
   // Autoplay is normally suppressed in the headless suite; FI_TEST_AUTOPLAY
   // opts the regression page in so the memorise auto-read path is exercised.
   const AUTOPLAY = !FAST || Boolean(window.FI_TEST_AUTOPLAY)
+  // The browser regression drives a fixed, canonical order; real sessions
+  // are shuffled. Read dynamically so the harness can switch modes of order.
+  const fixedOrder = () => window.FI_TEST_FIXED_ORDER === true
+  const newSeed = () => (Math.random() * 0xffffffff) >>> 0
   const DELAY = {
     feedback: FAST ? 6 : 880,
     transition: FAST ? 6 : 1000,
@@ -209,7 +215,7 @@
     if (!r || r.feedback) return
     let text, audioFile, key
     if (p === 'memorize') {
-      const item = source(session.kind).get(session.scopeIds[r.index])
+      const item = source(session.kind).get(r.scopeIds[r.index])
       if (!item) return
       text = session.kind === 'word' ? item.lemma : item.fiText
       audioFile = FI.itemAudio(item)
@@ -232,10 +238,19 @@
   }
   function makeRound(mode, scope, isRetry) {
     const g = groupById.get(session.groupId)
-    const seed = FI.hash(session.groupId) + session.attempt * 101 + session.pipelineIndex * 31 + (isRetry ? 7 : 0)
+    const base = session.seed ?? FI.hash(session.groupId)
+    const seed = base + session.attempt * 101 + session.pipelineIndex * 31 +
+      FI.hash(mode) * 13 + (isRetry ? 7 : 0)
+    // Every round gets its own item order. `previousOrder` stops two rounds
+    // in a row from presenting the same five words in the same sequence; for
+    // the first round it is the canonical order from the content pack.
+    const previousOrder = session.round?.scopeIds ?? session.itemIds
+    const order = fixedOrder()
+      ? scope.slice()
+      : FI.shuffleItems(scope, seed + 991, previousOrder)
     const r = {
       mode,
-      scopeIds: scope.slice(),
+      scopeIds: order.slice(),
       attempt: session.attempt,
       index: 0,
       questions: [],
@@ -254,10 +269,10 @@
     }
     // All select-style rounds use exactly four options.
     if (mode === 'choice') {
-      r.questions = FI.buildChoiceQuestions(g, pack, { scopeIds: scope, seed, optionCount: 4 })
+      r.questions = FI.buildChoiceQuestions(g, pack, { scopeIds: order, seed, optionCount: 4 })
     } else if (mode === 'listen' || mode === 'findImage') {
       r.questions = FI.buildSelectQuestions(g, pack, {
-        scopeIds: scope,
+        scopeIds: order,
         seed,
         optionCount: 4,
         textOnly: mode === 'findImage',
@@ -265,9 +280,9 @@
         meaningLang: pref().meaningLang,
       })
     } else if (mode === 'match') {
-      r.pairs = FI.buildMatchPairs(g, pack, scope, seed, pref().meaningLang)
+      r.pairs = FI.buildMatchPairs(g, pack, order, seed, pref().meaningLang)
     } else if (LETTER_MODES.includes(mode)) {
-      r.questions = FI.buildLetterQuestions(g, pack, scope, mode, pref().meaningLang)
+      r.questions = FI.buildLetterQuestions(g, pack, order, mode, pref().meaningLang)
       r.slots = initSlots(r.questions[0])
     }
     return r
@@ -278,12 +293,16 @@
     if (!g) { toast(t('toast.groupMissing')); return }
     stopTimers()
     ui.transition = false
+    // A fresh seed per group: mode order and item order change every time the
+    // group is started, but stay fixed while the group is in progress.
+    const seed = fixedOrder() ? 0 : newSeed()
     session = {
       groupId,
       level: g.level,
       kind: g.kind,
       itemIds: g.itemIds.slice(),
-      pipeline: FI.buildPipeline(g.kind, state.preferences.enabledModes),
+      seed,
+      pipeline: FI.buildPipeline(g.kind, state.preferences.enabledModes, fixedOrder() ? undefined : seed),
       pipelineIndex: 0,
       phase: 'memorize',
       scopeIds: (opts.scopeIds ?? g.itemIds).slice(),
@@ -546,8 +565,8 @@
 
   function memNext() {
     if (!session || session.phase !== 'memorize' || ui.transition) return
-    const scope = session.scopeIds
     const r = session.round
+    const scope = r.scopeIds
     if (r.index < scope.length - 1) {
       r.index++
       persist()
@@ -568,8 +587,11 @@
     const levelInfo = groupIndex.levels.find((l) => l.level === ui.level)
     const wordGroups = groupIndex.groups.filter((g) => g.level === ui.level && g.kind === 'word')
     const sentenceGroups = groupIndex.groups.filter((g) => g.level === ui.level && g.kind === 'sentence')
-    const wordPipeline = FI.buildPipeline('word', state.preferences.enabledModes).map(modeShort).join(' → ')
-    const sentencePipeline = FI.buildPipeline('sentence', state.preferences.enabledModes).map(modeShort).join(' → ')
+    // A set, not an arrow: the practice modes are shuffled per group.
+    const pipelineSet = (kind) => FI.buildPipeline(kind, state.preferences.enabledModes)
+      .slice(1, -1).map(modeShort).join(' · ')
+    const wordPipeline = pipelineSet('word')
+    const sentencePipeline = pipelineSet('sentence')
 
     const resume = state.session ? (() => {
       const s = state.session
@@ -757,18 +779,20 @@
   }
 
   function renderMemorize(g) {
-    const index = session.round?.index ?? 0
-    const item = source(session.kind).get(session.scopeIds[index])
+    const r = session.round
+    const index = r?.index ?? 0
+    const scope = r?.scopeIds ?? session.scopeIds
+    const item = source(session.kind).get(scope[index])
     const body = ui.transition
-      ? `<div style="text-align:center;padding:36px 0"><div class="pill teal">${th('mem.transition.title')}</div><h3 style="margin:14px 0 4px">${th('mem.transition.heading', { mode: nextModeLabel() })}</h3><p class="tip">${th('mem.transition.tip', { n: session.scopeIds.length })}</p></div>`
+      ? `<div style="text-align:center;padding:36px 0"><div class="pill teal">${th('mem.transition.title')}</div><h3 style="margin:14px 0 4px">${th('mem.transition.heading', { mode: nextModeLabel() })}</h3><p class="tip">${th('mem.transition.tip', { n: scope.length })}</p></div>`
       : session.kind === 'word' ? memorizeWord(item) : memorizeSentence(item)
     return `<div class="stage">
-      <div class="stage-head"><h3>${th('mem.title')}</h3><span class="pill">${index + 1} / ${session.scopeIds.length}</span><span class="pill teal">${th('mem.pill', { meaning: meaningName() })}</span></div>
+      <div class="stage-head"><h3>${th('mem.title')}</h3><span class="pill">${index + 1} / ${scope.length}</span><span class="pill teal">${th('mem.pill', { meaning: meaningName() })}</span></div>
       ${body}
       <div class="stage-foot">
         <button class="btn sm" data-act="mem-prev" ${index === 0 || ui.transition ? 'disabled' : ''}>${th('mem.prev')}</button>
         <span class="spacer"></span><span class="tip">${th('mem.nextKey')}</span>
-        <button class="btn primary" data-act="mem-next" ${ui.transition ? 'disabled' : ''}>${index < session.scopeIds.length - 1 ? th('mem.next') : th('mem.finish', { mode: modeShort(session.pipeline[1] ?? 'complete') })}</button>
+        <button class="btn primary" data-act="mem-next" ${ui.transition ? 'disabled' : ''}>${index < scope.length - 1 ? th('mem.next') : th('mem.finish', { mode: modeShort(session.pipeline[1] ?? 'complete') })}</button>
       </div>
     </div>`
   }

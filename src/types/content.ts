@@ -197,7 +197,10 @@ export interface GroupIndex {
 
 export const GROUP_SIZE = 5
 
-/** Default word-group phase order. Sentence groups skip word-only modes. */
+/** Canonical word-group phase order (used for previews and tooling).
+ *  At runtime the practice modes in the middle are shuffled per group, and
+ *  the items inside each round are shuffled too; memorize stays first and
+ *  complete stays last. Sentence groups skip word-only modes. */
 export const FLOW_PHASES = [
   'memorize', 'choice', 'listen', 'findImage', 'match', 'cloze', 'dictation', 'complete',
 ] as const

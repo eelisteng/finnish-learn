@@ -65,6 +65,8 @@
   const groupTitle = (g) => FI.groupTitle(g, uiLang())
   const meaningName = () => t(`meaningLang.${pref().meaningLang}`)
   const themeName = (v) => t(`theme.${v}`)
+  const bgmName = (id) => FI.bgmName(id, uiLang())
+  const bgmDesc = (id) => FI.bgmDesc(id, uiLang())
   const uiName = () => (FI.UI_LANG_NAME ?? {})[uiLang()] ?? uiLang()
   const kindName = (kind) => t(`head.kind.${kind}`)
   const groupKindName = (kind) => t(`head.group.${kind}`)
@@ -81,7 +83,8 @@
   }
   function applyBgm() {
     if (!FI.Bgm) return
-    if (pref().bgm) FI.Bgm.start()
+    FI.Bgm.setTrack(pref().bgmTrack)
+    if (pref().bgm) FI.Bgm.start(pref().bgmTrack)
     else FI.Bgm.stop()
   }
   function applyUiLang() {
@@ -645,7 +648,7 @@
         <div class="brand"><div class="brand-mark">FL</div><div><h1>Finnish Learn</h1><p>${th('brand.subtitle')}</p></div></div>
         <button class="btn sm icon" data-act="ui-toggle" title="${th('ui.toggle.title')}">${th('ui.toggle')}</button>
         <button class="btn sm icon" data-act="theme-toggle" title="${th('home.theme.title')}">${th(document.documentElement.dataset.theme === 'dark' ? 'home.theme.dark' : 'home.theme.light')}</button>
-        <button class="btn sm icon ${pref().bgm ? 'on' : ''}" data-act="bgm-toggle" title="${th('home.music.title')}">${th('home.music', { state: t(pref().bgm ? 'home.music.on' : 'home.music.off') })}</button>
+        <button class="btn sm icon ${pref().bgm ? 'on' : ''}" data-act="bgm-toggle" title="${th('home.music.title', { track: bgmName(pref().bgmTrack) })}">${th('home.music', { state: t(pref().bgm ? 'home.music.on' : 'home.music.off') })}</button>
         <button class="btn sm" data-act="settings">${th('home.settings')}</button>
         <button class="btn sm" data-act="export">${th('home.export')}</button>
         <button class="btn sm" data-act="import">${th('home.import')}</button>
@@ -689,6 +692,7 @@
         ${th('home.foot.line1', {
           ui: uiName(), meaning: meaningName(), theme: themeName(pref().theme),
           bgm: t(pref().bgm ? 'common.bgmOn' : 'common.bgmOff'),
+          track: bgmName(pref().bgmTrack),
         })}<br>
         ${th('home.foot.line2', { date: state.lastExportedAt ? state.lastExportedAt.slice(0, 16).replace('T', ' ') : t('home.foot.never') })}<br>
         ${th('home.foot.line3')}
@@ -1052,7 +1056,22 @@
     modalRoot.innerHTML = `<div class="modal-mask"><div class="modal">${html}</div></div>`
     ui.modal = true
   }
-  function closeModal() { modalRoot.innerHTML = ''; ui.modal = false; pendingImport = null }
+  function closeModal() {
+    FI.Bgm?.endPreview?.()
+    modalRoot.innerHTML = ''
+    ui.modal = false
+    pendingImport = null
+  }
+  /** Only the preview buttons are repainted: a full modal re-render would
+      discard unsaved radio choices the learner already made. */
+  function refreshBgmPreviewUI() {
+    const active = FI.Bgm?.previewTrack?.() ?? null
+    modalRoot.querySelectorAll('[data-modal^="bgm-preview:"]').forEach((btn) => {
+      const on = active === btn.dataset.modal.slice('bgm-preview:'.length)
+      btn.textContent = t(on ? 'settings.bgm.stopPreview' : 'settings.bgm.preview')
+      btn.classList.toggle('on', on)
+    })
+  }
   function showSettings() {
     const p = pref()
     const enabled = p.enabledModes
@@ -1099,6 +1118,15 @@
           <input type="checkbox" data-bgm ${p.bgm ? 'checked' : ''}>
           <span><b>${th('settings.bgm.label')}</b><small>${th('settings.bgm.desc')}</small></span>
         </label>
+        <p class="tip" style="margin:8px 0 6px">${th('settings.bgm.trackTip')}</p>
+        <div class="bgm-tracks">${FI.BGM_TRACKS.map((track) => `
+          <div class="bgm-track ${p.bgmTrack === track.id ? 'active' : ''}" data-track="${esc(track.id)}">
+            <label class="bgm-track-main">
+              <input type="radio" name="bgmTrack" value="${esc(track.id)}" ${p.bgmTrack === track.id ? 'checked' : ''}>
+              <span><b>${esc(bgmName(track.id))}</b><small>${esc(bgmDesc(track.id))}</small></span>
+            </label>
+            <button type="button" class="btn sm" data-modal="bgm-preview:${esc(track.id)}">${th('settings.bgm.preview')}</button>
+          </div>`).join('')}</div>
       </div>
 
       <div class="pref-group">
@@ -1284,14 +1312,20 @@
       const uiLangValue = modalRoot.querySelector('input[name="uiLang"]:checked')?.value ?? 'zh'
       const theme = modalRoot.querySelector('input[name="theme"]:checked')?.value ?? 'system'
       const bgm = modalRoot.querySelector('[data-bgm]')?.checked === true
+      const bgmTrack = modalRoot.querySelector('input[name="bgmTrack"]:checked')?.value ?? FI.DEFAULT_BGM_TRACK
       state.preferences = FI.sanitizePrefs({
-        ...state.preferences, enabledModes: picked, meaningLang, uiLang: uiLangValue, theme, bgm,
+        ...state.preferences, enabledModes: picked, meaningLang, uiLang: uiLangValue, theme, bgm, bgmTrack,
       })
       applyPrefs(); persist(); closeModal(); render(); toast(t('toast.settingsSaved')); return
     }
     if (act === 'preset-full' || act === 'preset-slim') {
       state.preferences.enabledModes = (act === 'preset-full' ? FI.DEFAULT_MODES : FI.SLIM_MODES).slice()
       persist(); closeModal(); render(); toast(t(act === 'preset-full' ? 'toast.presetFull' : 'toast.presetSlim')); return
+    }
+    if (act.startsWith('bgm-preview:')) {
+      FI.Bgm?.preview(act.slice('bgm-preview:'.length), refreshBgmPreviewUI)
+      refreshBgmPreviewUI()
+      return
     }
     if (!pendingImport) { closeModal(); return }
     if (act === 'merge') state = FI.Store.merge(state, pendingImport)

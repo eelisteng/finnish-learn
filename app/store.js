@@ -22,6 +22,7 @@
         uiLang: 'zh',
         theme: 'system',
         bgm: false,
+        bgmTrack: FI.DEFAULT_BGM_TRACK ?? 'mist',
       },
       groups: {},
       mistakes: {},

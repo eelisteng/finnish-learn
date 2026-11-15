@@ -152,6 +152,30 @@
       $('.modal')?.textContent.includes('与界面语言互不影响'))
     ok('settings: three theme options', $$('input[name="theme"]').length === 3)
     ok('settings: background music switch', $('[data-bgm]') !== null && $('[data-bgm]').checked === false)
+    ok('music: five ambient tracks listed', $$('input[name="bgmTrack"]').length === 5)
+    ok('music: default track is 薄雾', $('input[name="bgmTrack"][value="mist"]')?.checked === true)
+    ok('music: every track has a preview button', $$('[data-modal^="bgm-preview:"]').length === 5)
+    ok('music: all five Chinese track names shown',
+      ['薄雾', '极光', '静湖', '落雪', '林间'].every((n) => $('.bgm-tracks')?.textContent.includes(n)))
+    click('[data-modal="bgm-preview:aurora"]')
+    ok('music: preview plays the chosen track',
+      window.FI.Bgm.previewTrack() === 'aurora' || window.FI.Bgm.available === false)
+    ok('music: preview builds a live audio graph',
+      window.FI.Bgm.available === false || window.FI.Bgm.isOn() === true)
+    ok('music: preview button turns into Stop',
+      $('[data-modal="bgm-preview:aurora"]')?.textContent.includes('停止'))
+    click('[data-modal="bgm-preview:aurora"]')
+    ok('music: clicking again ends the preview', window.FI.Bgm.isPreviewing() === false)
+    click('[data-modal="bgm-preview:snow"]')
+    click('[data-modal="cancel"]')
+    ok('music: closing settings ends any preview', window.FI.Bgm.isPreviewing() === false)
+    click('[data-act="settings"]')
+    $('input[name="bgmTrack"][value="lake"]').click()
+    click('[data-modal="settings-save"]')
+    ok('music: chosen track is persisted', window.FI.Store.load().preferences.bgmTrack === 'lake')
+    ok('music: topbar title names the current track',
+      $('[data-act="bgm-toggle"]')?.title.includes('静湖'))
+    click('[data-act="settings"]')
     ok('home: quick interface-language toggle', $('[data-act="ui-toggle"]') !== null)
     ok('settings: pronunciation source is explained', $('.modal')?.textContent.includes('发音来源') &&
       $('.modal')?.textContent.includes('预录音频') && $('.modal')?.textContent.includes('fi-FI'))
@@ -176,9 +200,25 @@
     click('[data-act="bgm-toggle"]')
     ok('music: toggle turns the preference on', window.FI.Store.load().preferences.bgm === true)
     ok('music: audio engine is running or unavailable', window.FI.Bgm.isOn() === true || window.FI.Bgm.available === false)
+    ok('music: engine plays the selected track',
+      window.FI.Bgm.currentTrack() === 'lake' || window.FI.Bgm.available === false)
+    window.FI.Bgm.setTrack('snow')
+    ok('music: switching tracks while playing keeps the engine on',
+      window.FI.Bgm.available === false ||
+      (window.FI.Bgm.isOn() === true && window.FI.Bgm.currentTrack() === 'snow'))
+    window.FI.Bgm.setTrack('lake')
     ok('music: button reflects the on state', /音乐\s*开/.test($('[data-act="bgm-toggle"]')?.textContent ?? ''))
     click('[data-act="bgm-toggle"]')
     ok('music: toggle turns it back off', window.FI.Store.load().preferences.bgm === false && window.FI.Bgm.isOn() === false)
+    ok('music: all five track recipes build a live audio graph', (() => {
+      if (window.FI.Bgm.available === false) return true
+      return window.FI.BGM_TRACKS.every((track) => {
+        window.FI.Bgm.start(track.id)
+        const built = window.FI.Bgm.isOn() === true && window.FI.Bgm.currentTrack() === track.id
+        window.FI.Bgm.stop()
+        return built
+      })
+    })())
 
     /* ── ① memorize ─────────────────────────────────────────── */
     // Inject one declared clip so the "real audio wins over TTS" path is
@@ -383,7 +423,8 @@
       .every((t) => st.eventLog.some((e) => e.type === t)))
     ok('store: no spelling event exists', !st.eventLog.some((e) => e.type.includes('spelling')))
     ok('store: completion event carries per-mode scores', Object.keys(st.eventLog.at(-1).payload.modes ?? {}).length === 6)
-    ok('store: display preferences persisted', st.preferences.meaningLang === 'both' && st.preferences.theme === 'system' && st.preferences.bgm === false)
+    ok('store: display preferences persisted', st.preferences.meaningLang === 'both' && st.preferences.theme === 'system' &&
+      st.preferences.bgm === false && st.preferences.bgmTrack === 'lake')
 
     /* ── meaning-language preference actually changes the UI ─── */
     setPref('meaningLang', 'zh')
@@ -422,6 +463,10 @@
       !$('.hero h2')?.textContent.includes('按'))
     ok('uiLang: group titles are English', $('.gcard h4')?.textContent.includes('Places & objects'))
     ok('uiLang: foot preferences line is English', $('.footnote')?.textContent.includes('Current: interface'))
+    click('[data-act="settings"]')
+    ok('uiLang: music track names are English', $('.bgm-tracks')?.textContent.includes('Still Lake') &&
+      !$('.bgm-tracks')?.textContent.includes('静湖'))
+    click('[data-modal="cancel"]')
     click('[data-act="start-group"][data-id="A1-W-01"]')
     ok('uiLang: memorize chrome is English', $('.stage-head h3')?.textContent.includes('Memorise') &&
       $('.kv')?.textContent.includes('Singular') && $('.kv')?.textContent.includes('Plural'))

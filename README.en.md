@@ -33,7 +33,7 @@ python3 -m http.server 8000
 | Cloze | A few letters revealed at random, underline slots for the rest, an image hint, and a virtual Finnish letter bar (ä/ö/å) |
 | Interface language | Chinese / English, switched from the topbar quick toggle or Settings; buttons, headings, tips, dialogs, mode names, group titles, parts of speech and case names all follow. Word glosses are unaffected |
 | Gloss language | Chinese only / English only / both — independent of the interface language |
-| Appearance | Light / dark / follow-system theme, plus optional ambient background music (Web Audio, off by default) |
+| Appearance & music | Light / dark / follow-system theme. Background music is off by default and offers **five soothing instrumental tracks**: Morning Mist / Northern Lights / Still Lake / Snowfall / Woodland. Preview each for 12 seconds in Settings before choosing; the choice travels with the exported progress JSON. All tracks are synthesised live with Web Audio (procedural reverb, low-pass, stereo pan, wind bed and low drone), with no audio files, no network and no licensing |
 | Progress | `localStorage` holds group progress, a mistake book, an event log (capped at 2000) and game scores. JSON export includes a checksum and a diff preview; import supports merge or overwrite and deduplicates by `anonId + clientSeq` |
 
 `preferences.uiLang` (default `zh`) and `meaningLang` are independent settings; both stay on the device and travel with the exported progress file. The `zh` and `en` dictionaries in `app/i18n.js` must have identical keys (checked by the domain tests), so any new interface string needs both languages. Finnish lemmas, glosses, IPA and example sentences are content and are never translated here.
@@ -86,12 +86,12 @@ For the browser end-to-end regression, open `tests/browser-flow.html` in headles
 ```
 index.html / preview.html     app entry and word-card prototype
 app/data.js                   embedded content pack (window.FI_DATA)
-app/grouping.js               grouping, question generation, scoring (pure domain logic)
+app/grouping.js               grouping, question generation, scoring; recipes for the five music tracks
 app/i18n.js                   zh/en UI strings and mode/group/POS/case name maps
 app/store.js                  local progress, import/export, preferences
 app/main.js                   UI and flow controller
 app/styles.css                light / dark themes
-app/bgm.js                    background music
+app/bgm.js                    live synthesis, preview and switching of the five ambient tracks
 data/                         content pack, groups, CSV files, source inventory
 assets/illustrations/         finished illustrations
 assets/audio/                 pre-recorded clips (empty for now; declared in CSV)
@@ -104,6 +104,7 @@ tests/                        browser regression
 - Only 3 finished illustrations (`talo`, `kauppa`, `puhua`); the rest are geometric placeholders. All 50 have `image_reviewStatus: pending` and still need human review.
 - The pack declares 0 audio clips, so every item currently uses browser speech synthesis. Most devices lack a `fi-FI` voice, which distorts long/short vowels and `ä/ö/å`. Filling the `audio_*` columns and adding the files automatically switches playback to the recordings.
 - IPA, glosses and inflection / Kotus types are marked `auto-derived` and need proofreading. CEFR levels are an internal product convention — neither CEFR nor YKI publishes an official word list.
+- The five music tracks are generative ambience (fixed recipes, random notes and spacing), not recorded compositions: offline and licence-free, but the melody differs every time and the timbre depends on the device. To use real recordings later, drop files into `assets/bgm/` and swap the synthesis graph in `app/bgm.js` for `<audio loop>` playback — the `FI.BGM_TRACKS` list and the Settings UI stay as they are.
 - No accounts, no backend, no automatic sync; moving to another device requires a JSON export / import.
 - Do not rename the internal keys `finnish-learn:v1` (storage key) or `finnish-learn-progress` (export format), or existing progress and exported files become unreadable.
 

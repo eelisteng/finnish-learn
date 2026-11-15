@@ -241,10 +241,42 @@ const cleanPrefs = FI.sanitizePrefs({
 })
 ok('sanitizePrefs clamps invalid meaning/theme/level/bgm/uiLang',
   cleanPrefs.meaningLang === 'both' && cleanPrefs.theme === 'system' && cleanPrefs.bgm === false &&
-  cleanPrefs.targetLevel === 'A1' && cleanPrefs.uiLang === 'zh')
+  cleanPrefs.targetLevel === 'A1' && cleanPrefs.uiLang === 'zh' && cleanPrefs.bgmTrack === FI.DEFAULT_BGM_TRACK)
 ok('sanitizePrefs drops the removed spelling mode', cleanPrefs.enabledModes.join(',') === 'choice')
 ok('sanitizePrefs keeps a valid English interface', FI.sanitizePrefs({ uiLang: 'en' }).uiLang === 'en')
 ok('store defaults to a Chinese interface', st2.preferences.uiLang === 'zh')
+
+console.log('Background music tracks')
+const tracks = FI.BGM_TRACKS
+ok('five ambient tracks are registered', tracks.length === 5)
+ok('track ids are unique', new Set(tracks.map((x) => x.id)).size === tracks.length)
+ok('default track is one of the five', tracks.some((x) => x.id === FI.DEFAULT_BGM_TRACK))
+ok('every track has a valid synthesis recipe', tracks.every((x) =>
+  Array.isArray(x.scale) && x.scale.length >= 5 && x.scale.every((n) => Number.isFinite(n) && n >= 36 && n <= 96) &&
+  x.voices >= 1 && x.stepSec > 0 && x.duration > x.attack && x.attack > 0 &&
+  x.gain > 0 && x.master > 0 && x.master <= 0.08 && x.cutoff > 0 &&
+  x.reverb >= 0 && x.reverb <= 1 && x.pan >= 0 && x.pan <= 1 &&
+  ['sine', 'triangle'].includes(x.wave) && x.air >= 0 && x.sparkle >= 0 && x.sparkle <= 1))
+ok('all tracks are slow (no busy rhythm)', tracks.every((x) => x.stepSec >= 1.5 && x.duration >= 4))
+ok('recipes are genuinely different', new Set(tracks.map((x) => x.stepSec)).size === 5 &&
+  new Set(tracks.map((x) => x.cutoff)).size >= 4 && new Set(tracks.map((x) => x.wave)).size === 2)
+ok('exactly one track has a wind bed', tracks.filter((x) => x.air > 0).length === 1)
+ok('exactly one track has a low drone', tracks.filter((x) => Array.isArray(x.bass) && x.bass.length).length === 1)
+ok('unknown track falls back to the default', FI.bgmTrack('nope').id === FI.DEFAULT_BGM_TRACK)
+ok('sanitizePrefs rejects an unknown track', FI.sanitizePrefs({ bgmTrack: 'nope' }).bgmTrack === FI.DEFAULT_BGM_TRACK)
+ok('sanitizePrefs keeps a valid track', FI.sanitizePrefs({ bgmTrack: 'snow' }).bgmTrack === 'snow')
+ok('Chinese track names and descriptions', FI.bgmName('snow', 'zh') === '落雪' && FI.bgmDesc('mist', 'zh').includes('五声'))
+ok('English track names and descriptions', FI.bgmName('mist', 'en') === 'Morning Mist' &&
+  FI.bgmDesc('lake', 'en').includes('drone'))
+ok('every track has an English name + description', tracks.every((x) =>
+  FI.bgmName(x.id, 'en') !== x.name && FI.bgmDesc(x.id, 'en') !== x.desc))
+ok('store defaults to the quietest track', st2.preferences.bgmTrack === FI.DEFAULT_BGM_TRACK)
+const musicState = FI.Store.load()
+musicState.preferences.bgmTrack = 'aurora'
+const musicFile = (await FI.Store.buildExport(musicState)).file
+ok('chosen track travels in the exported progress file', musicFile.data.preferences.bgmTrack === 'aurora')
+const importedMusicState = FI.Store.overwrite(FI.Store.load(), musicFile)
+ok('imported track survives sanitization', importedMusicState.preferences.bgmTrack === 'aurora')
 
 console.log('Interface language')
 ok('two interface languages', (FI.UI_LANGS ?? []).join(',') === 'zh,en')

@@ -58,6 +58,81 @@
     return ['memorize', ...middle, 'complete']
   }
 
+  /* ── background music presets ────────────────────────────────
+     Five instrumental ambient "tracks". They contain no recordings: each
+     is a small recipe that app/bgm.js renders live with the Web Audio API,
+     so the site stays offline and licence-free. All are slow, quiet and
+     wordless; they differ in scale, register, voicing, envelope, reverb
+     and in whether a wind-like noise bed or a low drone is present.
+       scale     MIDI note pool (played in order, one event per step)
+       voices    how many notes sound together; voiceStep = pool stride
+       stepSec   seconds between events; jitter = ± fraction of that gap
+       duration  note length; attack = fade-in length (bell = very short)
+       wave      oscillator shape; detune = ± cents of gentle chorus
+       gain      per-note level; master = overall output (kept very low)
+       cutoff    low-pass ceiling; reverb = wet share; pan = L/R width
+       air       filtered noise bed level; bass = continuous drone notes
+       sparkle   probability of a sparse high harmonic each step          */
+  FI.BGM_TRACKS = [
+    {
+      id: 'mist', name: '薄雾',
+      desc: '最轻的一档：C 大调五声长音，几乎没有起伏',
+      scale: [60, 62, 64, 67, 69, 72, 74, 76, 79],
+      voices: 2, voiceStep: 2, stepSec: 3.6, jitter: 0.10,
+      duration: 8.0, attack: 1.8, wave: 'sine', detune: 3,
+      gain: 0.22, master: 0.055, cutoff: 1500, reverb: 0.32, pan: 0.30,
+      air: 0, airCutoff: 480, bass: null, droneGain: 0.12, sparkle: 0,
+    },
+    {
+      id: 'aurora', name: '极光',
+      desc: '空灵的悬浮和声与稀疏高音泛音，混响最长',
+      scale: [57, 60, 62, 64, 67, 69, 72, 76, 79],
+      voices: 3, voiceStep: 2, stepSec: 4.4, jitter: 0.14,
+      duration: 9.5, attack: 2.2, wave: 'triangle', detune: 6,
+      gain: 0.16, master: 0.050, cutoff: 2600, reverb: 0.62, pan: 0.55,
+      air: 0, airCutoff: 480, bass: null, droneGain: 0.12, sparkle: 0.38,
+    },
+    {
+      id: 'lake', name: '静湖',
+      desc: '低频持续音托底，单音极稀疏地浮起，最沉静',
+      scale: [62, 65, 67, 69, 72, 74, 77],
+      voices: 1, voiceStep: 1, stepSec: 6.2, jitter: 0.18,
+      duration: 10.5, attack: 2.8, wave: 'sine', detune: 0,
+      gain: 0.16, master: 0.050, cutoff: 900, reverb: 0.45, pan: 0.15,
+      air: 0, airCutoff: 480, bass: [38, 45], droneGain: 0.12, sparkle: 0,
+    },
+    {
+      id: 'snow', name: '落雪',
+      desc: '高音区冰晶般的单点铃音，间隔不规则，音量极小',
+      scale: [66, 68, 71, 73, 78, 80, 83, 85],
+      voices: 1, voiceStep: 1, stepSec: 1.9, jitter: 0.35,
+      duration: 5.2, attack: 0.03, wave: 'sine', detune: 0,
+      gain: 0.10, master: 0.045, cutoff: 5200, reverb: 0.75, pan: 0.70,
+      air: 0, airCutoff: 480, bass: null, droneGain: 0.12, sparkle: 0,
+    },
+    {
+      id: 'forest', name: '林间',
+      desc: '低通噪声像远处的风，叠一层温暖的木管和声',
+      scale: [55, 59, 62, 64, 67, 71, 74],
+      voices: 2, voiceStep: 2, stepSec: 4.8, jitter: 0.12,
+      duration: 8.5, attack: 2.0, wave: 'triangle', detune: 4,
+      gain: 0.14, master: 0.050, cutoff: 1100, reverb: 0.30, pan: 0.40,
+      air: 0.14, airCutoff: 480, bass: null, droneGain: 0.12, sparkle: 0,
+    },
+  ]
+  FI.DEFAULT_BGM_TRACK = 'mist'
+  FI.BGM_TRACK_IDS = FI.BGM_TRACKS.map((x) => x.id)
+  FI.bgmTrack = function (id) {
+    return FI.BGM_TRACKS.find((x) => x.id === id) ?? FI.BGM_TRACKS[0]
+  }
+  FI.bgmTrackId = function (id) { return FI.bgmTrack(id).id }
+  FI.bgmName = function (id, lang) {
+    return (lang === 'en' ? FI.BGM_I18N?.en?.[id]?.name : null) ?? FI.bgmTrack(id).name
+  }
+  FI.bgmDesc = function (id, lang) {
+    return (lang === 'en' ? FI.BGM_I18N?.en?.[id]?.desc : null) ?? FI.bgmTrack(id).desc
+  }
+
   /* ── display preferences ──────────────────────────────────── */
   FI.MEANING_LANGS = ['both', 'zh', 'en']
   FI.MEANING_LABEL = { both: '中英文都显示', zh: '只显示中文', en: '只显示英文' }
@@ -80,6 +155,7 @@
       uiLang: uiLangs.includes(p.uiLang) ? p.uiLang : 'zh',
       theme: FI.THEMES.includes(p.theme) ? p.theme : 'system',
       bgm: p.bgm === true,
+      bgmTrack: FI.bgmTrackId(p.bgmTrack),
     }
   }
 

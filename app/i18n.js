@@ -70,7 +70,7 @@
     'home.music': '音乐 {{state}}',
     'home.music.on': '开',
     'home.music.off': '关',
-    'home.music.title': '开启 / 关闭背景音乐',
+    'home.music.title': '开启 / 关闭背景音乐（当前音轨：{{track}}；在设置里可切换）',
     'home.settings': '设置',
     'home.export': '导出进度',
     'home.import': '导入进度',
@@ -108,7 +108,7 @@
     'home.tools.export': '导出进度 JSON',
     'home.tools.merge': '导入并合并',
     'home.tools.clear': '清除本机数据',
-    'home.foot.line1': '当前显示：界面「{{ui}}」 · 释义「{{meaning}}」 · 主题「{{theme}}」 · 背景音乐「{{bgm}}」。',
+    'home.foot.line1': '当前显示：界面「{{ui}}」 · 释义「{{meaning}}」 · 主题「{{theme}}」 · 背景音乐「{{bgm}}」 · 音轨「{{track}}」。',
     'home.foot.line2': '上次导出：{{date}} · 建议每 7 天导出一次，文件是跨设备迁移的唯一凭证。',
     'home.foot.never': '从未导出',
     'home.foot.line3': '示例词包的词形、IPA 与中文释义均为 <b>auto-derived 样例</b>，上线前须人工校对；3 张 AI 插画为样例，其余为几何占位图。发音使用浏览器芬兰语合成音（V1 兜底），听写可用虚拟字母条输入 ä / ö / å。',
@@ -238,15 +238,18 @@
     'complete.last': '已是最后一组 · 返回分组列表',
 
     'settings.title': '设置',
-    'settings.intro': '界面语言、释义语言、外观与音乐的偏好都保存在本机，并随进度文件一起导出/导入。',
+    'settings.intro': '界面语言、释义语言、外观与音乐（含音轨选择）的偏好都保存在本机，并随进度文件一起导出/导入。',
     'settings.ui.title': '界面语言',
     'settings.ui.tip': '切换按钮、提示、标题等界面文字；不影响词条的中英文释义（由「释义显示语言」控制）。',
     'settings.meaning.title': '释义显示语言',
     'settings.meaning.tip': '作用于背词卡、选词/找图题干、听选选项、填空题干、匹配下排与错词本；与界面语言互不影响。',
     'settings.theme.title': '主题背景',
     'settings.bgm.title': '背景音乐',
-    'settings.bgm.label': '播放低音量环境音',
-    'settings.bgm.desc': '由浏览器实时合成的五声音阶衬底，无需联网、无音频文件；默认关闭，浏览器要求首次点击后才可发声。',
+    'settings.bgm.label': '播放低音量背景音乐',
+    'settings.bgm.desc': '5 首舒缓、空灵、静谧的纯音乐，由浏览器实时合成：无需联网、无音频文件、无版权问题。默认关闭，浏览器要求首次点击后才可发声。',
+    'settings.bgm.trackTip': '选择音轨；「试听」会播放 12 秒并自动停止，不会改动已保存的设置。',
+    'settings.bgm.preview': '试听',
+    'settings.bgm.stopPreview': '停止',
     'settings.audio.title': '发音来源',
     'settings.audio.tip': '优先播放词包声明的预录音频（正常 1.0× / 慢速 0.5×，保持音高不失真）；没有音频的条目才回退到浏览器语音合成。',
     'settings.audio.autoplay': '进入背词卡时自动朗读一次，找图模式选对后也会自动朗读该词一次；浏览器要求先有一次点击才允许发声。',
@@ -334,7 +337,7 @@
     'home.music': 'Music {{state}}',
     'home.music.on': 'On',
     'home.music.off': 'Off',
-    'home.music.title': 'Toggle background music',
+    'home.music.title': 'Toggle background music (current track: {{track}}; change it in Settings)',
     'home.settings': 'Settings',
     'home.export': 'Export',
     'home.import': 'Import',
@@ -372,7 +375,7 @@
     'home.tools.export': 'Export progress JSON',
     'home.tools.merge': 'Import & merge',
     'home.tools.clear': 'Clear local data',
-    'home.foot.line1': 'Current: interface {{ui}} · meanings {{meaning}} · theme {{theme}} · music {{bgm}}.',
+    'home.foot.line1': 'Current: interface {{ui}} · meanings {{meaning}} · theme {{theme}} · music {{bgm}} · track {{track}}.',
     'home.foot.line2': 'Last export: {{date}} · Export every 7 days; this file is the only way to move progress between devices.',
     'home.foot.never': 'never',
     'home.foot.line3': 'Inflections, IPA and Chinese glosses in the sample pack are <b>auto-derived</b> and need human review; 3 AI illustrations are samples, the rest are geometric placeholders. Pronunciation uses the browser Finnish voice (V1 fallback); dictation offers a virtual letter bar for ä / ö / å.',
@@ -502,15 +505,18 @@
     'complete.last': 'Last group · back to the list',
 
     'settings.title': 'Settings',
-    'settings.intro': 'Interface language, meaning display, appearance and music preferences stay on this device and travel with your exported progress file.',
+    'settings.intro': 'Interface language, meaning display, appearance and music (including the chosen track) stay on this device and travel with your exported progress file.',
     'settings.ui.title': 'Interface language',
     'settings.ui.tip': 'Changes buttons, tips and headings. Word meanings are controlled separately by "Meaning display".',
     'settings.meaning.title': 'Meaning display',
     'settings.meaning.tip': 'Applies to memorise cards, prompts, listen options, cloze prompts, the match row and the mistake book. Independent of interface language.',
     'settings.theme.title': 'Theme',
     'settings.bgm.title': 'Background music',
-    'settings.bgm.label': 'Play quiet ambient music',
-    'settings.bgm.desc': 'A pentatonic ambience synthesised in the browser — offline, no audio files, off by default. Sound starts after your first click.',
+    'settings.bgm.label': 'Play quiet background music',
+    'settings.bgm.desc': 'Five soothing, ethereal, quiet instrumental tracks, synthesised live in the browser: offline, no audio files, no licensing. Off by default; sound starts after your first click.',
+    'settings.bgm.trackTip': 'Pick a track; Preview plays 12 seconds and stops without changing your saved settings.',
+    'settings.bgm.preview': 'Preview',
+    'settings.bgm.stopPreview': 'Stop',
     'settings.audio.title': 'Pronunciation source',
     'settings.audio.tip': 'Declared clips play first (normal 1.0× / slow 0.5× with pitch preserved); items without a clip fall back to browser speech synthesis.',
     'settings.audio.autoplay': 'Memorise cards play once on entry, and a correct pick in Find the picture plays that word once; browsers require one click before sound is allowed.',
@@ -573,6 +579,33 @@
       dictation: { short: 'Dictation', label: 'Dictation', desc: 'Audio (normal/slow) + picture; one blank per letter, all must be correct' },
       complete: { short: 'Done', label: 'Group complete', desc: 'Progress saved on this device' },
       result: { short: 'Results', label: 'Round results', desc: 'Continue to the next stage or retry wrong items' },
+    },
+  }
+
+  /* English names/descriptions for the five generative ambient tracks.
+     Chinese stays in BGM_TRACKS next to the synthesis parameters. */
+  FI.BGM_I18N = {
+    en: {
+      mist: {
+        name: 'Morning Mist',
+        desc: 'The quietest: long C-major pentatonic tones with almost no movement',
+      },
+      aurora: {
+        name: 'Northern Lights',
+        desc: 'Floating suspended chords, sparse high harmonics and the longest reverb',
+      },
+      lake: {
+        name: 'Still Lake',
+        desc: 'A low sustained drone with very occasional single notes — the calmest',
+      },
+      snow: {
+        name: 'Snowfall',
+        desc: 'Ice-crystal bells high in the register, irregularly spaced and very soft',
+      },
+      forest: {
+        name: 'Woodland',
+        desc: 'Low-passed noise like distant wind under a warm, woody chord pad',
+      },
     },
   }
 

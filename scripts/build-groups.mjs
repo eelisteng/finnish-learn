@@ -6,14 +6,46 @@
  *
  *   node scripts/build-groups.mjs
  */
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
-import { GROUP_TITLES } from '../data/content-source.mjs'
+import { GROUP_TITLES, GROUP_TITLES_EN } from '../data/content-source.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const pack = JSON.parse(readFileSync(join(root, 'data', 'packs', 'a1-core.json'), 'utf8'))
+const topicsPath = join(root, 'data', 'topics.json')
+const topics = existsSync(topicsPath)
+  ? JSON.parse(readFileSync(topicsPath, 'utf8')).topics : {}
 const GROUP_SIZE = 5
+
+/**
+ * The workbook adds ~190 groups, far too many to name by hand. Name each new
+ * group after the topic shared by most of its words (the workbook is organised
+ * by topic, so chunks are usually homogeneous). Reviewed demo groups keep
+ * their hand-authored bilingual titles.
+ */
+function groupTitle(id, level, kind, index, itemIds, wordById) {
+  if (GROUP_TITLES[id]) {
+    return { title: GROUP_TITLES[id], titleEn: GROUP_TITLES_EN[id] ?? null }
+  }
+  if (kind === 'sentence') {
+    return {
+      title: `${level} 句子 · 第 ${index} 组`,
+      titleEn: `${level} sentences · ${index}`,
+    }
+  }
+  const counts = new Map()
+  for (const id2 of itemIds) {
+    const t = wordById.get(id2)?.topicId
+    if (t) counts.set(t, (counts.get(t) ?? 0) + 1)
+  }
+  const dominant = [...counts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0]
+  const info = topics[dominant] ?? { zh: '综合', en: 'Mixed topics' }
+  return {
+    title: `${info.zh} · ${level} 第 ${index} 组`,
+    titleEn: `${info.en} · ${level} ${index}`,
+  }
+}
 
 function chunk(items, size) {
   const out = []
@@ -23,6 +55,7 @@ function chunk(items, size) {
 
 const groups = []
 const levels = []
+const wordById = new Map(pack.words.map((w) => [w.id, w]))
 
 for (const level of pack.levels) {
   const words = pack.words.filter((w) => w.cefr === level).map((w) => w.id)
@@ -32,6 +65,7 @@ for (const level of pack.levels) {
     const letter = kind === 'word' ? 'W' : 'S'
     chunk(ids, GROUP_SIZE).forEach((itemIds, i) => {
       const id = `${level}-${letter}-${String(i + 1).padStart(2, '0')}`
+      const names = groupTitle(id, level, kind, i + 1, itemIds, wordById)
       groups.push({
         id,
         level,
@@ -39,7 +73,8 @@ for (const level of pack.levels) {
         index: i + 1,
         size: itemIds.length,
         partial: itemIds.length < GROUP_SIZE,
-        title: GROUP_TITLES[id] ?? `第 ${i + 1} 组`,
+        title: names.title,
+        ...(names.titleEn ? { titleEn: names.titleEn } : {}),
         itemIds,
       })
     })

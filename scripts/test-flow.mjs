@@ -36,12 +36,15 @@ function ok(name, cond, extra = '') {
 const g = (id) => groups.groups.find((x) => x.id === id)
 
 console.log('Grouping')
-ok('17 groups across six levels', groups.groups.length === 17, `got ${groups.groups.length}`)
-ok('every group has exactly 5 items', groups.groups.every((x) => x.itemIds.length === 5))
+// The A1-B1 workbook import scales the index from 17 to ~200 groups. Keep the
+// invariants scale-agnostic rather than pinning a demo-only count.
+ok('group count matches the per-level index', groups.groups.length === groups.levels.reduce((n, l) => n + l.wordGroups + l.sentenceGroups, 0), `got ${groups.groups.length}`)
+ok('group count scales with the imported A1-B1 pack', groups.groups.length >= 17 && groups.groups.length >= Math.ceil(pack.words.length / groups.groupSize))
+ok('every group has 1-5 items', groups.groups.every((x) => x.itemIds.length >= 1 && x.itemIds.length <= groups.groupSize))
 ok('every level has at least one word group', groups.levels.every((l) => l.wordGroups >= 1))
 ok('every level has at least one sentence group', groups.levels.every((l) => l.sentenceGroups >= 1))
 ok('all six sentence lanes are ready', groups.levels.every((l) => l.sentenceStatus === 'ready'))
-ok('A1 has 3 word + 2 sentence groups', groups.levels[0].wordGroups === 3 && groups.levels[0].sentenceGroups === 2)
+ok('A1 has word + sentence groups for the workbook', groups.levels[0].wordGroups >= 3 && groups.levels[0].sentenceGroups >= 2)
 ok('no duplicate item across groups', (() => {
   const all = groups.groups.flatMap((x) => x.itemIds.map((i) => `${x.kind}:${i}`))
   return new Set(all).size === all.length
@@ -91,7 +94,8 @@ ok('sentence cloze also uses letter slots', cs.every((q) => Array.isArray(q.lett
 
 console.log('Group progression')
 ok('A1-W-01 → A1-W-02', FI.nextGroupId(groups, 'A1-W-01') === 'A1-W-02')
-ok('last A1 word group → next level', FI.nextGroupId(groups, 'A1-W-03') === 'A2-W-01')
+const lastA1WordGroup = groups.groups.filter((x) => x.level === 'A1' && x.kind === 'word').at(-1).id
+ok('last A1 word group → next level', FI.nextGroupId(groups, lastA1WordGroup) === 'A2-W-01', `from ${lastA1WordGroup}`)
 ok('last group returns null', FI.nextGroupId(groups, groups.groups.at(-1).id) === null)
 
 console.log('Progress store')
@@ -293,6 +297,14 @@ ok('mode short names are localised', FI.modeShort('listen') === '听选' && FI.m
 ok('mode descriptions are localised', FI.modeDesc('match', 'en').includes('shuffled'))
 ok('group titles have an English variant', FI.groupTitle(g('A1-W-01'), 'en') === 'Places & objects' &&
   FI.groupTitle(g('A1-W-01'), 'zh') === '生活场所与物件')
+ok('imported groups have topic-derived bilingual titles', (() => {
+  const imported = groups.groups.filter((x) => x.kind === 'word' && x.index > 3)
+  return imported.length > 0 && imported.every((x) => Boolean(x.titleEn) &&
+    FI.groupTitle(x, 'en') !== FI.groupTitle(x, 'zh'))
+})())
+ok('auto-derived declension labels are localised', FI.declText('indeclinable', 'zh') === '不变化词' &&
+  FI.declText('paradigm pending', 'en') === 'Paradigm pending' &&
+  FI.declText('Kotus 48 型（-e 词干）', 'en') === 'Kotus 48 type (-e stem)')
 ok('unknown group title falls back to generic English', FI.groupTitle({ id: 'Z9-W-99', level: 'Z9', kind: 'word', index: 9, title: '?' }, 'en') === 'Z9 Words · 9')
 ok('part-of-speech labels are localised', FI.posText({ posZh: '名词', pos: 'noun' }, 'en') === 'Noun' &&
   FI.posText({ posZh: '名词', pos: 'noun' }, 'zh') === '名词')

@@ -41,10 +41,30 @@ python3 -m http.server 8000
 ## Content & data
 
 - Runtime pack: `data/packs/a1-core.json`; browser-embedded copy: `app/data.js` (for `file://`)
-- Group index: `data/groups.json`
-- Editable seed: `data/content-source.mjs` (50 words / 35 sentences)
-- Human editing layer: `data/words.csv`, `data/sentences.csv` (UTF-8 BOM, opens in Excel / Numbers)
+- Group index: `data/groups.json` (currently 228 groups of 5 items)
+- Editable seed: `data/content-source.mjs` (50 words / 35 sentences — the reviewed baseline)
+- Human editing layer: `data/words.csv` (980 words), `data/sentences.csv` (151 sentences), UTF-8 BOM, opens in Excel / Numbers
+- Topic map: `data/topics.json`; import statistics and review backlog: `data/import/import-report.json`
 - Source and license inventory: `data/sources.json`; content types: `src/types/content.ts`
+
+### Where the A1–B1 vocabulary comes from
+
+`data/import/finnish_A1-B1_vocabulary_database.xlsx` is a user-provided workbook with six sheets (960 headwords / 44 fixed expressions / 30 sentences / 6 dialogues / grammar index / usage notes). **Neither CEFR nor YKI publishes an official per-word vocabulary list**, and the workbook itself labels its level column "建议等级，非官方逐词CEFR定级" (suggested level, not an official per-word CEFR grading). Levels are therefore an in-house convention only.
+
+The workbook contains only Finnish lemmas, Chinese glosses, part of speech, suggested level and topic. IPA, English glosses, stems, case tables, verb paradigms, illustrations and audio are all missing. The import pipeline fills those gaps:
+
+```bash
+node scripts/export-sheets.mjs        # XLSX -> six reviewable CSV snapshots (dependency-free OOXML reader)
+node scripts/build-en-glosses.mjs     # zh -> en cache (committed; normal builds need no network)
+node scripts/import-a1-b1.mjs         # merge into data/words.csv / data/sentences.csv
+node scripts/build-content.mjs && node scripts/build-groups.mjs
+```
+
+- English glosses come from `data/import/en-glosses.csv` (1,049 cached entries); `en-overrides.tsv` and `en-verbs.tsv` (166 hand-checked infinitives) fix machine-translation errors.
+- Morphology comes from `data/import/kotus-sanalista-2024.tsv` (Kotus declension/conjugation class + consonant-gradation letter, CC BY 4.0; attribution in `KOTUS-NOTICE.txt`), expanded by `scripts/fi-morphology.mjs` into stems, six basic cases and verb-type 1–6 principal parts.
+- The 50 reviewed words / 35 sentences keep their IDs and levels; duplicate lemmas are skipped. Imported IDs start with `x`, so re-running the importer is idempotent.
+- Truly indeclinable words (Kotus 99, adverbs, conjunctions) show `—`; words whose paradigm could not be derived are labelled `paradigm pending` and also show `—` — they are **never** mislabelled as indeclinable.
+- The whole pipeline is **deterministic**: `SOURCE.txt`, `import-report.json` and `csv-pack.mjs import` record SHA-256 hashes of their inputs rather than build timestamps. With unchanged inputs, two consecutive full rebuilds produce byte-identical output for all 15 generated files, so an empty `git diff` proves nothing drifted.
 
 The CSV bridge is the recommended way to edit vocabulary. Rebuild the group index and embedded data afterwards:
 
@@ -56,7 +76,7 @@ node scripts/csv-pack.mjs import   # CSV -> JSON pack
 node scripts/build-content.mjs && node scripts/build-groups.mjs && node scripts/validate-content.mjs --self-test
 ```
 
-`csv-pack.mjs import` preserves human review status and checks for dangling senses, missing glosses and similar problems.
+`csv-pack.mjs import` preserves human review status and checks for dangling senses, missing glosses and similar problems. Re-running `import-a1-b1.mjs` only regenerates the `x`-prefixed imported rows; hand-reviewed rows are untouched.
 
 ### One CSV row = one complete production unit
 
@@ -74,10 +94,14 @@ Keep image and audio metadata in the CSV, not in `app/*.js` or `data/content-sou
 ## Validation
 
 ```bash
-node scripts/validate-content.mjs --self-test   # content structure and level checks
+node scripts/fi-morphology.mjs --self-test     # Finnish morphology rules (59 cases)
+node scripts/validate-content.mjs --self-test  # content structure and level checks
 node scripts/csv-pack.mjs --self-test          # CSV round-trip and negative cases
+node scripts/import-a1-b1.mjs --dry-run        # report only, writes nothing
 node scripts/test-flow.mjs                     # domain and practice-behavior tests
 ```
+
+Reproducibility check: rerun `export-sheets.mjs -> build-en-glosses.mjs -> import-a1-b1.mjs -> build-content.mjs -> build-groups.mjs`; `git diff` should be empty because no generated file contains a timestamp. Any diff means an input snapshot or derivation rule changed and needs review.
 
 For the browser end-to-end regression, open `tests/browser-flow.html` in headless Chrome; the page prints each assertion result.
 
@@ -92,18 +116,27 @@ app/store.js                  local progress, import/export, preferences
 app/main.js                   UI and flow controller
 app/styles.css                light / dark themes
 app/bgm.js                    live synthesis, preview and switching of the five ambient tracks
-data/                         content pack, groups, CSV files, source inventory
+data/                         content pack, groups, CSV files, topic map, source inventory
+data/import/                  source XLSX, six CSV snapshots, en cache, Kotus list, import report
 assets/illustrations/         finished illustrations
 assets/audio/                 pre-recorded clips (empty for now; declared in CSV)
-scripts/                      build, validation, CSV bridge, domain tests
+scripts/xlsx-read.mjs         dependency-free XLSX reader (inlineStr / sharedStrings)
+scripts/export-sheets.mjs     workbook -> six CSV snapshots
+scripts/build-en-glosses.mjs  zh -> en translation cache
+scripts/fi-morphology.mjs     Finnish morphology / IPA rule derivation
+scripts/import-a1-b1.mjs      idempotent A1-B1 merge importer
+scripts/                      other build, validation, CSV bridge and domain tests
 tests/                        browser regression
 ```
 
 ## Known limitations
 
-- Only 3 finished illustrations (`talo`, `kauppa`, `puhua`); the rest are geometric placeholders. All 50 have `image_reviewStatus: pending` and still need human review.
+- Only 3 finished illustrations (`talo`, `kauppa`, `puhua`); the other 977 are geometric placeholders, all with `image_reviewStatus: pending`.
 - The pack declares 0 audio clips, so every item currently uses browser speech synthesis. Most devices lack a `fi-FI` voice, which distorts long/short vowels and `ä/ö/å`. Filling the `audio_*` columns and adding the files automatically switches playback to the recordings.
-- IPA, glosses and inflection / Kotus types are marked `auto-derived` and need proofreading. CEFR levels are an internal product convention — neither CEFR nor YKI publishes an official word list.
+- **On imported rows the IPA, English glosses, stems, six basic cases and verb principal parts are all `auto-derived` rule output and have NOT been checked by a Finnish linguist — do not publish them as teaching material.** 800/930 imported lemmas had a Kotus class; the rest were inferred from word shape or marked `paradigm pending`. The workbook's levels are suggestions only.
+- Imported sentences carry token chips without `senseId` / case annotation (the workbook has no interlinear glosses), so no CEFR gate is inferred from glosses.
+- Colloquial (Puhekieli) variants, collocations and the grammar index are preserved in `data/import/*.csv` but not yet surfaced in the app.
+- A1 now renders 83 group cards (69 word + 14 sentence) on one page. Pagination or a "show unstudied only" filter is a sensible next UX step; for now all groups are listed.
 - The five music tracks are generative ambience (fixed recipes, random notes and spacing), not recorded compositions: offline and licence-free, but the melody differs every time and the timbre depends on the device. To use real recordings later, drop files into `assets/bgm/` and swap the synthesis graph in `app/bgm.js` for `<audio loop>` playback — the `FI.BGM_TRACKS` list and the Settings UI stay as they are.
 - No accounts, no backend, no automatic sync; moving to another device requires a JSON export / import.
 - Do not rename the internal keys `finnish-learn:v1` (storage key) or `finnish-learn-progress` (export format), or existing progress and exported files become unreadable.

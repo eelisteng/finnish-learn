@@ -111,7 +111,7 @@
     'home.foot.line1': '当前显示：界面「{{ui}}」 · 释义「{{meaning}}」 · 主题「{{theme}}」 · 背景音乐「{{bgm}}」 · 音轨「{{track}}」。',
     'home.foot.line2': '上次导出：{{date}} · 建议每 7 天导出一次，文件是跨设备迁移的唯一凭证。',
     'home.foot.never': '从未导出',
-    'home.foot.line3': '示例词包的词形、IPA 与中文释义均为 <b>auto-derived 样例</b>，上线前须人工校对；3 张 AI 插画为样例，其余为几何占位图。发音使用浏览器芬兰语合成音（V1 兜底），听写可用虚拟字母条输入 ä / ö / å。',
+    'home.foot.line3': 'A1–B1 词条与句子来自用户提供的工作簿（「建议等级」，非官方 CEFR 词表）；词形与 IPA 依据 Kotus Nykysuomen sanalista（CC BY 4.0，署名见 data/import/KOTUS-NOTICE.txt）规则推导，导入行的词形、IPA 与英文释义均为 <b>auto-derived</b>，上线前须由芬兰语专家人工校对。3 张 AI 插画为样例，其余为几何占位图。发音使用浏览器芬兰语合成音（V1 兜底），听写可用虚拟字母条输入 ä / ö / å。',
 
     'head.pause': '← 暂停',
     'head.kind.word': '单词',
@@ -378,7 +378,7 @@
     'home.foot.line1': 'Current: interface {{ui}} · meanings {{meaning}} · theme {{theme}} · music {{bgm}} · track {{track}}.',
     'home.foot.line2': 'Last export: {{date}} · Export every 7 days; this file is the only way to move progress between devices.',
     'home.foot.never': 'never',
-    'home.foot.line3': 'Inflections, IPA and Chinese glosses in the sample pack are <b>auto-derived</b> and need human review; 3 AI illustrations are samples, the rest are geometric placeholders. Pronunciation uses the browser Finnish voice (V1 fallback); dictation offers a virtual letter bar for ä / ö / å.',
+    'home.foot.line3': 'A1–B1 words and sentences come from a user-provided workbook whose levels are suggestions, not an official CEFR word list. Paradigms and IPA are rule-derived from Kotus Nykysuomen sanalista (CC BY 4.0; attribution in data/import/KOTUS-NOTICE.txt); imported paradigms, IPA and English glosses are <b>auto-derived</b> and need review by a Finnish linguist before release. 3 AI illustrations are samples, the rest are geometric placeholders. Pronunciation uses the browser Finnish voice (V1 fallback); dictation offers a virtual letter bar for ä / ö / å.',
 
     'head.pause': '← Pause',
     'head.kind.word': 'words',
@@ -632,7 +632,9 @@
   }
   FI.groupTitle = function (g, lang) {
     if (lang !== 'en') return g.title
-    return GROUP_TITLE_EN[g.id] ?? `${g.level} ${g.kind === 'word' ? 'Words' : 'Sentences'} · ${g.index}`
+    // Imported groups carry a build-time titleEn derived from their dominant
+    // topic; the 17 reviewed demo groups keep their hand-written names.
+    return GROUP_TITLE_EN[g.id] ?? g.titleEn ?? `${g.level} ${g.kind === 'word' ? 'Words' : 'Sentences'} · ${g.index}`
   }
 
   const POS_EN = { '名词': 'Noun', '动词': 'Verb', '形容词': 'Adjective', '副词': 'Adverb', '代词': 'Pronoun', '数词': 'Numeral' }
@@ -655,7 +657,39 @@
     const fiName = String(f.label ?? '').trim().split(/\s+/).pop() || f.case
     return `${CASE_EN[f.case] ?? f.case} · ${fiName}`
   }
-  FI.declText = (s, lang) => lang === 'en' ? String(s ?? '').replace(/型\s*$/, 'type').trim() : String(s ?? '')
+  /** Declension-class labels. Reviewed demo rows use "… 型 (…)" Chinese;
+   *  workbook-derived rows use explicit English state labels that must never
+   *  be mistaken for a real linguistic classification. */
+  const DECL_EXACT_ZH = {
+    'indeclinable': '不变化词',
+    'paradigm pending': '形态待校对',
+    'phrase (paradigm pending)': '短语 · 形态待校对',
+    'pluralia tantum (paradigm pending)': '复数形式 · 形态待校对',
+    'pronoun (irregular)': '代词（不规则）',
+  }
+  const DECL_EXACT_EN = {
+    'indeclinable': 'Indeclinable',
+    'paradigm pending': 'Paradigm pending',
+    'phrase (paradigm pending)': 'Phrase · paradigm pending',
+    'pluralia tantum (paradigm pending)': 'Pluralia tantum · paradigm pending',
+    'pronoun (irregular)': 'Pronoun · irregular',
+  }
+  const DECL_PAREN_EN = {
+    '带强弱变换': 'with gradation', '推测': 'inferred',
+    '-e 词干': '-e stem', '-si 词干': '-si stem', '-nen 词干': '-nen stem',
+    '-s 词干': '-s stem', '-mpi 词干': '-mpi stem', '-in 词干': '-in stem',
+    '-än 词干': '-än stem', 'mies 词干': 'mies stem', 'kevät 词干': 'kevät stem',
+    '-ton 词干': '-ton stem', '-nut 分词': '-nut participle',
+    '辅干 + -i': 'consonant stem + -i', '-ut 词干': '-ut stem',
+  }
+  FI.declText = function (s, lang) {
+    const v = String(s ?? '').trim()
+    if (lang !== 'en') return DECL_EXACT_ZH[v] ?? v
+    if (DECL_EXACT_EN[v]) return DECL_EXACT_EN[v]
+    return v.replace(/型/g, 'type')
+      .replace(/（([^）]*)）/g, (m, inner) => ` (${DECL_PAREN_EN[inner] ?? inner})`)
+      .replace(/\s+/g, ' ').trim()
+  }
 
   const NOTE_EN = {
     '不规则动词，on / olen / olla 需单独记忆，不走 6 类规则派生':

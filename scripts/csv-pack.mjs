@@ -26,6 +26,7 @@
  * from data/content-source.mjs instead, then re-export).
  */
 import { readFileSync, writeFileSync, existsSync, mkdirSync, unlinkSync } from 'node:fs'
+import { createHash } from 'node:crypto'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { dirname, join } from 'node:path'
 
@@ -555,7 +556,11 @@ function main() {
   if (cmd === 'check') { console.log('No files written.'); return }
   if (cmd === 'import') {
     const next = applyCsvToPack(pack, csv.wordRows, csv.sentenceRows)
-    next.csvImportedAt = new Date().toISOString()
+    // Content hash instead of a timestamp: re-importing unchanged CSV must be
+    // byte-stable, so a clean git diff proves the pipeline is reproducible.
+    next.csvSourceSha256 = createHash('sha256')
+      .update(JSON.stringify([csv.wordRows, csv.sentenceRows]))
+      .digest('hex')
     writeFileSync(PACK_PATH, `${JSON.stringify(next, null, 2)}\n`, 'utf8')
     console.log(`Imported -> ${PACK_PATH}`)
     console.log('Next: node scripts/build-content.mjs && node scripts/build-groups.mjs && node scripts/validate-content.mjs --self-test')

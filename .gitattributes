@@ -1,0 +1,6 @@
+# CSV files are RFC 4180: UTF-8 BOM + CRLF, produced by scripts/csv-pack.mjs
+# on purpose so Excel / Numbers open Finnish diacritics and Chinese glosses
+# correctly. A CR before LF is part of the line terminator, not a
+# trailing space; without this, `git diff --check` reports ~1000 false
+# positives on every imported row. Genuine trailing spaces are still flagged.
+*.csv whitespace=cr-at-eol

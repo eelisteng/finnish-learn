@@ -1,21 +1,52 @@
 {
   "note": "CEFR defines can-do descriptors, not word lists. Finland's YKI/OPH publishes level descriptions and nine topic categories, not an official A1-C2 vocabulary. All levels in this project are derived in-house and must carry provenance.",
+  "contentVersion": "fi-a1b1-2026.11-xlsx",
   "sources": [
     {
+      "id": "a1b1-workbook",
+      "name": "User-provided workbook: finnish_A1-B1_vocabulary_database.xlsx",
+      "localCopy": "data/import/finnish_A1-B1_vocabulary_database.xlsx",
+      "license": "user-provided; used with the project owner's permission",
+      "provides": ["930 imported A1-B1 lemmas", "Chinese glosses", "116 sentences / fixed expressions / dialogue lines / word examples", "suggested CEFR level", "35 Chinese topic labels"],
+      "sheets": {
+        "A1-B1词汇总库": 960, "固定表达": 44, "句子库": 30, "情景对话": 6, "语法目录": 29, "使用说明": 9
+      },
+      "caveat": "The workbook's own 等级核验 column says 建议等级，非官方逐词CEFR定级 (suggested level, not an official per-word CEFR grading). The workbook has no IPA, English gloss, image, audio, stems, cases or verb principal parts."
+    },
+    {
       "id": "kotus",
-      "name": "Kotus / Kielipankki Nykysuomen sanalista + Enriched Kotus word list (Zenodo)",
+      "name": "Kotus Nykysuomen sanalista 2024 / Kielipankki + Enriched Kotus word list (Zenodo)",
       "url": "https://www.kielipankki.fi/lexical-conceptual-resources/nykysuomi-sanalista",
-      "license": "CC BY 4.0",
-      "provides": ["lemma", "nominal declension type 1-51", "verb conjugation type 52-78", "consonant gradation class"],
-      "caveat": "No translations and no CEFR levels."
+      "localCopy": "data/import/kotus-sanalista-2024.tsv",
+      "attribution": "data/import/KOTUS-NOTICE.txt",
+      "license": "CC BY 4.0 (upstream Kotus CC BY); see NOTICE for the required citation",
+      "provides": ["nominal declension type 1-51", "verb conjugation type 52-78", "consonant gradation letter A-L", "word class"],
+      "caveat": "Class numbers are hints for the rule engine, not ready-made inflection tables. 800/930 imported lemmas had a class; the rest were derived from word shape or left as paradigm pending. No translations and no CEFR levels."
+    },
+    {
+      "id": "yle-frequency",
+      "name": "Yle Uutisten taajuussanakirja (Yle Finnish News Archive 2011-2024)",
+      "localCopy": "data/import/yle-frequency-2011-2024.tsv",
+      "license": "CC BY 4.0, Daniel Radice / Yle / Kielipankki",
+      "provides": ["corpus frequency for future grading work"],
+      "caveat": "Reference data only; not yet wired into the level-assignment pipeline."
+    },
+    {
+      "id": "en-glosses",
+      "name": "Machine-assisted zh -> en gloss cache with hand-checked overrides",
+      "localCopy": "data/import/en-glosses.csv",
+      "license": "derived in-house (MyMemory translation API output, reviewed)",
+      "provides": ["English glosses", "English sentence / expression / dialogue translations"],
+      "reviewFiles": ["data/import/en-overrides.tsv", "data/import/en-verbs.tsv"],
+      "caveat": "Generated in batches, cached in the repo so normal builds need no network. 166 verb infinitives are hand-checked because Chinese verb glosses are ambiguous. All generated English is tagged auto-derived in the pack."
     },
     {
       "id": "wiktionary",
       "name": "Wiktionary Finnish declension / conjugation tables (incl. zh.wiktionary)",
       "url": "https://en.wiktionary.org/wiki/Appendix:Finnish_declension",
       "license": "CC BY-SA",
-      "provides": ["fi-en gloss", "fi-zh gloss", "full 15-case paradigm", "verb forms"],
-      "caveat": "Share-alike obligation; Chinese glosses require human review before publishing."
+      "provides": ["reference for the rule-derived paradigms"],
+      "caveat": "Share-alike obligation; no Wiktionary text is redistributed in this pack."
     },
     {
       "id": "corpus",
@@ -34,26 +65,37 @@
     },
     {
       "id": "own",
-      "name": "In-house: graded sentences, Chinese gloss review, mp3 audio, illustrations",
+      "name": "In-house: 50 demo words / 35 demo sentences, rule-derived morphology, illustrations",
       "license": "own",
-      "provides": ["sentences", "reviewed zh gloss", "audio", "images"],
+      "provides": ["reviewed demo rows", "scripts/fi-morphology.mjs paradigms", "IPA", "images"],
       "caveat": "Human QA is our responsibility."
     }
   ],
+  "importPolicy": {
+    "authoritativeEditingLayer": "data/words.csv + data/sentences.csv",
+    "regenerate": "node scripts/export-sheets.mjs && node scripts/build-en-glosses.mjs && node scripts/import-a1-b1.mjs && node scripts/build-content.mjs && node scripts/build-groups.mjs",
+    "reviewStatus": "every imported row is auto-derived; no imported illustration or audio is human-verified",
+    "imageStatus": "977 pending motif placeholders, 3 ready demo illustrations",
+    "audioStatus": "0 clips declared; browser TTS fallback for all items",
+    "morphology": "IPA, case tables, stems and verb principal parts are derived from Kotus class + word shape by scripts/fi-morphology.mjs. Unresolved words show — and are labelled paradigm pending, never indeclinable unless they genuinely are.",
+    "cefr": "suggested level copied from the workbook; treated as an in-house product convention only",
+    "report": "data/import/import-report.json"
+  },
   "yki_topic_categories": [
     "I and my background", "home and housing", "shops and services", "culture",
     "travelling", "health and wellbeing", "work", "the environment", "society"
   ],
   "grading_recipe": [
-    "frequency percentile from corpus",
-    "morphology gate: unlocked cases, verb type 1-6, rektio",
-    "map to a YKI topic category",
-    "human spot-check 100 words per level"
+    "suggested level from the workbook (A1 / A2 / B1)",
+    "cross-check against Kotus class, verb type 1-6 and morphology complexity",
+    "map workbook topic to a YKI topic category via data/topics.json",
+    "human spot-check 100 words per level before publishing"
   ],
   "forbidden": [
     "Scraping FunEasyLearn word lists, illustrations or audio (proprietary)",
     "Using CC BY-NC word lists in a product that may be commercialised",
     "Publishing machine-translated Chinese glosses without human review",
-    "Copying commercial blog 'A1 word list' posts (copyrighted content)"
+    "Copying commercial blog 'A1 word list' posts (copyrighted content)",
+    "Presenting the workbook's suggested levels as an official CEFR / YKI word list"
   ]
 }

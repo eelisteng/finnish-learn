@@ -1,0 +1,63 @@
+﻿# Hand-checked corrections for the machine-assisted Chinese -> English cache.
+# Entries here win over data/import/en-glosses.csv. Format: zh<TAB>en
+zh	en
+汽车	car
+厕所	toilet
+上午	morning (a.m.)
+下午	afternoon
+我	I / me
+英语	English
+芬兰语/芬兰	Finnish / Finland
+中文/中国	Chinese / China
+还是	or (in questions)
+名	first name
+姓	last name
+客厅	living room
+电话号码	phone number
+一百	one hundred
+一千	one thousand
+一百万	one million
+年轻人	young person
+父母/家长	parents / guardian
+男孩/儿子	boy / son
+女孩/女儿	girl / daughter
+男人/丈夫	man / husband
+女人/妻子	woman / wife
+国家/土地	country / land
+天/白天	day / daytime
+天花板/屋顶	ceiling / roof
+洗衣机	washing machine
+毛衣/上衣	sweater / top
+手/胳膊	hand / arm
+脚/腿	foot / leg
+课时	lesson / class period
+店主	shopkeeper
+煎锅	frying pan
+网页	web page
+城区	urban district
+体能	physical fitness
+兼职	part-time (work)
+全职	full-time (work)
+例如	for example
+至少	at least
+以便	in order to
+总共	in total
+同时	at the same time
+那时	at that time
+远处	far away
+直行	straight ahead
+不/没有	no / not (negative verb)
+社交媒体	social media
+寻找	look for
+挣钱	earn money
+压力	stress
+担忧	worry
+惊讶	surprise
+意义	meaning
+承认	admit
+减少	decrease
+发布	publish
+登记	registration / check-in
+属于	belong to
+照顾	take care of
+力求	strive for

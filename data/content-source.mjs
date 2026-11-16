@@ -222,7 +222,9 @@ export const SENTENCE_SEED = [
     gloss: [{ token: 'Kieli', senseId: 'kieli-1' }, { token: 'on', senseId: 'olla-1' }, { token: 'vivahteinen', senseId: 'vivahteinen-1' }] },
 ]
 
-/** Hand-authored group titles; anything missing falls back to "第 N 组". */
+/** Hand-authored group titles for the 17 reviewed demo groups. New groups
+ *  imported from the A1-B1 workbook get topic-derived titles in
+ *  scripts/build-groups.mjs (see data/topics.json). */
 export const GROUP_TITLES = {
   'A1-W-01': '生活场所与物件', 'A1-W-02': '饮食', 'A1-W-03': '常用动词',
   'A1-S-01': 'A1 日常句 · 上', 'A1-S-02': 'A1 日常句 · 下',
@@ -231,4 +233,17 @@ export const GROUP_TITLES = {
   'B2-W-01': '社会与研究', 'B2-S-01': 'B2 论述句',
   'C1-W-01': '抽象概念', 'C1-S-01': 'C1 抽象句',
   'C2-W-01': '精细表达', 'C2-S-01': 'C2 精微句',
+}
+
+/** English counterparts, kept next to the Chinese titles so the group index
+ *  can carry both languages at build time instead of duplicating the map in
+ *  app/i18n.js. */
+export const GROUP_TITLES_EN = {
+  'A1-W-01': 'Places & objects', 'A1-W-02': 'Food & drink', 'A1-W-03': 'Common verbs',
+  'A1-S-01': 'A1 everyday sentences · 1', 'A1-S-02': 'A1 everyday sentences · 2',
+  'A2-W-01': 'Everyday actions', 'A2-W-02': 'People & time', 'A2-S-01': 'A2 situational sentences',
+  'B1-W-01': 'Language & thought', 'B1-W-02': 'Verb types 2–6', 'B1-S-01': 'B1 narrative sentences',
+  'B2-W-01': 'Society & research', 'B2-S-01': 'B2 argumentative sentences',
+  'C1-W-01': 'Abstract concepts', 'C1-S-01': 'C1 abstract sentences',
+  'C2-W-01': 'Nuanced expression', 'C2-S-01': 'C2 subtle sentences',
 }

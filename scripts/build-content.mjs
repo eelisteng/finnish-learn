@@ -140,8 +140,8 @@ function buildSentence(s) {
 const seedPack = {
   format: 'finnish-learn-content',
   schema: 2,
-  version: 'fi-core-2026.11-demo',
-  reviewNote: 'Demo pack. Every paradigm, IPA transcription and Chinese gloss is auto-derived and MUST be human-verified before production. CEFR grading is an internal product convention, not an official word list.',
+  version: 'fi-a1b1-2026.11-xlsx',
+  reviewNote: 'A1-B1 pack built from the user-provided finnish_A1-B1_vocabulary_database.xlsx plus 50/35 hand-authored demo rows. Workbook-derived IPA, paradigms and English glosses are auto-derived and MUST be human-verified before production. CEFR grading is a suggested in-house convention: neither CEFR nor YKI publishes an official word list.',
   levels: LEVELS,
   words: WORD_SEED.map(buildWord),
   sentences: SENTENCE_SEED.map(buildSentence),

@@ -133,11 +133,13 @@
   try {
     /* ── home & settings ───────────────────────────────────── */
     ok('home: 6 level tabs', $$('.leveltab').length === 6)
-    ok('home: A1 shows 5 group cards', $$('.gcard').length === 5)
+    // The A1-B1 workbook import produces dozens of groups per level; keep the
+    // reviewed demo group as the first card instead of pinning a demo count.
+    ok('home: A1 shows the reviewed first group', $$('.gcard').length >= 5 && $$('.gcard .gid')[0]?.textContent === 'A1-W-01')
     ok('home: hero shows the pipeline', $('.hero p')?.textContent.includes('听选') && $('.hero p')?.textContent.includes('听写'))
     ok('home: hero no longer mentions 拼写', !$('.hero p')?.textContent.includes('拼写'))
     ok('home: quick theme + music toggles', $('[data-act="theme-toggle"]') && $('[data-act="bgm-toggle"]'))
-    ok('home: B1 has both word and sentence groups', (() => { $$('.leveltab').find((b) => b.dataset.level === 'B1').click(); return $$('.gcard').length === 3 && $$('.gid').some((x) => x.textContent === 'B1-S-01') })())
+    ok('home: B1 has both word and sentence groups', (() => { $$('.leveltab').find((b) => b.dataset.level === 'B1').click(); const ids = $$('.gid').map((x) => x.textContent); return ids.some((x) => x === 'B1-S-01') && ids.some((x) => x?.startsWith('B1-W-')) })())
     $$('.leveltab').find((b) => b.dataset.level === 'A1').click()
 
     click('[data-act="settings"]')
@@ -563,6 +565,30 @@
       headIs('本组完成') && $$('.complete-grid div').length >= 7)
     if ($('[data-act="complete-pause"]')) click('[data-act="complete-pause"]')
     else { click('[data-act="pause"]'); click('[data-act="discard"]') }
+
+    /* ── workbook rows are renderable by memorizeWord() ───────── */
+    const importedWords = window.FI_DATA.pack.words.filter((w) => w.id.startsWith('xw-'))
+    ok('import: workbook rows are present', importedWords.length > 900, `got ${importedWords.length}`)
+    ok('import: every imported word has the fields memorizeWord() reads',
+      importedWords.every((w) => w.ipa && w.senses?.[0]?.zh && w.senses?.[0]?.en && (
+        w.pos === 'verb'
+          ? w.verb && Number.isInteger(w.verb.verbType) && w.verb.presentStem &&
+            w.verb.present1sg && w.verb.past3sg && w.verb.nutParticiple
+          : w.number?.singular && w.number?.plural && w.nominal?.stems?.strong &&
+            w.nominal?.stems?.weak && w.nominal?.caseForms?.length === 6
+      )))
+    ok('import: unverified paradigms are labelled, not invented', (() => {
+      const gaps = importedWords.filter((w) => w.nominal?.declensionClass === 'paradigm pending' ||
+        w.nominal?.declensionClass === 'pluralia tantum (paradigm pending)')
+      // nominative is always the lemma; the five derived cases are the gaps.
+      return gaps.length > 0 && gaps.every((w) => w.nominal.caseForms.length === 6 &&
+        w.nominal.caseForms[0].form === w.lemma &&
+        w.nominal.caseForms.slice(1).every((f) => f.form === '—'))
+    })())
+    ok('import: group titles are bilingual for new groups', (() => {
+      const x = window.FI_DATA.groups.groups.find((g) => g.id === 'A1-W-04')
+      return x && x.titleEn && x.title.includes('家庭') && x.titleEn.includes('Family')
+    })())
   } catch (err) {
     out.push('FAIL exception :: ' + (err && err.stack ? err.stack : String(err)))
   }

@@ -91,6 +91,13 @@ export interface NominalParadigm {
   stems: { strong: string; weak: string }
   gradation: string | null
   harmony: 'back' | 'front' | 'neutral'
+  /**
+   * "Kotus N 型 (...)" for a rule-derived paradigm, or one of the explicit
+   * state labels `indeclinable` / `paradigm pending` /
+   * `pluralia tantum (paradigm pending)` / `phrase (paradigm pending)` /
+   * `pronoun (irregular)`. State labels mean the caseForms contain "—" and
+   * must never be presented as verified Finnish.
+   */
   declensionClass: string
   /** Kotus nominal declension type, 1-51. null = pending human review. */
   kotusType: number | null
@@ -174,6 +181,9 @@ export interface LearningGroup {
   /** True only for a trailing group when the level is not a multiple of 5. */
   partial: boolean
   title: string
+  /** English title. Hand-authored for the 17 reviewed demo groups, derived
+   *  from the dominant topic (data/topics.json) for workbook-imported groups. */
+  titleEn?: string
   itemIds: string[]
 }
 

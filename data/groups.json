@@ -1,31 +1,31 @@
 {
   "format": "finnish-learn-groups",
   "schema": 1,
-  "contentVersion": "fi-core-2026.11-demo",
+  "contentVersion": "fi-a1b1-2026.11-xlsx",
   "groupSize": 5,
   "levels": [
     {
       "level": "A1",
-      "wordCount": 15,
-      "sentenceCount": 10,
-      "wordGroups": 3,
-      "sentenceGroups": 2,
+      "wordCount": 342,
+      "sentenceCount": 70,
+      "wordGroups": 69,
+      "sentenceGroups": 14,
       "sentenceStatus": "ready"
     },
     {
       "level": "A2",
-      "wordCount": 10,
-      "sentenceCount": 5,
-      "wordGroups": 2,
-      "sentenceGroups": 1,
+      "wordCount": 274,
+      "sentenceCount": 30,
+      "wordGroups": 55,
+      "sentenceGroups": 6,
       "sentenceStatus": "ready"
     },
     {
       "level": "B1",
-      "wordCount": 10,
-      "sentenceCount": 5,
-      "wordGroups": 2,
-      "sentenceGroups": 1,
+      "wordCount": 349,
+      "sentenceCount": 36,
+      "wordGroups": 70,
+      "sentenceGroups": 8,
       "sentenceStatus": "ready"
     },
     {
@@ -62,6 +62,7 @@
       "size": 5,
       "partial": false,
       "title": "生活场所与物件",
+      "titleEn": "Places & objects",
       "itemIds": [
         "talo",
         "kauppa",
@@ -78,6 +79,7 @@
       "size": 5,
       "partial": false,
       "title": "饮食",
+      "titleEn": "Food & drink",
       "itemIds": [
         "vesi",
         "kahvi",
@@ -94,12 +96,1132 @@
       "size": 5,
       "partial": false,
       "title": "常用动词",
+      "titleEn": "Common verbs",
       "itemIds": [
         "olla",
         "puhua",
         "syoda",
         "tulla",
         "haluta"
+      ]
+    },
+    {
+      "id": "A1-W-04",
+      "level": "A1",
+      "kind": "word",
+      "index": 4,
+      "size": 5,
+      "partial": false,
+      "title": "家庭 · A1 第 4 组",
+      "titleEn": "Family · A1 4",
+      "itemIds": [
+        "xw-aiti",
+        "xw-isa",
+        "xw-vanhempi",
+        "xw-lapsi",
+        "xw-poika"
+      ]
+    },
+    {
+      "id": "A1-W-05",
+      "level": "A1",
+      "kind": "word",
+      "index": 5,
+      "size": 5,
+      "partial": false,
+      "title": "家庭 · A1 第 5 组",
+      "titleEn": "Family · A1 5",
+      "itemIds": [
+        "xw-tytto",
+        "xw-veli",
+        "xw-sisko",
+        "xw-mies",
+        "xw-nainen"
+      ]
+    },
+    {
+      "id": "A1-W-06",
+      "level": "A1",
+      "kind": "word",
+      "index": 6,
+      "size": 5,
+      "partial": false,
+      "title": "家庭 · A1 第 6 组",
+      "titleEn": "Family · A1 6",
+      "itemIds": [
+        "xw-naapuri",
+        "xw-isoaiti",
+        "xw-isoisa",
+        "xw-serkku",
+        "xw-vauva"
+      ]
+    },
+    {
+      "id": "A1-W-07",
+      "level": "A1",
+      "kind": "word",
+      "index": 7,
+      "size": 5,
+      "partial": false,
+      "title": "个人信息 · A1 第 7 组",
+      "titleEn": "Personal information · A1 7",
+      "itemIds": [
+        "xw-aikuinen",
+        "xw-nuori",
+        "xw-nimi",
+        "xw-etunimi",
+        "xw-sukunimi"
+      ]
+    },
+    {
+      "id": "A1-W-08",
+      "level": "A1",
+      "kind": "word",
+      "index": 8,
+      "size": 5,
+      "partial": false,
+      "title": "个人信息 · A1 第 8 组",
+      "titleEn": "Personal information · A1 8",
+      "itemIds": [
+        "xw-ika",
+        "xw-syntymapaiva",
+        "xw-osoite",
+        "xw-puhelin",
+        "xw-puhelinnumero"
+      ]
+    },
+    {
+      "id": "A1-W-09",
+      "level": "A1",
+      "kind": "word",
+      "index": 9,
+      "size": 5,
+      "partial": false,
+      "title": "个人信息 · A1 第 9 组",
+      "titleEn": "Personal information · A1 9",
+      "itemIds": [
+        "xw-sahkoposti",
+        "xw-maa",
+        "xw-suomi",
+        "xw-englanti",
+        "xw-kiina"
+      ]
+    },
+    {
+      "id": "A1-W-10",
+      "level": "A1",
+      "kind": "word",
+      "index": 10,
+      "size": 5,
+      "partial": false,
+      "title": "时间日期 · A1 第 10 组",
+      "titleEn": "Time & dates · A1 10",
+      "itemIds": [
+        "xw-kansalaisuus",
+        "xw-paiva",
+        "xw-viikko",
+        "xw-kuukausi",
+        "xw-tunti"
+      ]
+    },
+    {
+      "id": "A1-W-11",
+      "level": "A1",
+      "kind": "word",
+      "index": 11,
+      "size": 5,
+      "partial": false,
+      "title": "时间日期 · A1 第 11 组",
+      "titleEn": "Time & dates · A1 11",
+      "itemIds": [
+        "xw-minuutti",
+        "xw-sekunti",
+        "xw-aamu",
+        "xw-aamupaiva",
+        "xw-iltapaiva"
+      ]
+    },
+    {
+      "id": "A1-W-12",
+      "level": "A1",
+      "kind": "word",
+      "index": 12,
+      "size": 5,
+      "partial": false,
+      "title": "时间日期 · A1 第 12 组",
+      "titleEn": "Time & dates · A1 12",
+      "itemIds": [
+        "xw-ilta",
+        "xw-yo",
+        "xw-maanantai",
+        "xw-tiistai",
+        "xw-keskiviikko"
+      ]
+    },
+    {
+      "id": "A1-W-13",
+      "level": "A1",
+      "kind": "word",
+      "index": 13,
+      "size": 5,
+      "partial": false,
+      "title": "时间日期 · A1 第 13 组",
+      "titleEn": "Time & dates · A1 13",
+      "itemIds": [
+        "xw-torstai",
+        "xw-perjantai",
+        "xw-lauantai",
+        "xw-sunnuntai",
+        "xw-tammikuu"
+      ]
+    },
+    {
+      "id": "A1-W-14",
+      "level": "A1",
+      "kind": "word",
+      "index": 14,
+      "size": 5,
+      "partial": false,
+      "title": "时间日期 · A1 第 14 组",
+      "titleEn": "Time & dates · A1 14",
+      "itemIds": [
+        "xw-helmikuu",
+        "xw-maaliskuu",
+        "xw-huhtikuu",
+        "xw-toukokuu",
+        "xw-kesakuu"
+      ]
+    },
+    {
+      "id": "A1-W-15",
+      "level": "A1",
+      "kind": "word",
+      "index": 15,
+      "size": 5,
+      "partial": false,
+      "title": "时间日期 · A1 第 15 组",
+      "titleEn": "Time & dates · A1 15",
+      "itemIds": [
+        "xw-heinakuu",
+        "xw-elokuu",
+        "xw-syyskuu",
+        "xw-lokakuu",
+        "xw-marraskuu"
+      ]
+    },
+    {
+      "id": "A1-W-16",
+      "level": "A1",
+      "kind": "word",
+      "index": 16,
+      "size": 5,
+      "partial": false,
+      "title": "数字数量 · A1 第 16 组",
+      "titleEn": "Numbers & quantity · A1 16",
+      "itemIds": [
+        "xw-joulukuu",
+        "xw-nolla",
+        "xw-yksi",
+        "xw-kaksi",
+        "xw-kolme"
+      ]
+    },
+    {
+      "id": "A1-W-17",
+      "level": "A1",
+      "kind": "word",
+      "index": 17,
+      "size": 5,
+      "partial": false,
+      "title": "数字数量 · A1 第 17 组",
+      "titleEn": "Numbers & quantity · A1 17",
+      "itemIds": [
+        "xw-nelja",
+        "xw-viisi",
+        "xw-kuusi",
+        "xw-seitseman",
+        "xw-kahdeksan"
+      ]
+    },
+    {
+      "id": "A1-W-18",
+      "level": "A1",
+      "kind": "word",
+      "index": 18,
+      "size": 5,
+      "partial": false,
+      "title": "数字数量 · A1 第 18 组",
+      "titleEn": "Numbers & quantity · A1 18",
+      "itemIds": [
+        "xw-yhdeksan",
+        "xw-kymmenen",
+        "xw-yksitoista",
+        "xw-kaksitoista",
+        "xw-kolmetoista"
+      ]
+    },
+    {
+      "id": "A1-W-19",
+      "level": "A1",
+      "kind": "word",
+      "index": 19,
+      "size": 5,
+      "partial": false,
+      "title": "数字数量 · A1 第 19 组",
+      "titleEn": "Numbers & quantity · A1 19",
+      "itemIds": [
+        "xw-neljatoista",
+        "xw-viisitoista",
+        "xw-kaksikymmenta",
+        "xw-kolmekymmenta",
+        "xw-sata"
+      ]
+    },
+    {
+      "id": "A1-W-20",
+      "level": "A1",
+      "kind": "word",
+      "index": 20,
+      "size": 5,
+      "partial": false,
+      "title": "数字数量 · A1 第 20 组",
+      "titleEn": "Numbers & quantity · A1 20",
+      "itemIds": [
+        "xw-tuhat",
+        "xw-miljoona",
+        "xw-ensimmainen",
+        "xw-toinen",
+        "xw-kolmas"
+      ]
+    },
+    {
+      "id": "A1-W-21",
+      "level": "A1",
+      "kind": "word",
+      "index": 21,
+      "size": 5,
+      "partial": false,
+      "title": "数字数量 · A1 第 21 组",
+      "titleEn": "Numbers & quantity · A1 21",
+      "itemIds": [
+        "xw-monta",
+        "xw-paljon",
+        "xw-vahan",
+        "xw-kaikki",
+        "xw-jokainen"
+      ]
+    },
+    {
+      "id": "A1-W-22",
+      "level": "A1",
+      "kind": "word",
+      "index": 22,
+      "size": 5,
+      "partial": false,
+      "title": "住房家具 · A1 第 22 组",
+      "titleEn": "Housing & furniture · A1 22",
+      "itemIds": [
+        "xw-puoli",
+        "xw-koti",
+        "xw-asunto",
+        "xw-huone",
+        "xw-keittio"
+      ]
+    },
+    {
+      "id": "A1-W-23",
+      "level": "A1",
+      "kind": "word",
+      "index": 23,
+      "size": 5,
+      "partial": false,
+      "title": "住房家具 · A1 第 23 组",
+      "titleEn": "Housing & furniture · A1 23",
+      "itemIds": [
+        "xw-olohuone",
+        "xw-makuuhuone",
+        "xw-kylpyhuone",
+        "xw-wc",
+        "xw-ovi"
+      ]
+    },
+    {
+      "id": "A1-W-24",
+      "level": "A1",
+      "kind": "word",
+      "index": 24,
+      "size": 5,
+      "partial": false,
+      "title": "住房家具 · A1 第 24 组",
+      "titleEn": "Housing & furniture · A1 24",
+      "itemIds": [
+        "xw-ikkuna",
+        "xw-seina",
+        "xw-lattia",
+        "xw-katto",
+        "xw-poyta"
+      ]
+    },
+    {
+      "id": "A1-W-25",
+      "level": "A1",
+      "kind": "word",
+      "index": 25,
+      "size": 5,
+      "partial": false,
+      "title": "住房家具 · A1 第 25 组",
+      "titleEn": "Housing & furniture · A1 25",
+      "itemIds": [
+        "xw-tuoli",
+        "xw-sohva",
+        "xw-sanky",
+        "xw-kaappi",
+        "xw-hylly"
+      ]
+    },
+    {
+      "id": "A1-W-26",
+      "level": "A1",
+      "kind": "word",
+      "index": 26,
+      "size": 5,
+      "partial": false,
+      "title": "住房家具 · A1 第 26 组",
+      "titleEn": "Housing & furniture · A1 26",
+      "itemIds": [
+        "xw-lamppu",
+        "xw-avain",
+        "xw-matto",
+        "xw-verho",
+        "xw-peili"
+      ]
+    },
+    {
+      "id": "A1-W-27",
+      "level": "A1",
+      "kind": "word",
+      "index": 27,
+      "size": 5,
+      "partial": false,
+      "title": "住房家具 · A1 第 27 组",
+      "titleEn": "Housing & furniture · A1 27",
+      "itemIds": [
+        "xw-jaakaappi",
+        "xw-liesi",
+        "xw-pesukone",
+        "xw-suihku",
+        "xw-vuokra"
+      ]
+    },
+    {
+      "id": "A1-W-28",
+      "level": "A1",
+      "kind": "word",
+      "index": 28,
+      "size": 5,
+      "partial": false,
+      "title": "食物饮料 · A1 第 28 组",
+      "titleEn": "Food & drink · A1 28",
+      "itemIds": [
+        "xw-juoma",
+        "xw-tee",
+        "xw-mehu",
+        "xw-voi",
+        "xw-juusto"
+      ]
+    },
+    {
+      "id": "A1-W-29",
+      "level": "A1",
+      "kind": "word",
+      "index": 29,
+      "size": 5,
+      "partial": false,
+      "title": "食物饮料 · A1 第 29 组",
+      "titleEn": "Food & drink · A1 29",
+      "itemIds": [
+        "xw-muna",
+        "xw-liha",
+        "xw-kala",
+        "xw-kana",
+        "xw-riisi"
+      ]
+    },
+    {
+      "id": "A1-W-30",
+      "level": "A1",
+      "kind": "word",
+      "index": 30,
+      "size": 5,
+      "partial": false,
+      "title": "食物饮料 · A1 第 30 组",
+      "titleEn": "Food & drink · A1 30",
+      "itemIds": [
+        "xw-peruna",
+        "xw-pasta",
+        "xw-keitto",
+        "xw-salaatti",
+        "xw-hedelma"
+      ]
+    },
+    {
+      "id": "A1-W-31",
+      "level": "A1",
+      "kind": "word",
+      "index": 31,
+      "size": 5,
+      "partial": false,
+      "title": "食物饮料 · A1 第 31 组",
+      "titleEn": "Food & drink · A1 31",
+      "itemIds": [
+        "xw-omena",
+        "xw-banaani",
+        "xw-appelsiini",
+        "xw-marja",
+        "xw-mansikka"
+      ]
+    },
+    {
+      "id": "A1-W-32",
+      "level": "A1",
+      "kind": "word",
+      "index": 32,
+      "size": 5,
+      "partial": false,
+      "title": "食物饮料 · A1 第 32 组",
+      "titleEn": "Food & drink · A1 32",
+      "itemIds": [
+        "xw-vihannes",
+        "xw-tomaatti",
+        "xw-kurkku",
+        "xw-sipuli",
+        "xw-porkkana"
+      ]
+    },
+    {
+      "id": "A1-W-33",
+      "level": "A1",
+      "kind": "word",
+      "index": 33,
+      "size": 5,
+      "partial": false,
+      "title": "食物饮料 · A1 第 33 组",
+      "titleEn": "Food & drink · A1 33",
+      "itemIds": [
+        "xw-suola",
+        "xw-sokeri",
+        "xw-pippuri",
+        "xw-oljy",
+        "xw-aamiainen"
+      ]
+    },
+    {
+      "id": "A1-W-34",
+      "level": "A1",
+      "kind": "word",
+      "index": 34,
+      "size": 5,
+      "partial": false,
+      "title": "食物饮料 · A1 第 34 组",
+      "titleEn": "Food & drink · A1 34",
+      "itemIds": [
+        "xw-lounas",
+        "xw-paivallinen",
+        "xw-valipala",
+        "xw-jalkiruoka",
+        "xw-nalka"
+      ]
+    },
+    {
+      "id": "A1-W-35",
+      "level": "A1",
+      "kind": "word",
+      "index": 35,
+      "size": 5,
+      "partial": false,
+      "title": "衣物颜色 · A1 第 35 组",
+      "titleEn": "Clothing & colours · A1 35",
+      "itemIds": [
+        "xw-jano",
+        "xw-vaate",
+        "xw-paita",
+        "xw-t-paita",
+        "xw-housut"
+      ]
+    },
+    {
+      "id": "A1-W-36",
+      "level": "A1",
+      "kind": "word",
+      "index": 36,
+      "size": 5,
+      "partial": false,
+      "title": "衣物颜色 · A1 第 36 组",
+      "titleEn": "Clothing & colours · A1 36",
+      "itemIds": [
+        "xw-farkut",
+        "xw-mekko",
+        "xw-hame",
+        "xw-takki",
+        "xw-pusero"
+      ]
+    },
+    {
+      "id": "A1-W-37",
+      "level": "A1",
+      "kind": "word",
+      "index": 37,
+      "size": 5,
+      "partial": false,
+      "title": "衣物颜色 · A1 第 37 组",
+      "titleEn": "Clothing & colours · A1 37",
+      "itemIds": [
+        "xw-sukat",
+        "xw-kengat",
+        "xw-saappaat",
+        "xw-hattu",
+        "xw-huivi"
+      ]
+    },
+    {
+      "id": "A1-W-38",
+      "level": "A1",
+      "kind": "word",
+      "index": 38,
+      "size": 5,
+      "partial": false,
+      "title": "衣物颜色 · A1 第 38 组",
+      "titleEn": "Clothing & colours · A1 38",
+      "itemIds": [
+        "xw-hanskat",
+        "xw-vyo",
+        "xw-punainen",
+        "xw-sininen",
+        "xw-vihrea"
+      ]
+    },
+    {
+      "id": "A1-W-39",
+      "level": "A1",
+      "kind": "word",
+      "index": 39,
+      "size": 5,
+      "partial": false,
+      "title": "衣物颜色 · A1 第 39 组",
+      "titleEn": "Clothing & colours · A1 39",
+      "itemIds": [
+        "xw-keltainen",
+        "xw-musta",
+        "xw-valkoinen",
+        "xw-harmaa",
+        "xw-ruskea"
+      ]
+    },
+    {
+      "id": "A1-W-40",
+      "level": "A1",
+      "kind": "word",
+      "index": 40,
+      "size": 5,
+      "partial": false,
+      "title": "衣物颜色 · A1 第 40 组",
+      "titleEn": "Clothing & colours · A1 40",
+      "itemIds": [
+        "xw-oranssi",
+        "xw-violetti",
+        "xw-vaalea",
+        "xw-tumma",
+        "xw-uusi"
+      ]
+    },
+    {
+      "id": "A1-W-41",
+      "level": "A1",
+      "kind": "word",
+      "index": 41,
+      "size": 5,
+      "partial": false,
+      "title": "身体健康 · A1 第 41 组",
+      "titleEn": "Body & health · A1 41",
+      "itemIds": [
+        "xw-vanha",
+        "xw-keho",
+        "xw-paa",
+        "xw-hiukset",
+        "xw-kasvot"
+      ]
+    },
+    {
+      "id": "A1-W-42",
+      "level": "A1",
+      "kind": "word",
+      "index": 42,
+      "size": 5,
+      "partial": false,
+      "title": "身体健康 · A1 第 42 组",
+      "titleEn": "Body & health · A1 42",
+      "itemIds": [
+        "xw-silma",
+        "xw-korva",
+        "xw-nena",
+        "xw-suu",
+        "xw-hammas"
+      ]
+    },
+    {
+      "id": "A1-W-43",
+      "level": "A1",
+      "kind": "word",
+      "index": 43,
+      "size": 5,
+      "partial": false,
+      "title": "身体健康 · A1 第 43 组",
+      "titleEn": "Body & health · A1 43",
+      "itemIds": [
+        "xw-kaula",
+        "xw-olkapaa",
+        "xw-kasi",
+        "xw-sormi",
+        "xw-selka"
+      ]
+    },
+    {
+      "id": "A1-W-44",
+      "level": "A1",
+      "kind": "word",
+      "index": 44,
+      "size": 5,
+      "partial": false,
+      "title": "身体健康 · A1 第 44 组",
+      "titleEn": "Body & health · A1 44",
+      "itemIds": [
+        "xw-vatsa",
+        "xw-jalka",
+        "xw-polvi",
+        "xw-sydan",
+        "xw-veri"
+      ]
+    },
+    {
+      "id": "A1-W-45",
+      "level": "A1",
+      "kind": "word",
+      "index": 45,
+      "size": 5,
+      "partial": false,
+      "title": "身体健康 · A1 第 45 组",
+      "titleEn": "Body & health · A1 45",
+      "itemIds": [
+        "xw-iho",
+        "xw-terveys",
+        "xw-sairaus",
+        "xw-laakari",
+        "xw-hoitaja"
+      ]
+    },
+    {
+      "id": "A1-W-46",
+      "level": "A1",
+      "kind": "word",
+      "index": 46,
+      "size": 5,
+      "partial": false,
+      "title": "身体健康 · A1 第 46 组",
+      "titleEn": "Body & health · A1 46",
+      "itemIds": [
+        "xw-sairaala",
+        "xw-apteekki",
+        "xw-laake",
+        "xw-kipu",
+        "xw-kuume"
+      ]
+    },
+    {
+      "id": "A1-W-47",
+      "level": "A1",
+      "kind": "word",
+      "index": 47,
+      "size": 5,
+      "partial": false,
+      "title": "身体健康 · A1 第 47 组",
+      "titleEn": "Body & health · A1 47",
+      "itemIds": [
+        "xw-flunssa",
+        "xw-yska",
+        "xw-allergia",
+        "xw-tehda",
+        "xw-menna"
+      ]
+    },
+    {
+      "id": "A1-W-48",
+      "level": "A1",
+      "kind": "word",
+      "index": 48,
+      "size": 5,
+      "partial": false,
+      "title": "常用动词 · A1 第 48 组",
+      "titleEn": "Common verbs · A1 48",
+      "itemIds": [
+        "xw-lahtea",
+        "xw-saapua",
+        "xw-kayda",
+        "xw-antaa",
+        "xw-ottaa"
+      ]
+    },
+    {
+      "id": "A1-W-49",
+      "level": "A1",
+      "kind": "word",
+      "index": 49,
+      "size": 5,
+      "partial": false,
+      "title": "常用动词 · A1 第 49 组",
+      "titleEn": "Common verbs · A1 49",
+      "itemIds": [
+        "xw-saada",
+        "xw-voida",
+        "xw-osata",
+        "xw-pitaa",
+        "xw-tykata"
+      ]
+    },
+    {
+      "id": "A1-W-50",
+      "level": "A1",
+      "kind": "word",
+      "index": 50,
+      "size": 5,
+      "partial": false,
+      "title": "常用动词 · A1 第 50 组",
+      "titleEn": "Common verbs · A1 50",
+      "itemIds": [
+        "xw-rakastaa",
+        "xw-nahda",
+        "xw-katsoa",
+        "xw-kuulla",
+        "xw-kuunnella"
+      ]
+    },
+    {
+      "id": "A1-W-51",
+      "level": "A1",
+      "kind": "word",
+      "index": 51,
+      "size": 5,
+      "partial": false,
+      "title": "常用动词 · A1 第 51 组",
+      "titleEn": "Common verbs · A1 51",
+      "itemIds": [
+        "xw-lukea",
+        "xw-kirjoittaa",
+        "xw-oppia",
+        "xw-tyoskennella",
+        "xw-soittaa"
+      ]
+    },
+    {
+      "id": "A1-W-52",
+      "level": "A1",
+      "kind": "word",
+      "index": 52,
+      "size": 5,
+      "partial": false,
+      "title": "常用动词 · A1 第 52 组",
+      "titleEn": "Common verbs · A1 52",
+      "itemIds": [
+        "xw-pelata",
+        "xw-leikkia",
+        "xw-ostaa",
+        "xw-myyda",
+        "xw-maksaa"
+      ]
+    },
+    {
+      "id": "A1-W-53",
+      "level": "A1",
+      "kind": "word",
+      "index": 53,
+      "size": 5,
+      "partial": false,
+      "title": "常用动词 · A1 第 53 组",
+      "titleEn": "Common verbs · A1 53",
+      "itemIds": [
+        "xw-etsia",
+        "xw-loytaa",
+        "xw-kayttaa",
+        "xw-avata",
+        "xw-sulkea"
+      ]
+    },
+    {
+      "id": "A1-W-54",
+      "level": "A1",
+      "kind": "word",
+      "index": 54,
+      "size": 5,
+      "partial": false,
+      "title": "常用动词 · A1 第 54 组",
+      "titleEn": "Common verbs · A1 54",
+      "itemIds": [
+        "xw-aloittaa",
+        "xw-lopettaa",
+        "xw-odottaa",
+        "xw-auttaa",
+        "xw-unohtaa"
+      ]
+    },
+    {
+      "id": "A1-W-55",
+      "level": "A1",
+      "kind": "word",
+      "index": 55,
+      "size": 5,
+      "partial": false,
+      "title": "常用动词 · A1 第 55 组",
+      "titleEn": "Common verbs · A1 55",
+      "itemIds": [
+        "xw-ymmartaa",
+        "xw-tietaa",
+        "xw-tuntea",
+        "xw-ajatella",
+        "xw-uskoa"
+      ]
+    },
+    {
+      "id": "A1-W-56",
+      "level": "A1",
+      "kind": "word",
+      "index": 56,
+      "size": 5,
+      "partial": false,
+      "title": "常用动词 · A1 第 56 组",
+      "titleEn": "Common verbs · A1 56",
+      "itemIds": [
+        "xw-nauraa",
+        "xw-itkea",
+        "xw-hymyilla",
+        "xw-tie",
+        "xw-silta"
+      ]
+    },
+    {
+      "id": "A1-W-57",
+      "level": "A1",
+      "kind": "word",
+      "index": 57,
+      "size": 5,
+      "partial": false,
+      "title": "城市交通 · A1 第 57 组",
+      "titleEn": "City & transport · A1 57",
+      "itemIds": [
+        "xw-asema",
+        "xw-rautatieasema",
+        "xw-bussipysakki",
+        "xw-lentokentta",
+        "xw-satama"
+      ]
+    },
+    {
+      "id": "A1-W-58",
+      "level": "A1",
+      "kind": "word",
+      "index": 58,
+      "size": 5,
+      "partial": false,
+      "title": "城市交通 · A1 第 58 组",
+      "titleEn": "City & transport · A1 58",
+      "itemIds": [
+        "xw-bussi",
+        "xw-juna",
+        "xw-raitiovaunu",
+        "xw-metro",
+        "xw-taksi"
+      ]
+    },
+    {
+      "id": "A1-W-59",
+      "level": "A1",
+      "kind": "word",
+      "index": 59,
+      "size": 5,
+      "partial": false,
+      "title": "城市交通 · A1 第 59 组",
+      "titleEn": "City & transport · A1 59",
+      "itemIds": [
+        "xw-polkupyora",
+        "xw-lentokone",
+        "xw-laiva",
+        "xw-vene",
+        "xw-lippu"
+      ]
+    },
+    {
+      "id": "A1-W-60",
+      "level": "A1",
+      "kind": "word",
+      "index": 60,
+      "size": 5,
+      "partial": false,
+      "title": "城市交通 · A1 第 60 组",
+      "titleEn": "City & transport · A1 60",
+      "itemIds": [
+        "xw-matka",
+        "xw-kartta",
+        "xw-matkustaja",
+        "xw-kuljettaja",
+        "xw-liikenne"
+      ]
+    },
+    {
+      "id": "A1-W-61",
+      "level": "A1",
+      "kind": "word",
+      "index": 61,
+      "size": 5,
+      "partial": false,
+      "title": "城市交通 · A1 第 61 组",
+      "titleEn": "City & transport · A1 61",
+      "itemIds": [
+        "xw-liikennevalo",
+        "xw-risteys",
+        "xw-keskusta",
+        "xw-lahella",
+        "xw-kaukana"
+      ]
+    },
+    {
+      "id": "A1-W-62",
+      "level": "A1",
+      "kind": "word",
+      "index": 62,
+      "size": 5,
+      "partial": false,
+      "title": "城市交通 · A1 第 62 组",
+      "titleEn": "City & transport · A1 62",
+      "itemIds": [
+        "xw-suoraan",
+        "xw-vasemmalle",
+        "xw-oikealle",
+        "xw-mina",
+        "xw-sina"
+      ]
+    },
+    {
+      "id": "A1-W-63",
+      "level": "A1",
+      "kind": "word",
+      "index": 63,
+      "size": 5,
+      "partial": false,
+      "title": "代词 · A1 第 63 组",
+      "titleEn": "Pronouns · A1 63",
+      "itemIds": [
+        "xw-han",
+        "xw-me",
+        "xw-te",
+        "xw-he",
+        "xw-tama"
+      ]
+    },
+    {
+      "id": "A1-W-64",
+      "level": "A1",
+      "kind": "word",
+      "index": 64,
+      "size": 5,
+      "partial": false,
+      "title": "疑问词 · A1 第 64 组",
+      "titleEn": "Question words · A1 64",
+      "itemIds": [
+        "xw-tuo",
+        "xw-se",
+        "xw-mika",
+        "xw-kuka",
+        "xw-missa"
+      ]
+    },
+    {
+      "id": "A1-W-65",
+      "level": "A1",
+      "kind": "word",
+      "index": 65,
+      "size": 5,
+      "partial": false,
+      "title": "疑问词 · A1 第 65 组",
+      "titleEn": "Question words · A1 65",
+      "itemIds": [
+        "xw-mista",
+        "xw-mihin",
+        "xw-milloin",
+        "xw-miksi",
+        "xw-miten"
+      ]
+    },
+    {
+      "id": "A1-W-66",
+      "level": "A1",
+      "kind": "word",
+      "index": 66,
+      "size": 5,
+      "partial": false,
+      "title": "副词 · A1 第 66 组",
+      "titleEn": "Adverbs · A1 66",
+      "itemIds": [
+        "xw-ei",
+        "xw-kylla",
+        "xw-joo",
+        "xw-myos",
+        "xw-taalla"
+      ]
+    },
+    {
+      "id": "A1-W-67",
+      "level": "A1",
+      "kind": "word",
+      "index": 67,
+      "size": 5,
+      "partial": false,
+      "title": "方向副词 · A1 第 67 组",
+      "titleEn": "Direction words · A1 67",
+      "itemIds": [
+        "xw-tuolla",
+        "xw-siella",
+        "xw-ylos",
+        "xw-alas",
+        "xw-sisaan"
+      ]
+    },
+    {
+      "id": "A1-W-68",
+      "level": "A1",
+      "kind": "word",
+      "index": 68,
+      "size": 5,
+      "partial": false,
+      "title": "方向副词 · A1 第 68 组",
+      "titleEn": "Direction words · A1 68",
+      "itemIds": [
+        "xw-ulos",
+        "xw-pois",
+        "xw-takaisin",
+        "xw-kanssa",
+        "xw-ja"
+      ]
+    },
+    {
+      "id": "A1-W-69",
+      "level": "A1",
+      "kind": "word",
+      "index": 69,
+      "size": 2,
+      "partial": true,
+      "title": "连接词 · A1 第 69 组",
+      "titleEn": "Conjunctions · A1 69",
+      "itemIds": [
+        "xw-tai",
+        "xw-mutta"
       ]
     },
     {
@@ -110,6 +1232,7 @@
       "size": 5,
       "partial": false,
       "title": "A1 日常句 · 上",
+      "titleEn": "A1 everyday sentences · 1",
       "itemIds": [
         "a1-s01",
         "a1-s02",
@@ -126,12 +1249,217 @@
       "size": 5,
       "partial": false,
       "title": "A1 日常句 · 下",
+      "titleEn": "A1 everyday sentences · 2",
       "itemIds": [
         "a1-s06",
         "a1-s07",
         "a1-s08",
         "a1-s09",
         "a1-s10"
+      ]
+    },
+    {
+      "id": "A1-S-03",
+      "level": "A1",
+      "kind": "sentence",
+      "index": 3,
+      "size": 5,
+      "partial": false,
+      "title": "A1 句子 · 第 3 组",
+      "titleEn": "A1 sentences · 3",
+      "itemIds": [
+        "xs-001",
+        "xs-002",
+        "xs-003",
+        "xs-004",
+        "xs-005"
+      ]
+    },
+    {
+      "id": "A1-S-04",
+      "level": "A1",
+      "kind": "sentence",
+      "index": 4,
+      "size": 5,
+      "partial": false,
+      "title": "A1 句子 · 第 4 组",
+      "titleEn": "A1 sentences · 4",
+      "itemIds": [
+        "xs-006",
+        "xs-007",
+        "xs-008",
+        "xs-009",
+        "xs-010"
+      ]
+    },
+    {
+      "id": "A1-S-05",
+      "level": "A1",
+      "kind": "sentence",
+      "index": 5,
+      "size": 5,
+      "partial": false,
+      "title": "A1 句子 · 第 5 组",
+      "titleEn": "A1 sentences · 5",
+      "itemIds": [
+        "xe-001",
+        "xe-002",
+        "xe-003",
+        "xe-004",
+        "xe-005"
+      ]
+    },
+    {
+      "id": "A1-S-06",
+      "level": "A1",
+      "kind": "sentence",
+      "index": 6,
+      "size": 5,
+      "partial": false,
+      "title": "A1 句子 · 第 6 组",
+      "titleEn": "A1 sentences · 6",
+      "itemIds": [
+        "xe-006",
+        "xe-007",
+        "xe-008",
+        "xe-009",
+        "xe-011"
+      ]
+    },
+    {
+      "id": "A1-S-07",
+      "level": "A1",
+      "kind": "sentence",
+      "index": 7,
+      "size": 5,
+      "partial": false,
+      "title": "A1 句子 · 第 7 组",
+      "titleEn": "A1 sentences · 7",
+      "itemIds": [
+        "xe-012",
+        "xe-014",
+        "xe-015",
+        "xe-016",
+        "xe-017"
+      ]
+    },
+    {
+      "id": "A1-S-08",
+      "level": "A1",
+      "kind": "sentence",
+      "index": 8,
+      "size": 5,
+      "partial": false,
+      "title": "A1 句子 · 第 8 组",
+      "titleEn": "A1 sentences · 8",
+      "itemIds": [
+        "xe-018",
+        "xe-020",
+        "xe-022",
+        "xe-023",
+        "xe-024"
+      ]
+    },
+    {
+      "id": "A1-S-09",
+      "level": "A1",
+      "kind": "sentence",
+      "index": 9,
+      "size": 5,
+      "partial": false,
+      "title": "A1 句子 · 第 9 组",
+      "titleEn": "A1 sentences · 9",
+      "itemIds": [
+        "xe-025",
+        "xe-028",
+        "xe-029",
+        "xe-031",
+        "xd-001"
+      ]
+    },
+    {
+      "id": "A1-S-10",
+      "level": "A1",
+      "kind": "sentence",
+      "index": 10,
+      "size": 5,
+      "partial": false,
+      "title": "A1 句子 · 第 10 组",
+      "titleEn": "A1 sentences · 10",
+      "itemIds": [
+        "xd-002",
+        "xd-003",
+        "xd-004",
+        "xd-005",
+        "xd-006"
+      ]
+    },
+    {
+      "id": "A1-S-11",
+      "level": "A1",
+      "kind": "sentence",
+      "index": 11,
+      "size": 5,
+      "partial": false,
+      "title": "A1 句子 · 第 11 组",
+      "titleEn": "A1 sentences · 11",
+      "itemIds": [
+        "xd-007",
+        "xd-008",
+        "xd-009",
+        "xd-010",
+        "xd-011"
+      ]
+    },
+    {
+      "id": "A1-S-12",
+      "level": "A1",
+      "kind": "sentence",
+      "index": 12,
+      "size": 5,
+      "partial": false,
+      "title": "A1 句子 · 第 12 组",
+      "titleEn": "A1 sentences · 12",
+      "itemIds": [
+        "xd-012",
+        "xx-001",
+        "xx-002",
+        "xx-003",
+        "xx-004"
+      ]
+    },
+    {
+      "id": "A1-S-13",
+      "level": "A1",
+      "kind": "sentence",
+      "index": 13,
+      "size": 5,
+      "partial": false,
+      "title": "A1 句子 · 第 13 组",
+      "titleEn": "A1 sentences · 13",
+      "itemIds": [
+        "xx-005",
+        "xx-006",
+        "xx-007",
+        "xx-008",
+        "xx-009"
+      ]
+    },
+    {
+      "id": "A1-S-14",
+      "level": "A1",
+      "kind": "sentence",
+      "index": 14,
+      "size": 5,
+      "partial": false,
+      "title": "A1 句子 · 第 14 组",
+      "titleEn": "A1 sentences · 14",
+      "itemIds": [
+        "xx-010",
+        "xx-011",
+        "xx-012",
+        "xx-013",
+        "xx-014"
       ]
     },
     {
@@ -142,6 +1470,7 @@
       "size": 5,
       "partial": false,
       "title": "日常动作",
+      "titleEn": "Everyday actions",
       "itemIds": [
         "tarvita",
         "kysya",
@@ -158,12 +1487,913 @@
       "size": 5,
       "partial": false,
       "title": "人与时间",
+      "titleEn": "People & time",
       "itemIds": [
         "ystava",
         "perhe",
         "aika",
         "tyo",
         "kaupunki"
+      ]
+    },
+    {
+      "id": "A2-W-03",
+      "level": "A2",
+      "kind": "word",
+      "index": 3,
+      "size": 5,
+      "partial": false,
+      "title": "学习教育 · A2 第 3 组",
+      "titleEn": "Study & education · A2 3",
+      "itemIds": [
+        "xw-koulu",
+        "xw-yliopisto",
+        "xw-ammattikoulu",
+        "xw-kurssi",
+        "xw-oppitunti"
+      ]
+    },
+    {
+      "id": "A2-W-04",
+      "level": "A2",
+      "kind": "word",
+      "index": 4,
+      "size": 5,
+      "partial": false,
+      "title": "学习教育 · A2 第 4 组",
+      "titleEn": "Study & education · A2 4",
+      "itemIds": [
+        "xw-luokka",
+        "xw-opettaja",
+        "xw-opiskelija",
+        "xw-oppilas",
+        "xw-rehtori"
+      ]
+    },
+    {
+      "id": "A2-W-05",
+      "level": "A2",
+      "kind": "word",
+      "index": 5,
+      "size": 5,
+      "partial": false,
+      "title": "学习教育 · A2 第 5 组",
+      "titleEn": "Study & education · A2 5",
+      "itemIds": [
+        "xw-koe",
+        "xw-tentti",
+        "xw-tehtava",
+        "xw-laksy",
+        "xw-vihko"
+      ]
+    },
+    {
+      "id": "A2-W-06",
+      "level": "A2",
+      "kind": "word",
+      "index": 6,
+      "size": 5,
+      "partial": false,
+      "title": "学习教育 · A2 第 6 组",
+      "titleEn": "Study & education · A2 6",
+      "itemIds": [
+        "xw-kyna",
+        "xw-paperi",
+        "xw-taulu",
+        "xw-tietokone",
+        "xw-nappaimisto"
+      ]
+    },
+    {
+      "id": "A2-W-07",
+      "level": "A2",
+      "kind": "word",
+      "index": 7,
+      "size": 5,
+      "partial": false,
+      "title": "学习教育 · A2 第 7 组",
+      "titleEn": "Study & education · A2 7",
+      "itemIds": [
+        "xw-naytto",
+        "xw-sanakirja",
+        "xw-kielioppi",
+        "xw-sana",
+        "xw-lause"
+      ]
+    },
+    {
+      "id": "A2-W-08",
+      "level": "A2",
+      "kind": "word",
+      "index": 8,
+      "size": 5,
+      "partial": false,
+      "title": "学习教育 · A2 第 8 组",
+      "titleEn": "Study & education · A2 8",
+      "itemIds": [
+        "xw-teksti",
+        "xw-aantaminen",
+        "xw-tavu",
+        "xw-kirjain",
+        "xw-arvosana"
+      ]
+    },
+    {
+      "id": "A2-W-09",
+      "level": "A2",
+      "kind": "word",
+      "index": 9,
+      "size": 5,
+      "partial": false,
+      "title": "学习教育 · A2 第 9 组",
+      "titleEn": "Study & education · A2 9",
+      "itemIds": [
+        "xw-todistus",
+        "xw-tutkinto",
+        "xw-valmistua",
+        "xw-harjoitella",
+        "xw-kerrata"
+      ]
+    },
+    {
+      "id": "A2-W-10",
+      "level": "A2",
+      "kind": "word",
+      "index": 10,
+      "size": 5,
+      "partial": false,
+      "title": "学习教育 · A2 第 10 组",
+      "titleEn": "Study & education · A2 10",
+      "itemIds": [
+        "xw-opettaa",
+        "xw-selittaa",
+        "xw-kaantaa",
+        "xw-lausua",
+        "xw-ammatti"
+      ]
+    },
+    {
+      "id": "A2-W-11",
+      "level": "A2",
+      "kind": "word",
+      "index": 11,
+      "size": 5,
+      "partial": false,
+      "title": "工作职业 · A2 第 11 组",
+      "titleEn": "Work & careers · A2 11",
+      "itemIds": [
+        "xw-tyopaikka",
+        "xw-toimisto",
+        "xw-yritys",
+        "xw-tyontekija",
+        "xw-tyonantaja"
+      ]
+    },
+    {
+      "id": "A2-W-12",
+      "level": "A2",
+      "kind": "word",
+      "index": 12,
+      "size": 5,
+      "partial": false,
+      "title": "工作职业 · A2 第 12 组",
+      "titleEn": "Work & careers · A2 12",
+      "itemIds": [
+        "xw-esimies",
+        "xw-kollega",
+        "xw-asiakas",
+        "xw-kokous",
+        "xw-palaveri"
+      ]
+    },
+    {
+      "id": "A2-W-13",
+      "level": "A2",
+      "kind": "word",
+      "index": 13,
+      "size": 5,
+      "partial": false,
+      "title": "工作职业 · A2 第 13 组",
+      "titleEn": "Work & careers · A2 13",
+      "itemIds": [
+        "xw-projekti",
+        "xw-palkka",
+        "xw-tyosopimus",
+        "xw-tyohaastattelu",
+        "xw-hakemus"
+      ]
+    },
+    {
+      "id": "A2-W-14",
+      "level": "A2",
+      "kind": "word",
+      "index": 14,
+      "size": 5,
+      "partial": false,
+      "title": "工作职业 · A2 第 14 组",
+      "titleEn": "Work & careers · A2 14",
+      "itemIds": [
+        "xw-ansioluettelo",
+        "xw-cv",
+        "xw-lomake",
+        "xw-tauko",
+        "xw-loma"
+      ]
+    },
+    {
+      "id": "A2-W-15",
+      "level": "A2",
+      "kind": "word",
+      "index": 15,
+      "size": 5,
+      "partial": false,
+      "title": "工作职业 · A2 第 15 组",
+      "titleEn": "Work & careers · A2 15",
+      "itemIds": [
+        "xw-vuorotyo",
+        "xw-osa-aikatyo",
+        "xw-kokopaivatyo",
+        "xw-tyottomyys",
+        "xw-johtaja"
+      ]
+    },
+    {
+      "id": "A2-W-16",
+      "level": "A2",
+      "kind": "word",
+      "index": 16,
+      "size": 5,
+      "partial": false,
+      "title": "工作职业 · A2 第 16 组",
+      "titleEn": "Work & careers · A2 16",
+      "itemIds": [
+        "xw-sihteeri",
+        "xw-insinoori",
+        "xw-myyja",
+        "xw-kokki",
+        "xw-siivooja"
+      ]
+    },
+    {
+      "id": "A2-W-17",
+      "level": "A2",
+      "kind": "word",
+      "index": 17,
+      "size": 5,
+      "partial": false,
+      "title": "工作职业 · A2 第 17 组",
+      "titleEn": "Work & careers · A2 17",
+      "itemIds": [
+        "xw-rakentaja",
+        "xw-tehdas",
+        "xw-hakea",
+        "xw-palkata",
+        "xw-irtisanoa"
+      ]
+    },
+    {
+      "id": "A2-W-18",
+      "level": "A2",
+      "kind": "word",
+      "index": 18,
+      "size": 5,
+      "partial": false,
+      "title": "工作职业 · A2 第 18 组",
+      "titleEn": "Work & careers · A2 18",
+      "itemIds": [
+        "xw-ansaita",
+        "xw-jarjestaa",
+        "xw-suunnitella",
+        "xw-osallistua",
+        "xw-marketti"
+      ]
+    },
+    {
+      "id": "A2-W-19",
+      "level": "A2",
+      "kind": "word",
+      "index": 19,
+      "size": 5,
+      "partial": false,
+      "title": "购物服务 · A2 第 19 组",
+      "titleEn": "Shopping & services · A2 19",
+      "itemIds": [
+        "xw-ostoskeskus",
+        "xw-tori",
+        "xw-kauppias",
+        "xw-kassa",
+        "xw-kuitti"
+      ]
+    },
+    {
+      "id": "A2-W-20",
+      "level": "A2",
+      "kind": "word",
+      "index": 20,
+      "size": 5,
+      "partial": false,
+      "title": "购物服务 · A2 第 20 组",
+      "titleEn": "Shopping & services · A2 20",
+      "itemIds": [
+        "xw-hinta",
+        "xw-alennus",
+        "xw-tarjous",
+        "xw-ostos",
+        "xw-ostoslista"
+      ]
+    },
+    {
+      "id": "A2-W-21",
+      "level": "A2",
+      "kind": "word",
+      "index": 21,
+      "size": 5,
+      "partial": false,
+      "title": "购物服务 · A2 第 21 组",
+      "titleEn": "Shopping & services · A2 21",
+      "itemIds": [
+        "xw-kori",
+        "xw-karry",
+        "xw-koko",
+        "xw-malli",
+        "xw-vari"
+      ]
+    },
+    {
+      "id": "A2-W-22",
+      "level": "A2",
+      "kind": "word",
+      "index": 22,
+      "size": 5,
+      "partial": false,
+      "title": "购物服务 · A2 第 22 组",
+      "titleEn": "Shopping & services · A2 22",
+      "itemIds": [
+        "xw-laatu",
+        "xw-takuu",
+        "xw-palautus",
+        "xw-vaihto",
+        "xw-maksu"
+      ]
+    },
+    {
+      "id": "A2-W-23",
+      "level": "A2",
+      "kind": "word",
+      "index": 23,
+      "size": 5,
+      "partial": false,
+      "title": "购物服务 · A2 第 23 组",
+      "titleEn": "Shopping & services · A2 23",
+      "itemIds": [
+        "xw-kateinen",
+        "xw-kortti",
+        "xw-pankkikortti",
+        "xw-luottokortti",
+        "xw-lasku"
+      ]
+    },
+    {
+      "id": "A2-W-24",
+      "level": "A2",
+      "kind": "word",
+      "index": 24,
+      "size": 5,
+      "partial": false,
+      "title": "购物服务 · A2 第 24 组",
+      "titleEn": "Shopping & services · A2 24",
+      "itemIds": [
+        "xw-lompakko",
+        "xw-raha",
+        "xw-kolikko",
+        "xw-seteli",
+        "xw-pankki"
+      ]
+    },
+    {
+      "id": "A2-W-25",
+      "level": "A2",
+      "kind": "word",
+      "index": 25,
+      "size": 5,
+      "partial": false,
+      "title": "购物服务 · A2 第 25 组",
+      "titleEn": "Shopping & services · A2 25",
+      "itemIds": [
+        "xw-palvelu",
+        "xw-parturi",
+        "xw-kampaamo",
+        "xw-korjaamo",
+        "xw-varata"
+      ]
+    },
+    {
+      "id": "A2-W-26",
+      "level": "A2",
+      "kind": "word",
+      "index": 26,
+      "size": 5,
+      "partial": false,
+      "title": "购物服务 · A2 第 26 组",
+      "titleEn": "Shopping & services · A2 26",
+      "itemIds": [
+        "xw-tilata",
+        "xw-palauttaa",
+        "xw-vaihtaa",
+        "xw-saastaa",
+        "xw-kallis"
+      ]
+    },
+    {
+      "id": "A2-W-27",
+      "level": "A2",
+      "kind": "word",
+      "index": 27,
+      "size": 5,
+      "partial": false,
+      "title": "天气自然 · A2 第 27 组",
+      "titleEn": "Weather & nature · A2 27",
+      "itemIds": [
+        "xw-halpa",
+        "xw-ilmainen",
+        "xw-saa",
+        "xw-aurinko",
+        "xw-kuu"
+      ]
+    },
+    {
+      "id": "A2-W-28",
+      "level": "A2",
+      "kind": "word",
+      "index": 28,
+      "size": 5,
+      "partial": false,
+      "title": "天气自然 · A2 第 28 组",
+      "titleEn": "Weather & nature · A2 28",
+      "itemIds": [
+        "xw-tahti",
+        "xw-taivas",
+        "xw-pilvi",
+        "xw-sade",
+        "xw-lumi"
+      ]
+    },
+    {
+      "id": "A2-W-29",
+      "level": "A2",
+      "kind": "word",
+      "index": 29,
+      "size": 5,
+      "partial": false,
+      "title": "天气自然 · A2 第 29 组",
+      "titleEn": "Weather & nature · A2 29",
+      "itemIds": [
+        "xw-jaa",
+        "xw-tuuli",
+        "xw-myrsky",
+        "xw-ukkonen",
+        "xw-salama"
+      ]
+    },
+    {
+      "id": "A2-W-30",
+      "level": "A2",
+      "kind": "word",
+      "index": 30,
+      "size": 5,
+      "partial": false,
+      "title": "天气自然 · A2 第 30 组",
+      "titleEn": "Weather & nature · A2 30",
+      "itemIds": [
+        "xw-sumu",
+        "xw-pakkanen",
+        "xw-lampotila",
+        "xw-kevat",
+        "xw-kesa"
+      ]
+    },
+    {
+      "id": "A2-W-31",
+      "level": "A2",
+      "kind": "word",
+      "index": 31,
+      "size": 5,
+      "partial": false,
+      "title": "天气自然 · A2 第 31 组",
+      "titleEn": "Weather & nature · A2 31",
+      "itemIds": [
+        "xw-syksy",
+        "xw-talvi",
+        "xw-luonto",
+        "xw-metsa",
+        "xw-puu"
+      ]
+    },
+    {
+      "id": "A2-W-32",
+      "level": "A2",
+      "kind": "word",
+      "index": 32,
+      "size": 5,
+      "partial": false,
+      "title": "天气自然 · A2 第 32 组",
+      "titleEn": "Weather & nature · A2 32",
+      "itemIds": [
+        "xw-kukka",
+        "xw-ruoho",
+        "xw-jarvi",
+        "xw-meri",
+        "xw-joki"
+      ]
+    },
+    {
+      "id": "A2-W-33",
+      "level": "A2",
+      "kind": "word",
+      "index": 33,
+      "size": 5,
+      "partial": false,
+      "title": "天气自然 · A2 第 33 组",
+      "titleEn": "Weather & nature · A2 33",
+      "itemIds": [
+        "xw-vuori",
+        "xw-saari",
+        "xw-ranta",
+        "xw-elain",
+        "xw-koira"
+      ]
+    },
+    {
+      "id": "A2-W-34",
+      "level": "A2",
+      "kind": "word",
+      "index": 34,
+      "size": 5,
+      "partial": false,
+      "title": "天气自然 · A2 第 34 组",
+      "titleEn": "Weather & nature · A2 34",
+      "itemIds": [
+        "xw-kissa",
+        "xw-lintu",
+        "xw-hevonen",
+        "xw-lehma",
+        "xw-lammas"
+      ]
+    },
+    {
+      "id": "A2-W-35",
+      "level": "A2",
+      "kind": "word",
+      "index": 35,
+      "size": 5,
+      "partial": false,
+      "title": "天气自然 · A2 第 35 组",
+      "titleEn": "Weather & nature · A2 35",
+      "itemIds": [
+        "xw-karhu",
+        "xw-susi",
+        "xw-kettu",
+        "xw-hyttynen",
+        "xw-sataa"
+      ]
+    },
+    {
+      "id": "A2-W-36",
+      "level": "A2",
+      "kind": "word",
+      "index": 36,
+      "size": 5,
+      "partial": false,
+      "title": "天气自然 · A2 第 36 组",
+      "titleEn": "Weather & nature · A2 36",
+      "itemIds": [
+        "xw-paistaa",
+        "xw-tuulla",
+        "xw-jaatya",
+        "xw-sulaa",
+        "xw-ilo"
+      ]
+    },
+    {
+      "id": "A2-W-37",
+      "level": "A2",
+      "kind": "word",
+      "index": 37,
+      "size": 5,
+      "partial": false,
+      "title": "情绪性格 · A2 第 37 组",
+      "titleEn": "Emotions & personality · A2 37",
+      "itemIds": [
+        "xw-viha",
+        "xw-pelko",
+        "xw-jannitys",
+        "xw-yllatys",
+        "xw-toivo"
+      ]
+    },
+    {
+      "id": "A2-W-38",
+      "level": "A2",
+      "kind": "word",
+      "index": 38,
+      "size": 5,
+      "partial": false,
+      "title": "情绪性格 · A2 第 38 组",
+      "titleEn": "Emotions & personality · A2 38",
+      "itemIds": [
+        "xw-huoli",
+        "xw-stressi",
+        "xw-rauha",
+        "xw-mieliala",
+        "xw-tunne"
+      ]
+    },
+    {
+      "id": "A2-W-39",
+      "level": "A2",
+      "kind": "word",
+      "index": 39,
+      "size": 5,
+      "partial": false,
+      "title": "情绪性格 · A2 第 39 组",
+      "titleEn": "Emotions & personality · A2 39",
+      "itemIds": [
+        "xw-mielipide",
+        "xw-ajatus",
+        "xw-unelma",
+        "xw-tavoite",
+        "xw-onnellinen"
+      ]
+    },
+    {
+      "id": "A2-W-40",
+      "level": "A2",
+      "kind": "word",
+      "index": 40,
+      "size": 5,
+      "partial": false,
+      "title": "情绪性格 · A2 第 40 组",
+      "titleEn": "Emotions & personality · A2 40",
+      "itemIds": [
+        "xw-iloinen",
+        "xw-surullinen",
+        "xw-vihainen",
+        "xw-pelokas",
+        "xw-rauhallinen"
+      ]
+    },
+    {
+      "id": "A2-W-41",
+      "level": "A2",
+      "kind": "word",
+      "index": 41,
+      "size": 5,
+      "partial": false,
+      "title": "情绪性格 · A2 第 41 组",
+      "titleEn": "Emotions & personality · A2 41",
+      "itemIds": [
+        "xw-hermostunut",
+        "xw-innostunut",
+        "xw-pettynyt",
+        "xw-ylpea",
+        "xw-ujo"
+      ]
+    },
+    {
+      "id": "A2-W-42",
+      "level": "A2",
+      "kind": "word",
+      "index": 42,
+      "size": 5,
+      "partial": false,
+      "title": "情绪性格 · A2 第 42 组",
+      "titleEn": "Emotions & personality · A2 42",
+      "itemIds": [
+        "xw-rohkea",
+        "xw-rehellinen",
+        "xw-ahkera",
+        "xw-laiska",
+        "xw-avulias"
+      ]
+    },
+    {
+      "id": "A2-W-43",
+      "level": "A2",
+      "kind": "word",
+      "index": 43,
+      "size": 5,
+      "partial": false,
+      "title": "情绪性格 · A2 第 43 组",
+      "titleEn": "Emotions & personality · A2 43",
+      "itemIds": [
+        "xw-kohtelias",
+        "xw-karsivallinen",
+        "xw-luotettava",
+        "xw-nauttia",
+        "xw-pelata-2"
+      ]
+    },
+    {
+      "id": "A2-W-44",
+      "level": "A2",
+      "kind": "word",
+      "index": 44,
+      "size": 5,
+      "partial": false,
+      "title": "情绪性格 · A2 第 44 组",
+      "titleEn": "Emotions & personality · A2 44",
+      "itemIds": [
+        "xw-toivoa",
+        "xw-huolestua",
+        "xw-suuttua",
+        "xw-arki",
+        "xw-kotityo"
+      ]
+    },
+    {
+      "id": "A2-W-45",
+      "level": "A2",
+      "kind": "word",
+      "index": 45,
+      "size": 5,
+      "partial": false,
+      "title": "家务生活 · A2 第 45 组",
+      "titleEn": "Household life · A2 45",
+      "itemIds": [
+        "xw-siivous",
+        "xw-pyykki",
+        "xw-pyyhe",
+        "xw-saippua",
+        "xw-shampoo"
+      ]
+    },
+    {
+      "id": "A2-W-46",
+      "level": "A2",
+      "kind": "word",
+      "index": 46,
+      "size": 5,
+      "partial": false,
+      "title": "家务生活 · A2 第 46 组",
+      "titleEn": "Household life · A2 46",
+      "itemIds": [
+        "xw-pesuaine",
+        "xw-harja",
+        "xw-imuri",
+        "xw-roska",
+        "xw-roskakori"
+      ]
+    },
+    {
+      "id": "A2-W-47",
+      "level": "A2",
+      "kind": "word",
+      "index": 47,
+      "size": 5,
+      "partial": false,
+      "title": "家务生活 · A2 第 47 组",
+      "titleEn": "Household life · A2 47",
+      "itemIds": [
+        "xw-kierratys",
+        "xw-jatteet",
+        "xw-astianpesukone",
+        "xw-uuni",
+        "xw-mikroaaltouuni"
+      ]
+    },
+    {
+      "id": "A2-W-48",
+      "level": "A2",
+      "kind": "word",
+      "index": 48,
+      "size": 5,
+      "partial": false,
+      "title": "家务生活 · A2 第 48 组",
+      "titleEn": "Household life · A2 48",
+      "itemIds": [
+        "xw-pakastin",
+        "xw-kattila",
+        "xw-paistinpannu",
+        "xw-lautanen",
+        "xw-kulho"
+      ]
+    },
+    {
+      "id": "A2-W-49",
+      "level": "A2",
+      "kind": "word",
+      "index": 49,
+      "size": 5,
+      "partial": false,
+      "title": "家务生活 · A2 第 49 组",
+      "titleEn": "Household life · A2 49",
+      "itemIds": [
+        "xw-lasi",
+        "xw-kuppi",
+        "xw-muki",
+        "xw-lusikka",
+        "xw-haarukka"
+      ]
+    },
+    {
+      "id": "A2-W-50",
+      "level": "A2",
+      "kind": "word",
+      "index": 50,
+      "size": 5,
+      "partial": false,
+      "title": "家务生活 · A2 第 50 组",
+      "titleEn": "Household life · A2 50",
+      "itemIds": [
+        "xw-veitsi",
+        "xw-puhdas",
+        "xw-likainen",
+        "xw-siisti",
+        "xw-sotkuinen"
+      ]
+    },
+    {
+      "id": "A2-W-51",
+      "level": "A2",
+      "kind": "word",
+      "index": 51,
+      "size": 5,
+      "partial": false,
+      "title": "家务生活 · A2 第 51 组",
+      "titleEn": "Household life · A2 51",
+      "itemIds": [
+        "xw-korjata",
+        "xw-kuivata",
+        "xw-silittaa",
+        "xw-tyhjentaa",
+        "xw-tayttaa"
+      ]
+    },
+    {
+      "id": "A2-W-52",
+      "level": "A2",
+      "kind": "word",
+      "index": 52,
+      "size": 5,
+      "partial": false,
+      "title": "代词 · A2 第 52 组",
+      "titleEn": "Pronouns · A2 52",
+      "itemIds": [
+        "xw-kuinka",
+        "xw-kenen",
+        "xw-joku",
+        "xw-jokin",
+        "xw-itse"
+      ]
+    },
+    {
+      "id": "A2-W-53",
+      "level": "A2",
+      "kind": "word",
+      "index": 53,
+      "size": 5,
+      "partial": false,
+      "title": "副词 · A2 第 53 组",
+      "titleEn": "Adverbs · A2 53",
+      "itemIds": [
+        "xw-molemmat",
+        "xw-vain",
+        "xw-liian",
+        "xw-tarpeeksi",
+        "xw-melko"
+      ]
+    },
+    {
+      "id": "A2-W-54",
+      "level": "A2",
+      "kind": "word",
+      "index": 54,
+      "size": 5,
+      "partial": false,
+      "title": "副词 · A2 第 54 组",
+      "titleEn": "Adverbs · A2 54",
+      "itemIds": [
+        "xw-erittain",
+        "xw-todella",
+        "xw-noin",
+        "xw-yhteensa",
+        "xw-silloin"
+      ]
+    },
+    {
+      "id": "A2-W-55",
+      "level": "A2",
+      "kind": "word",
+      "index": 55,
+      "size": 4,
+      "partial": true,
+      "title": "后置词 · A2 第 55 组",
+      "titleEn": "Postpositions · A2 55",
+      "itemIds": [
+        "xw-varten",
+        "xw-takia",
+        "xw-etta",
+        "xw-vai"
       ]
     },
     {
@@ -174,12 +2404,98 @@
       "size": 5,
       "partial": false,
       "title": "A2 场景句",
+      "titleEn": "A2 situational sentences",
       "itemIds": [
         "a2-s01",
         "a2-s02",
         "a2-s03",
         "a2-s04",
         "a2-s05"
+      ]
+    },
+    {
+      "id": "A2-S-02",
+      "level": "A2",
+      "kind": "sentence",
+      "index": 2,
+      "size": 5,
+      "partial": false,
+      "title": "A2 句子 · 第 2 组",
+      "titleEn": "A2 sentences · 2",
+      "itemIds": [
+        "xs-011",
+        "xs-012",
+        "xs-013",
+        "xs-014",
+        "xs-015"
+      ]
+    },
+    {
+      "id": "A2-S-03",
+      "level": "A2",
+      "kind": "sentence",
+      "index": 3,
+      "size": 5,
+      "partial": false,
+      "title": "A2 句子 · 第 3 组",
+      "titleEn": "A2 sentences · 3",
+      "itemIds": [
+        "xs-016",
+        "xs-017",
+        "xs-018",
+        "xe-010",
+        "xe-013"
+      ]
+    },
+    {
+      "id": "A2-S-04",
+      "level": "A2",
+      "kind": "sentence",
+      "index": 4,
+      "size": 5,
+      "partial": false,
+      "title": "A2 句子 · 第 4 组",
+      "titleEn": "A2 sentences · 4",
+      "itemIds": [
+        "xe-019",
+        "xe-021",
+        "xe-026",
+        "xe-027",
+        "xe-030"
+      ]
+    },
+    {
+      "id": "A2-S-05",
+      "level": "A2",
+      "kind": "sentence",
+      "index": 5,
+      "size": 5,
+      "partial": false,
+      "title": "A2 句子 · 第 5 组",
+      "titleEn": "A2 sentences · 5",
+      "itemIds": [
+        "xe-032",
+        "xe-033",
+        "xe-034",
+        "xe-041",
+        "xe-042"
+      ]
+    },
+    {
+      "id": "A2-S-06",
+      "level": "A2",
+      "kind": "sentence",
+      "index": 6,
+      "size": 5,
+      "partial": false,
+      "title": "A2 句子 · 第 6 组",
+      "titleEn": "A2 sentences · 6",
+      "itemIds": [
+        "xe-043",
+        "xe-044",
+        "xd-013",
+        "xd-014",
+        "xd-015"
       ]
     },
     {
@@ -190,6 +2506,7 @@
       "size": 5,
       "partial": false,
       "title": "语言与思维",
+      "titleEn": "Language & thought",
       "itemIds": [
         "kieli",
         "ihminen",
@@ -206,12 +2523,1168 @@
       "size": 5,
       "partial": false,
       "title": "动词类型 2–6",
+      "titleEn": "Verb types 2–6",
       "itemIds": [
         "juoda",
         "nousta",
         "tavata",
         "valita",
         "vanheta"
+      ]
+    },
+    {
+      "id": "B1-W-03",
+      "level": "B1",
+      "kind": "word",
+      "index": 3,
+      "size": 5,
+      "partial": false,
+      "title": "社会公共生活 · B1 第 3 组",
+      "titleEn": "Society & public life · B1 3",
+      "itemIds": [
+        "xw-kansalainen",
+        "xw-vaesto",
+        "xw-asukas",
+        "xw-maahanmuuttaja",
+        "xw-maahanmuutto"
+      ]
+    },
+    {
+      "id": "B1-W-04",
+      "level": "B1",
+      "kind": "word",
+      "index": 4,
+      "size": 5,
+      "partial": false,
+      "title": "社会公共生活 · B1 第 4 组",
+      "titleEn": "Society & public life · B1 4",
+      "itemIds": [
+        "xw-kotoutuminen",
+        "xw-viranomainen",
+        "xw-virasto",
+        "xw-kunta",
+        "xw-kaupunginosa"
+      ]
+    },
+    {
+      "id": "B1-W-05",
+      "level": "B1",
+      "kind": "word",
+      "index": 5,
+      "size": 5,
+      "partial": false,
+      "title": "社会公共生活 · B1 第 5 组",
+      "titleEn": "Society & public life · B1 5",
+      "itemIds": [
+        "xw-paakaupunki",
+        "xw-hallitus",
+        "xw-eduskunta",
+        "xw-presidentti",
+        "xw-vaalit"
+      ]
+    },
+    {
+      "id": "B1-W-06",
+      "level": "B1",
+      "kind": "word",
+      "index": 6,
+      "size": 5,
+      "partial": false,
+      "title": "社会公共生活 · B1 第 6 组",
+      "titleEn": "Society & public life · B1 6",
+      "itemIds": [
+        "xw-aanestaa",
+        "xw-paatos",
+        "xw-laki",
+        "xw-saanto",
+        "xw-oikeus"
+      ]
+    },
+    {
+      "id": "B1-W-07",
+      "level": "B1",
+      "kind": "word",
+      "index": 7,
+      "size": 5,
+      "partial": false,
+      "title": "社会公共生活 · B1 第 7 组",
+      "titleEn": "Society & public life · B1 7",
+      "itemIds": [
+        "xw-velvollisuus",
+        "xw-vastuu",
+        "xw-turvallisuus",
+        "xw-rikos",
+        "xw-tuomioistuin"
+      ]
+    },
+    {
+      "id": "B1-W-08",
+      "level": "B1",
+      "kind": "word",
+      "index": 8,
+      "size": 5,
+      "partial": false,
+      "title": "社会公共生活 · B1 第 8 组",
+      "titleEn": "Society & public life · B1 8",
+      "itemIds": [
+        "xw-sopimus",
+        "xw-lupa",
+        "xw-julkinen",
+        "xw-yksityinen",
+        "xw-yhteinen"
+      ]
+    },
+    {
+      "id": "B1-W-09",
+      "level": "B1",
+      "kind": "word",
+      "index": 9,
+      "size": 5,
+      "partial": false,
+      "title": "社会公共生活 · B1 第 9 组",
+      "titleEn": "Society & public life · B1 9",
+      "itemIds": [
+        "xw-paikallinen",
+        "xw-kansainvalinen",
+        "xw-vaikuttaa",
+        "xw-kehittaa",
+        "xw-edistaa"
+      ]
+    },
+    {
+      "id": "B1-W-10",
+      "level": "B1",
+      "kind": "word",
+      "index": 10,
+      "size": 5,
+      "partial": false,
+      "title": "社会公共生活 · B1 第 10 组",
+      "titleEn": "Society & public life · B1 10",
+      "itemIds": [
+        "xw-suojella",
+        "xw-noudattaa",
+        "xw-rikkoa",
+        "xw-sallia",
+        "xw-kieltaa"
+      ]
+    },
+    {
+      "id": "B1-W-11",
+      "level": "B1",
+      "kind": "word",
+      "index": 11,
+      "size": 5,
+      "partial": false,
+      "title": "经济金融 · B1 第 11 组",
+      "titleEn": "Economy & finance · B1 11",
+      "itemIds": [
+        "xw-vaatia",
+        "xw-tarjota",
+        "xw-talous",
+        "xw-raha-asiat",
+        "xw-pankkitili"
+      ]
+    },
+    {
+      "id": "B1-W-12",
+      "level": "B1",
+      "kind": "word",
+      "index": 12,
+      "size": 5,
+      "partial": false,
+      "title": "经济金融 · B1 第 12 组",
+      "titleEn": "Economy & finance · B1 12",
+      "itemIds": [
+        "xw-tili",
+        "xw-tilisiirto",
+        "xw-laina",
+        "xw-korko",
+        "xw-velka"
+      ]
+    },
+    {
+      "id": "B1-W-13",
+      "level": "B1",
+      "kind": "word",
+      "index": 13,
+      "size": 5,
+      "partial": false,
+      "title": "经济金融 · B1 第 13 组",
+      "titleEn": "Economy & finance · B1 13",
+      "itemIds": [
+        "xw-saasto",
+        "xw-sijoitus",
+        "xw-budjetti",
+        "xw-verotus",
+        "xw-vero"
+      ]
+    },
+    {
+      "id": "B1-W-14",
+      "level": "B1",
+      "kind": "word",
+      "index": 14,
+      "size": 5,
+      "partial": false,
+      "title": "经济金融 · B1 第 14 组",
+      "titleEn": "Economy & finance · B1 14",
+      "itemIds": [
+        "xw-veronmaksaja",
+        "xw-arvonlisavero",
+        "xw-tulo",
+        "xw-menot",
+        "xw-kulutus"
+      ]
+    },
+    {
+      "id": "B1-W-15",
+      "level": "B1",
+      "kind": "word",
+      "index": 15,
+      "size": 5,
+      "partial": false,
+      "title": "经济金融 · B1 第 15 组",
+      "titleEn": "Economy & finance · B1 15",
+      "itemIds": [
+        "xw-kuluttaja",
+        "xw-tuotanto",
+        "xw-tuote",
+        "xw-markkinat",
+        "xw-kilpailu"
+      ]
+    },
+    {
+      "id": "B1-W-16",
+      "level": "B1",
+      "kind": "word",
+      "index": 16,
+      "size": 5,
+      "partial": false,
+      "title": "经济金融 · B1 第 16 组",
+      "titleEn": "Economy & finance · B1 16",
+      "itemIds": [
+        "xw-kilpailija",
+        "xw-yrittaja",
+        "xw-konkurssi",
+        "xw-inflaatio",
+        "xw-talouskasvu"
+      ]
+    },
+    {
+      "id": "B1-W-17",
+      "level": "B1",
+      "kind": "word",
+      "index": 17,
+      "size": 5,
+      "partial": false,
+      "title": "经济金融 · B1 第 17 组",
+      "titleEn": "Economy & finance · B1 17",
+      "itemIds": [
+        "xw-taantuma",
+        "xw-tyollisyys",
+        "xw-kannattava",
+        "xw-taloudellinen",
+        "xw-rahoittaa"
+      ]
+    },
+    {
+      "id": "B1-W-18",
+      "level": "B1",
+      "kind": "word",
+      "index": 18,
+      "size": 5,
+      "partial": false,
+      "title": "经济金融 · B1 第 18 组",
+      "titleEn": "Economy & finance · B1 18",
+      "itemIds": [
+        "xw-maksaa-takaisin",
+        "xw-velkaantua",
+        "xw-kasvaa",
+        "xw-vahentya",
+        "xw-lisaantya"
+      ]
+    },
+    {
+      "id": "B1-W-19",
+      "level": "B1",
+      "kind": "word",
+      "index": 19,
+      "size": 5,
+      "partial": false,
+      "title": "媒体科技 · B1 第 19 组",
+      "titleEn": "Media & technology · B1 19",
+      "itemIds": [
+        "xw-media",
+        "xw-uutinen",
+        "xw-uutiset",
+        "xw-lehti",
+        "xw-sanomalehti"
+      ]
+    },
+    {
+      "id": "B1-W-20",
+      "level": "B1",
+      "kind": "word",
+      "index": 20,
+      "size": 5,
+      "partial": false,
+      "title": "媒体科技 · B1 第 20 组",
+      "titleEn": "Media & technology · B1 20",
+      "itemIds": [
+        "xw-aikakauslehti",
+        "xw-artikkeli",
+        "xw-otsikko",
+        "xw-haastattelu",
+        "xw-toimittaja"
+      ]
+    },
+    {
+      "id": "B1-W-21",
+      "level": "B1",
+      "kind": "word",
+      "index": 21,
+      "size": 5,
+      "partial": false,
+      "title": "媒体科技 · B1 第 21 组",
+      "titleEn": "Media & technology · B1 21",
+      "itemIds": [
+        "xw-mainos",
+        "xw-mainonta",
+        "xw-televisio",
+        "xw-radio",
+        "xw-ohjelma"
+      ]
+    },
+    {
+      "id": "B1-W-22",
+      "level": "B1",
+      "kind": "word",
+      "index": 22,
+      "size": 5,
+      "partial": false,
+      "title": "媒体科技 · B1 第 22 组",
+      "titleEn": "Media & technology · B1 22",
+      "itemIds": [
+        "xw-sarja",
+        "xw-elokuva",
+        "xw-valokuva",
+        "xw-kuva",
+        "xw-kamera"
+      ]
+    },
+    {
+      "id": "B1-W-23",
+      "level": "B1",
+      "kind": "word",
+      "index": 23,
+      "size": 5,
+      "partial": false,
+      "title": "媒体科技 · B1 第 23 组",
+      "titleEn": "Media & technology · B1 23",
+      "itemIds": [
+        "xw-ohjelmisto",
+        "xw-sovellus",
+        "xw-verkkosivu",
+        "xw-verkkosivusto",
+        "xw-internet"
+      ]
+    },
+    {
+      "id": "B1-W-24",
+      "level": "B1",
+      "kind": "word",
+      "index": 24,
+      "size": 5,
+      "partial": false,
+      "title": "媒体科技 · B1 第 24 组",
+      "titleEn": "Media & technology · B1 24",
+      "itemIds": [
+        "xw-verkko",
+        "xw-sosiaalinen-media",
+        "xw-kayttaja",
+        "xw-salasana",
+        "xw-tietoturva"
+      ]
+    },
+    {
+      "id": "B1-W-25",
+      "level": "B1",
+      "kind": "word",
+      "index": 25,
+      "size": 5,
+      "partial": false,
+      "title": "媒体科技 · B1 第 25 组",
+      "titleEn": "Media & technology · B1 25",
+      "itemIds": [
+        "xw-yksityisyys",
+        "xw-tiedosto",
+        "xw-kansio",
+        "xw-lataus",
+        "xw-paivitys"
+      ]
+    },
+    {
+      "id": "B1-W-26",
+      "level": "B1",
+      "kind": "word",
+      "index": 26,
+      "size": 5,
+      "partial": false,
+      "title": "媒体科技 · B1 第 26 组",
+      "titleEn": "Media & technology · B1 26",
+      "itemIds": [
+        "xw-viesti",
+        "xw-ilmoitus",
+        "xw-julkaista",
+        "xw-jakaa",
+        "xw-ladata"
+      ]
+    },
+    {
+      "id": "B1-W-27",
+      "level": "B1",
+      "kind": "word",
+      "index": 27,
+      "size": 5,
+      "partial": false,
+      "title": "旅行住宿 · B1 第 27 组",
+      "titleEn": "Travel & accommodation · B1 27",
+      "itemIds": [
+        "xw-tallentaa",
+        "xw-poistaa",
+        "xw-matkailu",
+        "xw-matkailija",
+        "xw-turisti"
+      ]
+    },
+    {
+      "id": "B1-W-28",
+      "level": "B1",
+      "kind": "word",
+      "index": 28,
+      "size": 5,
+      "partial": false,
+      "title": "旅行住宿 · B1 第 28 组",
+      "titleEn": "Travel & accommodation · B1 28",
+      "itemIds": [
+        "xw-matkakohde",
+        "xw-matkaopas",
+        "xw-opas",
+        "xw-varaus",
+        "xw-majoitus"
+      ]
+    },
+    {
+      "id": "B1-W-29",
+      "level": "B1",
+      "kind": "word",
+      "index": 29,
+      "size": 5,
+      "partial": false,
+      "title": "旅行住宿 · B1 第 29 组",
+      "titleEn": "Travel & accommodation · B1 29",
+      "itemIds": [
+        "xw-hotelli",
+        "xw-hostelli",
+        "xw-huonevaraus",
+        "xw-vastaanotto",
+        "xw-matkalaukku"
+      ]
+    },
+    {
+      "id": "B1-W-30",
+      "level": "B1",
+      "kind": "word",
+      "index": 30,
+      "size": 5,
+      "partial": false,
+      "title": "旅行住宿 · B1 第 30 组",
+      "titleEn": "Travel & accommodation · B1 30",
+      "itemIds": [
+        "xw-reppu",
+        "xw-matkatavarat",
+        "xw-passi",
+        "xw-viisumi",
+        "xw-henkilollisyystodistus"
+      ]
+    },
+    {
+      "id": "B1-W-31",
+      "level": "B1",
+      "kind": "word",
+      "index": 31,
+      "size": 5,
+      "partial": false,
+      "title": "旅行住宿 · B1 第 31 组",
+      "titleEn": "Travel & accommodation · B1 31",
+      "itemIds": [
+        "xw-matkavakuutus",
+        "xw-peruutus",
+        "xw-viivastys",
+        "xw-myohastya",
+        "xw-peruuttaa"
+      ]
+    },
+    {
+      "id": "B1-W-32",
+      "level": "B1",
+      "kind": "word",
+      "index": 32,
+      "size": 5,
+      "partial": false,
+      "title": "旅行住宿 · B1 第 32 组",
+      "titleEn": "Travel & accommodation · B1 32",
+      "itemIds": [
+        "xw-yopya",
+        "xw-majoittua",
+        "xw-rekisteroitya",
+        "xw-lahto",
+        "xw-saapuminen"
+      ]
+    },
+    {
+      "id": "B1-W-33",
+      "level": "B1",
+      "kind": "word",
+      "index": 33,
+      "size": 5,
+      "partial": false,
+      "title": "旅行住宿 · B1 第 33 组",
+      "titleEn": "Travel & accommodation · B1 33",
+      "itemIds": [
+        "xw-portti",
+        "xw-terminaali",
+        "xw-tulli",
+        "xw-ruuhkainen",
+        "xw-hyvinvointi"
+      ]
+    },
+    {
+      "id": "B1-W-34",
+      "level": "B1",
+      "kind": "word",
+      "index": 34,
+      "size": 5,
+      "partial": false,
+      "title": "健康生活方式 · B1 第 34 组",
+      "titleEn": "Healthy living · B1 34",
+      "itemIds": [
+        "xw-elamantapa",
+        "xw-ravinto",
+        "xw-ravitsemus",
+        "xw-ruokavalio",
+        "xw-liikunta"
+      ]
+    },
+    {
+      "id": "B1-W-35",
+      "level": "B1",
+      "kind": "word",
+      "index": 35,
+      "size": 5,
+      "partial": false,
+      "title": "健康生活方式 · B1 第 35 组",
+      "titleEn": "Healthy living · B1 35",
+      "itemIds": [
+        "xw-kunto",
+        "xw-kestavyys",
+        "xw-voima",
+        "xw-lihas",
+        "xw-luu"
+      ]
+    },
+    {
+      "id": "B1-W-36",
+      "level": "B1",
+      "kind": "word",
+      "index": 36,
+      "size": 5,
+      "partial": false,
+      "title": "健康生活方式 · B1 第 36 组",
+      "titleEn": "Healthy living · B1 36",
+      "itemIds": [
+        "xw-nivel",
+        "xw-hengitys",
+        "xw-uni",
+        "xw-unettomuus",
+        "xw-lepo"
+      ]
+    },
+    {
+      "id": "B1-W-37",
+      "level": "B1",
+      "kind": "word",
+      "index": 37,
+      "size": 5,
+      "partial": false,
+      "title": "健康生活方式 · B1 第 37 组",
+      "titleEn": "Healthy living · B1 37",
+      "itemIds": [
+        "xw-palautuminen",
+        "xw-mielenterveys",
+        "xw-masennus",
+        "xw-ahdistus",
+        "xw-riippuvuus"
+      ]
+    },
+    {
+      "id": "B1-W-38",
+      "level": "B1",
+      "kind": "word",
+      "index": 38,
+      "size": 5,
+      "partial": false,
+      "title": "健康生活方式 · B1 第 38 组",
+      "titleEn": "Healthy living · B1 38",
+      "itemIds": [
+        "xw-rokotus",
+        "xw-rokote",
+        "xw-oire",
+        "xw-diagnoosi",
+        "xw-hoito"
+      ]
+    },
+    {
+      "id": "B1-W-39",
+      "level": "B1",
+      "kind": "word",
+      "index": 39,
+      "size": 5,
+      "partial": false,
+      "title": "健康生活方式 · B1 第 39 组",
+      "titleEn": "Healthy living · B1 39",
+      "itemIds": [
+        "xw-resepti",
+        "xw-kipulaake",
+        "xw-terveellinen",
+        "xw-epaterveellinen",
+        "xw-ravitseva"
+      ]
+    },
+    {
+      "id": "B1-W-40",
+      "level": "B1",
+      "kind": "word",
+      "index": 40,
+      "size": 5,
+      "partial": false,
+      "title": "健康生活方式 · B1 第 40 组",
+      "titleEn": "Healthy living · B1 40",
+      "itemIds": [
+        "xw-aktiivinen",
+        "xw-passiivinen",
+        "xw-hengittaa",
+        "xw-venytella",
+        "xw-toipua"
+      ]
+    },
+    {
+      "id": "B1-W-41",
+      "level": "B1",
+      "kind": "word",
+      "index": 41,
+      "size": 5,
+      "partial": false,
+      "title": "抽象连接词 · B1 第 41 组",
+      "titleEn": "Abstract connectors · B1 41",
+      "itemIds": [
+        "xw-ehkaista",
+        "xw-tutkia",
+        "xw-syy",
+        "xw-seuraus",
+        "xw-merkitys"
+      ]
+    },
+    {
+      "id": "B1-W-42",
+      "level": "B1",
+      "kind": "word",
+      "index": 42,
+      "size": 5,
+      "partial": false,
+      "title": "抽象连接词 · B1 第 42 组",
+      "titleEn": "Abstract connectors · B1 42",
+      "itemIds": [
+        "xw-tarkoitus",
+        "xw-vaihtoehto",
+        "xw-ero",
+        "xw-muutos",
+        "xw-kehitys"
+      ]
+    },
+    {
+      "id": "B1-W-43",
+      "level": "B1",
+      "kind": "word",
+      "index": 43,
+      "size": 5,
+      "partial": false,
+      "title": "抽象连接词 · B1 第 43 组",
+      "titleEn": "Abstract connectors · B1 43",
+      "itemIds": [
+        "xw-ongelma",
+        "xw-ratkaisu",
+        "xw-haaste",
+        "xw-tilanne",
+        "xw-kokemus"
+      ]
+    },
+    {
+      "id": "B1-W-44",
+      "level": "B1",
+      "kind": "word",
+      "index": 44,
+      "size": 5,
+      "partial": false,
+      "title": "抽象连接词 · B1 第 44 组",
+      "titleEn": "Abstract connectors · B1 44",
+      "itemIds": [
+        "xw-tapahtuma",
+        "xw-asia",
+        "xw-seikka",
+        "xw-tekija",
+        "xw-ominaisuus"
+      ]
+    },
+    {
+      "id": "B1-W-45",
+      "level": "B1",
+      "kind": "word",
+      "index": 45,
+      "size": 5,
+      "partial": false,
+      "title": "抽象连接词 · B1 第 45 组",
+      "titleEn": "Abstract connectors · B1 45",
+      "itemIds": [
+        "xw-piirre",
+        "xw-maara",
+        "xw-taso",
+        "xw-peruste",
+        "xw-esimerkki"
+      ]
+    },
+    {
+      "id": "B1-W-46",
+      "level": "B1",
+      "kind": "word",
+      "index": 46,
+      "size": 5,
+      "partial": false,
+      "title": "抽象连接词 · B1 第 46 组",
+      "titleEn": "Abstract connectors · B1 46",
+      "itemIds": [
+        "xw-todellisuus",
+        "xw-yleensa",
+        "xw-erityisesti",
+        "xw-kuitenkin",
+        "xw-silti"
+      ]
+    },
+    {
+      "id": "B1-W-47",
+      "level": "B1",
+      "kind": "word",
+      "index": 47,
+      "size": 5,
+      "partial": false,
+      "title": "抽象连接词 · B1 第 47 组",
+      "titleEn": "Abstract connectors · B1 47",
+      "itemIds": [
+        "xw-siksi",
+        "xw-lisaksi",
+        "xw-toisaalta",
+        "xw-esimerkiksi",
+        "xw-ainakin"
+      ]
+    },
+    {
+      "id": "B1-W-48",
+      "level": "B1",
+      "kind": "word",
+      "index": 48,
+      "size": 5,
+      "partial": false,
+      "title": "抽象连接词 · B1 第 48 组",
+      "titleEn": "Abstract connectors · B1 48",
+      "itemIds": [
+        "xw-ehka",
+        "xw-todennakoisesti",
+        "xw-mahdollisesti",
+        "xw-koska",
+        "xw-vaikka"
+      ]
+    },
+    {
+      "id": "B1-W-49",
+      "level": "B1",
+      "kind": "word",
+      "index": 49,
+      "size": 5,
+      "partial": false,
+      "title": "抽象连接词 · B1 第 49 组",
+      "titleEn": "Abstract connectors · B1 49",
+      "itemIds": [
+        "xw-jotta",
+        "xw-ellei",
+        "xw-sen-vuoksi",
+        "xw-suuri",
+        "xw-pieni"
+      ]
+    },
+    {
+      "id": "B1-W-50",
+      "level": "B1",
+      "kind": "word",
+      "index": 50,
+      "size": 5,
+      "partial": false,
+      "title": "描述比较 · B1 第 50 组",
+      "titleEn": "Description & comparison · B1 50",
+      "itemIds": [
+        "xw-korkea",
+        "xw-matala",
+        "xw-pitka",
+        "xw-lyhyt",
+        "xw-levea"
+      ]
+    },
+    {
+      "id": "B1-W-51",
+      "level": "B1",
+      "kind": "word",
+      "index": 51,
+      "size": 5,
+      "partial": false,
+      "title": "描述比较 · B1 第 51 组",
+      "titleEn": "Description & comparison · B1 51",
+      "itemIds": [
+        "xw-kapea",
+        "xw-syva",
+        "xw-ohut",
+        "xw-paksu",
+        "xw-painava"
+      ]
+    },
+    {
+      "id": "B1-W-52",
+      "level": "B1",
+      "kind": "word",
+      "index": 52,
+      "size": 5,
+      "partial": false,
+      "title": "描述比较 · B1 第 52 组",
+      "titleEn": "Description & comparison · B1 52",
+      "itemIds": [
+        "xw-kevyt",
+        "xw-vahva",
+        "xw-heikko",
+        "xw-voimakas",
+        "xw-kirkas"
+      ]
+    },
+    {
+      "id": "B1-W-53",
+      "level": "B1",
+      "kind": "word",
+      "index": 53,
+      "size": 5,
+      "partial": false,
+      "title": "描述比较 · B1 第 53 组",
+      "titleEn": "Description & comparison · B1 53",
+      "itemIds": [
+        "xw-pimea",
+        "xw-selkea",
+        "xw-epaselva",
+        "xw-yksinkertainen",
+        "xw-monimutkainen"
+      ]
+    },
+    {
+      "id": "B1-W-54",
+      "level": "B1",
+      "kind": "word",
+      "index": 54,
+      "size": 5,
+      "partial": false,
+      "title": "描述比较 · B1 第 54 组",
+      "titleEn": "Description & comparison · B1 54",
+      "itemIds": [
+        "xw-mahdollinen",
+        "xw-mahdoton",
+        "xw-todellinen",
+        "xw-tavallinen",
+        "xw-erilainen"
+      ]
+    },
+    {
+      "id": "B1-W-55",
+      "level": "B1",
+      "kind": "word",
+      "index": 55,
+      "size": 5,
+      "partial": false,
+      "title": "描述比较 · B1 第 55 组",
+      "titleEn": "Description & comparison · B1 55",
+      "itemIds": [
+        "xw-samanlainen",
+        "xw-yleinen",
+        "xw-harvinainen",
+        "xw-suosittu",
+        "xw-kuuluisa"
+      ]
+    },
+    {
+      "id": "B1-W-56",
+      "level": "B1",
+      "kind": "word",
+      "index": 56,
+      "size": 5,
+      "partial": false,
+      "title": "描述比较 · B1 第 56 组",
+      "titleEn": "Description & comparison · B1 56",
+      "itemIds": [
+        "xw-tunnettu",
+        "xw-tuntematon",
+        "xw-hyodyllinen",
+        "xw-tarpeellinen",
+        "xw-valttamaton"
+      ]
+    },
+    {
+      "id": "B1-W-57",
+      "level": "B1",
+      "kind": "word",
+      "index": 57,
+      "size": 5,
+      "partial": false,
+      "title": "描述比较 · B1 第 57 组",
+      "titleEn": "Description & comparison · B1 57",
+      "itemIds": [
+        "xw-riittava",
+        "xw-laadukas",
+        "xw-parempi",
+        "xw-paras",
+        "xw-verrata"
+      ]
+    },
+    {
+      "id": "B1-W-58",
+      "level": "B1",
+      "kind": "word",
+      "index": 58,
+      "size": 5,
+      "partial": false,
+      "title": "扩展动词 · B1 第 58 组",
+      "titleEn": "Extended verbs · B1 58",
+      "itemIds": [
+        "xw-vertailla",
+        "xw-suositella",
+        "xw-ehdottaa",
+        "xw-paattaa",
+        "xw-paatya"
+      ]
+    },
+    {
+      "id": "B1-W-59",
+      "level": "B1",
+      "kind": "word",
+      "index": 59,
+      "size": 5,
+      "partial": false,
+      "title": "扩展动词 · B1 第 59 组",
+      "titleEn": "Extended verbs · B1 59",
+      "itemIds": [
+        "xw-selvittaa",
+        "xw-tarkistaa",
+        "xw-varmistaa",
+        "xw-huomata",
+        "xw-havaita"
+      ]
+    },
+    {
+      "id": "B1-W-60",
+      "level": "B1",
+      "kind": "word",
+      "index": 60,
+      "size": 5,
+      "partial": false,
+      "title": "扩展动词 · B1 第 60 组",
+      "titleEn": "Extended verbs · B1 60",
+      "itemIds": [
+        "xw-tunnistaa",
+        "xw-kuvailla",
+        "xw-kuvata",
+        "xw-mainita",
+        "xw-korostaa"
+      ]
+    },
+    {
+      "id": "B1-W-61",
+      "level": "B1",
+      "kind": "word",
+      "index": 61,
+      "size": 5,
+      "partial": false,
+      "title": "扩展动词 · B1 第 61 组",
+      "titleEn": "Extended verbs · B1 61",
+      "itemIds": [
+        "xw-vaittaa",
+        "xw-todistaa",
+        "xw-osoittautua",
+        "xw-riippua",
+        "xw-merkita"
+      ]
+    },
+    {
+      "id": "B1-W-62",
+      "level": "B1",
+      "kind": "word",
+      "index": 62,
+      "size": 5,
+      "partial": false,
+      "title": "扩展动词 · B1 第 62 组",
+      "titleEn": "Extended verbs · B1 62",
+      "itemIds": [
+        "xw-tarkoittaa",
+        "xw-sisaltaa",
+        "xw-kuulua",
+        "xw-liittya",
+        "xw-keskittya"
+      ]
+    },
+    {
+      "id": "B1-W-63",
+      "level": "B1",
+      "kind": "word",
+      "index": 63,
+      "size": 5,
+      "partial": false,
+      "title": "扩展动词 · B1 第 63 组",
+      "titleEn": "Extended verbs · B1 63",
+      "itemIds": [
+        "xw-keskeyttaa",
+        "xw-jatkaa",
+        "xw-pyrkia",
+        "xw-saavuttaa",
+        "xw-toteuttaa"
+      ]
+    },
+    {
+      "id": "B1-W-64",
+      "level": "B1",
+      "kind": "word",
+      "index": 64,
+      "size": 5,
+      "partial": false,
+      "title": "扩展动词 · B1 第 64 组",
+      "titleEn": "Extended verbs · B1 64",
+      "itemIds": [
+        "xw-muodostaa",
+        "xw-rakentaa",
+        "xw-luoda",
+        "xw-parantaa",
+        "xw-vahentaa"
+      ]
+    },
+    {
+      "id": "B1-W-65",
+      "level": "B1",
+      "kind": "word",
+      "index": 65,
+      "size": 5,
+      "partial": false,
+      "title": "扩展动词 · B1 第 65 组",
+      "titleEn": "Extended verbs · B1 65",
+      "itemIds": [
+        "xw-lisata",
+        "xw-sailyttaa",
+        "xw-huolehtia",
+        "xw-huomioida",
+        "xw-suhtautua"
+      ]
+    },
+    {
+      "id": "B1-W-66",
+      "level": "B1",
+      "kind": "word",
+      "index": 66,
+      "size": 5,
+      "partial": false,
+      "title": "扩展动词 · B1 第 66 组",
+      "titleEn": "Extended verbs · B1 66",
+      "itemIds": [
+        "xw-kasitella",
+        "xw-edellyttaa",
+        "xw-mahdollistaa",
+        "xw-estaa",
+        "xw-valttaa"
+      ]
+    },
+    {
+      "id": "B1-W-67",
+      "level": "B1",
+      "kind": "word",
+      "index": 67,
+      "size": 5,
+      "partial": false,
+      "title": "扩展动词 · B1 第 67 组",
+      "titleEn": "Extended verbs · B1 67",
+      "itemIds": [
+        "xw-kieltaytya",
+        "xw-suostua",
+        "xw-myontaa",
+        "xw-kiistaa",
+        "xw-epailla"
+      ]
+    },
+    {
+      "id": "B1-W-68",
+      "level": "B1",
+      "kind": "word",
+      "index": 68,
+      "size": 5,
+      "partial": false,
+      "title": "扩展动词 · B1 第 68 组",
+      "titleEn": "Extended verbs · B1 68",
+      "itemIds": [
+        "xw-luottaa",
+        "xw-pettya",
+        "xw-yllattya",
+        "xw-innostua",
+        "xw-kiinnostua"
+      ]
+    },
+    {
+      "id": "B1-W-69",
+      "level": "B1",
+      "kind": "word",
+      "index": 69,
+      "size": 5,
+      "partial": false,
+      "title": "代词 · B1 第 69 组",
+      "titleEn": "Pronouns · B1 69",
+      "itemIds": [
+        "xw-joka",
+        "xw-kukaan",
+        "xw-mikaan",
+        "xw-samalla",
+        "xw-kaikkialla"
+      ]
+    },
+    {
+      "id": "B1-W-70",
+      "level": "B1",
+      "kind": "word",
+      "index": 70,
+      "size": 4,
+      "partial": true,
+      "title": "连接词 · B1 第 70 组",
+      "titleEn": "Conjunctions · B1 70",
+      "itemIds": [
+        "xw-joten",
+        "xw-silla",
+        "xw-eli",
+        "xw-seka"
       ]
     },
     {
@@ -222,12 +3695,128 @@
       "size": 5,
       "partial": false,
       "title": "B1 叙述句",
+      "titleEn": "B1 narrative sentences",
       "itemIds": [
         "b1-s01",
         "b1-s02",
         "b1-s03",
         "b1-s04",
         "b1-s05"
+      ]
+    },
+    {
+      "id": "B1-S-02",
+      "level": "B1",
+      "kind": "sentence",
+      "index": 2,
+      "size": 5,
+      "partial": false,
+      "title": "B1 句子 · 第 2 组",
+      "titleEn": "B1 sentences · 2",
+      "itemIds": [
+        "xs-019",
+        "xs-020",
+        "xs-021",
+        "xs-022",
+        "xs-023"
+      ]
+    },
+    {
+      "id": "B1-S-03",
+      "level": "B1",
+      "kind": "sentence",
+      "index": 3,
+      "size": 5,
+      "partial": false,
+      "title": "B1 句子 · 第 3 组",
+      "titleEn": "B1 sentences · 3",
+      "itemIds": [
+        "xs-024",
+        "xs-025",
+        "xs-026",
+        "xs-027",
+        "xs-028"
+      ]
+    },
+    {
+      "id": "B1-S-04",
+      "level": "B1",
+      "kind": "sentence",
+      "index": 4,
+      "size": 5,
+      "partial": false,
+      "title": "B1 句子 · 第 4 组",
+      "titleEn": "B1 sentences · 4",
+      "itemIds": [
+        "xs-029",
+        "xs-030",
+        "xe-035",
+        "xe-036",
+        "xe-037"
+      ]
+    },
+    {
+      "id": "B1-S-05",
+      "level": "B1",
+      "kind": "sentence",
+      "index": 5,
+      "size": 5,
+      "partial": false,
+      "title": "B1 句子 · 第 5 组",
+      "titleEn": "B1 sentences · 5",
+      "itemIds": [
+        "xe-038",
+        "xe-039",
+        "xe-040",
+        "xd-016",
+        "xd-017"
+      ]
+    },
+    {
+      "id": "B1-S-06",
+      "level": "B1",
+      "kind": "sentence",
+      "index": 6,
+      "size": 5,
+      "partial": false,
+      "title": "B1 句子 · 第 6 组",
+      "titleEn": "B1 sentences · 6",
+      "itemIds": [
+        "xd-018",
+        "xd-019",
+        "xd-020",
+        "xd-021",
+        "xd-022"
+      ]
+    },
+    {
+      "id": "B1-S-07",
+      "level": "B1",
+      "kind": "sentence",
+      "index": 7,
+      "size": 5,
+      "partial": false,
+      "title": "B1 句子 · 第 7 组",
+      "titleEn": "B1 sentences · 7",
+      "itemIds": [
+        "xd-023",
+        "xx-015",
+        "xx-016",
+        "xx-017",
+        "xx-018"
+      ]
+    },
+    {
+      "id": "B1-S-08",
+      "level": "B1",
+      "kind": "sentence",
+      "index": 8,
+      "size": 1,
+      "partial": true,
+      "title": "B1 句子 · 第 8 组",
+      "titleEn": "B1 sentences · 8",
+      "itemIds": [
+        "xx-019"
       ]
     },
     {
@@ -238,6 +3827,7 @@
       "size": 5,
       "partial": false,
       "title": "社会与研究",
+      "titleEn": "Society & research",
       "itemIds": [
         "mahdollisuus",
         "tutkimus",
@@ -254,6 +3844,7 @@
       "size": 5,
       "partial": false,
       "title": "B2 论述句",
+      "titleEn": "B2 argumentative sentences",
       "itemIds": [
         "b2-s01",
         "b2-s02",
@@ -270,6 +3861,7 @@
       "size": 5,
       "partial": false,
       "title": "抽象概念",
+      "titleEn": "Abstract concepts",
       "itemIds": [
         "kasite",
         "ilmio",
@@ -286,6 +3878,7 @@
       "size": 5,
       "partial": false,
       "title": "C1 抽象句",
+      "titleEn": "C1 abstract sentences",
       "itemIds": [
         "c1-s01",
         "c1-s02",
@@ -302,6 +3895,7 @@
       "size": 5,
       "partial": false,
       "title": "精细表达",
+      "titleEn": "Nuanced expression",
       "itemIds": [
         "vivahteinen",
         "monitulkintainen",
@@ -318,6 +3912,7 @@
       "size": 5,
       "partial": false,
       "title": "C2 精微句",
+      "titleEn": "C2 subtle sentences",
       "itemIds": [
         "c2-s01",
         "c2-s02",

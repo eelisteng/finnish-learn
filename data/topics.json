@@ -1,0 +1,197 @@
+{
+  "format": "finnish-learn-topics",
+  "topics": {
+    "family": {
+      "zh": "家庭",
+      "en": "Family"
+    },
+    "personal-info": {
+      "zh": "个人信息",
+      "en": "Personal information"
+    },
+    "housing": {
+      "zh": "住房家具",
+      "en": "Housing & furniture"
+    },
+    "household": {
+      "zh": "家务生活",
+      "en": "Household life"
+    },
+    "food-drink": {
+      "zh": "食物饮料",
+      "en": "Food & drink"
+    },
+    "clothing": {
+      "zh": "衣物颜色",
+      "en": "Clothing & colours"
+    },
+    "shops-services": {
+      "zh": "购物服务",
+      "en": "Shopping & services"
+    },
+    "city-transport": {
+      "zh": "城市交通",
+      "en": "City & transport"
+    },
+    "travel": {
+      "zh": "旅行住宿",
+      "en": "Travel & accommodation"
+    },
+    "weather-nature": {
+      "zh": "天气自然",
+      "en": "Weather & nature"
+    },
+    "time": {
+      "zh": "时间日期",
+      "en": "Time & dates"
+    },
+    "numbers": {
+      "zh": "数字数量",
+      "en": "Numbers & quantity"
+    },
+    "health": {
+      "zh": "身体健康",
+      "en": "Body & health"
+    },
+    "healthy-living": {
+      "zh": "健康生活方式",
+      "en": "Healthy living"
+    },
+    "study": {
+      "zh": "学习教育",
+      "en": "Study & education"
+    },
+    "work": {
+      "zh": "工作职业",
+      "en": "Work & careers"
+    },
+    "economy": {
+      "zh": "经济金融",
+      "en": "Economy & finance"
+    },
+    "society-public": {
+      "zh": "社会公共生活",
+      "en": "Society & public life"
+    },
+    "media-tech": {
+      "zh": "媒体科技",
+      "en": "Media & technology"
+    },
+    "emotions": {
+      "zh": "情绪性格",
+      "en": "Emotions & personality"
+    },
+    "description": {
+      "zh": "描述比较",
+      "en": "Description & comparison"
+    },
+    "connectors": {
+      "zh": "抽象连接词",
+      "en": "Abstract connectors"
+    },
+    "common-verbs": {
+      "zh": "常用动词",
+      "en": "Common verbs"
+    },
+    "extended-verbs": {
+      "zh": "扩展动词",
+      "en": "Extended verbs"
+    },
+    "pronouns": {
+      "zh": "代词",
+      "en": "Pronouns"
+    },
+    "adverbs": {
+      "zh": "副词",
+      "en": "Adverbs"
+    },
+    "question-words": {
+      "zh": "疑问词",
+      "en": "Question words"
+    },
+    "conjunctions": {
+      "zh": "连接词",
+      "en": "Conjunctions"
+    },
+    "direction": {
+      "zh": "方向副词",
+      "en": "Direction words"
+    },
+    "place-words": {
+      "zh": "地点副词",
+      "en": "Place words"
+    },
+    "postpositions": {
+      "zh": "后置词",
+      "en": "Postpositions"
+    },
+    "demonstratives": {
+      "zh": "指示代词",
+      "en": "Demonstrative pronouns"
+    },
+    "relatives": {
+      "zh": "关系代词",
+      "en": "Relative pronouns"
+    },
+    "grammar-words": {
+      "zh": "语法词",
+      "en": "Grammar words"
+    },
+    "colloquial": {
+      "zh": "口语",
+      "en": "Colloquial speech"
+    },
+    "home": {
+      "zh": "家居",
+      "en": "Home"
+    },
+    "shops-and-services": {
+      "zh": "商店与服务",
+      "en": "Shops & services"
+    },
+    "travelling": {
+      "zh": "出行",
+      "en": "Travelling"
+    },
+    "objects": {
+      "zh": "物品",
+      "en": "Objects"
+    },
+    "food": {
+      "zh": "饮食",
+      "en": "Food"
+    },
+    "actions": {
+      "zh": "动作",
+      "en": "Actions"
+    },
+    "communication": {
+      "zh": "交流",
+      "en": "Communication"
+    },
+    "people": {
+      "zh": "人物",
+      "en": "People"
+    },
+    "language": {
+      "zh": "语言",
+      "en": "Language"
+    },
+    "cognition": {
+      "zh": "认知",
+      "en": "Cognition"
+    },
+    "society": {
+      "zh": "社会",
+      "en": "Society"
+    },
+    "abstract": {
+      "zh": "抽象概念",
+      "en": "Abstract concepts"
+    },
+    "general": {
+      "zh": "通用",
+      "en": "General"
+    }
+  }
+}

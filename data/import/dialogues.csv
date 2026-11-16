@@ -1,0 +1,43 @@
+﻿情景,芬兰语对话,中文翻译,建议等级
+自我介绍,"A: Hei! Mikä sinun nimesi on?
+B: Minun nimeni on Li. Entä sinun?
+A: Olen Anna. Hauska tutustua!
+B: Samoin!","A: 你好！你叫什么名字？
+B: 我叫李。你呢？
+A: 我是安娜。很高兴认识你！
+B: 我也是！",A1
+咖啡馆点单,"A: Mitä saisi olla?
+B: Haluaisin kahvin ja korvapuustin.
+A: Tuleeko muuta?
+B: Ei kiitos. Paljonko se maksaa?","A: 您想要什么？
+B: 我想要一杯咖啡和一个肉桂卷。
+A: 还需要别的吗？
+B: 不用了，谢谢。多少钱？",A1
+问路,"A: Anteeksi, missä rautatieasema on?
+B: Mene suoraan ja käänny oikealle.
+A: Onko se kaukana?
+B: Ei, noin viiden minuutin kävelymatkan päässä.","A: 打扰一下，火车站在哪里？
+B: 直走然后右转。
+A: 远吗？
+B: 不远，步行大约五分钟。",A1-A2
+预约医生,"A: Terveyskeskus, hyvää päivää.
+B: Haluaisin varata ajan lääkärille.
+A: Mikä teitä vaivaa?
+B: Minulla on ollut kuumetta kaksi päivää.","A: 健康中心，您好。
+B: 我想预约看医生。
+A: 您哪里不舒服？
+B: 我已经发烧两天了。",A2
+求职面试,"A: Miksi haette tätä työpaikkaa?
+B: Olen kiinnostunut tehtävästä, koska minulla on kokemusta asiakaspalvelusta.
+A: Mitkä ovat vahvuutenne?
+B: Olen vastuullinen, joustava ja opin nopeasti.","A: 您为什么申请这个职位？
+B: 我对这个职位感兴趣，因为我有客户服务经验。
+A: 您的优势是什么？
+B: 我有责任心、灵活，而且学习很快。",B1
+表达观点,"A: Mitä mieltä olet etätyöstä?
+B: Mielestäni siinä on sekä hyviä että huonoja puolia.
+A: Voitko antaa esimerkin?
+B: Se säästää työmatka-aikaa, mutta yhteistyö voi olla vaikeampaa.","A: 你怎么看远程办公？
+B: 我认为它既有优点也有缺点。
+A: 你能举个例子吗？
+B: 它节省通勤时间，但协作可能更困难。",B1

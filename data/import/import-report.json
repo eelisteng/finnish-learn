@@ -1,0 +1,206 @@
+{
+  "format": "finnish-learn-import-report",
+  "sourceWorkbook": "finnish_A1-B1_vocabulary_database.xlsx",
+  "sourceWorkbookSha256": "e0d57e35ca0e16744e0752ff097b87526e9adf5f2f4bf12e8e2a1142b99a59ba",
+  "snapshotsSha256": "7b576c43a11819bfbcbf9ae43bc5dbe7a61cc21c899829d6021725b821183c4c",
+  "sourceSheets": {
+    "A1-B1词汇总库": 960,
+    "固定表达": 44,
+    "句子库": 30,
+    "情景对话": 6
+  },
+  "counts": {
+    "reviewedBaselineWords": 50,
+    "importedWords": 930,
+    "finalWords": 980,
+    "reviewedBaselineSentences": 35,
+    "importedSentences": 116,
+    "finalSentences": 151,
+    "skipped": 32
+  },
+  "levels": {
+    "A1": 327,
+    "A2": 264,
+    "B1": 339,
+    "B2": 0,
+    "C1": 0,
+    "C2": 0
+  },
+  "partsOfSpeech": {
+    "noun": 629,
+    "verb": 167,
+    "adverb": 47,
+    "pronoun": 19,
+    "particle": 16,
+    "adjective": 52
+  },
+  "morphology": {
+    "kotusClassFound": 800,
+    "kotusClassMissing": 130,
+    "derivationQuality": {
+      "kotus-rule": 717,
+      "shape-rule": 87,
+      "hand-checked": 28,
+      "phrase": 1,
+      "indeclinable": 71,
+      "pending": 26
+    }
+  },
+  "english": {
+    "cache": 764,
+    "verbTable": 166,
+    "missing": 0
+  },
+  "sourceFixes": [
+    {
+      "from": "y yhdeksän",
+      "to": "yhdeksän",
+      "reason": "lemma typo corrected"
+    }
+  ],
+  "sentenceSources": {
+    "xs": 30,
+    "xe": 44,
+    "xd": 23,
+    "xx": 19
+  },
+  "caveats": [
+    "The workbook CEFR column is an in-house SUGGESTION (\"建议等级，非官方逐词CEFR定级\"), not an official CEFR word list.",
+    "Every imported word is reviewStatus=auto-derived: IPA, case tables, stems and verb principal parts are rule-derived and need a Finnish linguist to verify.",
+    "Genuinely indeclinable words (Kotus 99, adverbs, conjunctions) show \"—\"; words whose paradigm could not be derived are labelled \"paradigm pending\" / \"pluralia tantum (paradigm pending)\" and also show \"—\" until a linguist fills them in.",
+    "Imported sentences carry token chips only; interlinear senseId/caseForm annotation is a future step, so no CEFR gate is inferred from glosses.",
+    "All imported illustrations and audio stay pending; browser TTS is used until native recordings are reviewed.",
+    "Colloquial (Puhekieli) variants, collocations and grammar notes from the workbook are preserved in data/import/*.csv but not yet surfaced in the app.",
+    "This report is deterministic (content hashes, no wall-clock timestamp): regenerating from unchanged inputs must produce an empty git diff."
+  ],
+  "skipped": [
+    {
+      "lemma": "perhe",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "ystävä",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "ihminen",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "kaupunki",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "kieli",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "aika",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "vuosi",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "talo",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "ruoka",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "vesi",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "maito",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "kahvi",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "leipä",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "olla",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "tulla",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "haluta",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "tarvita",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "opiskella",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "muistaa",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "katu",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "auto",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "kirja",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "työ",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "kauppa",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "yhteiskunta",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "vaikutus",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "mahdollisuus",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "ilmiö",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "valita",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "perustella",
+      "reason": "already in reviewed baseline"
+    },
+    {
+      "lemma": "Haluaisin varata ajan lääkärille.",
+      "reason": "duplicate dialogue line text"
+    },
+    {
+      "lemma": "Paljonko tämä maksaa?",
+      "reason": "duplicate word example text"
+    }
+  ]
+}

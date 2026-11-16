@@ -1,0 +1,180 @@
+﻿# Hand-checked English infinitives for the workbook's verbs.
+# Chinese verb glosses are ambiguous (the same string is used for nouns and
+# verbs), so machine translation alone yields "to compliance" style errors.
+# Format: lemma<TAB>en
+lemma	en
+olla	to be
+tehdä	to do, to make
+mennä	to go
+tulla	to come
+lähteä	to leave, to set off
+saapua	to arrive
+käydä	to visit, to go
+antaa	to give
+ottaa	to take
+saada	to get, to receive
+haluta	to want
+tarvita	to need
+voida	to be able to, can
+osata	to know how to
+pitää	to like, to have to
+tykätä	to like
+rakastaa	to love
+nähdä	to see
+katsoa	to look at, to watch
+kuulla	to hear
+kuunnella	to listen
+lukea	to read
+kirjoittaa	to write
+opiskella	to study
+oppia	to learn
+työskennellä	to work
+soittaa	to call, to play (an instrument)
+pelata	to play (a game or sport)
+leikkiä	to play
+ostaa	to buy
+myydä	to sell
+maksaa	to pay, to cost
+etsiä	to look for
+löytää	to find
+käyttää	to use
+avata	to open
+sulkea	to close
+aloittaa	to start
+lopettaa	to stop, to finish
+odottaa	to wait
+auttaa	to help
+muistaa	to remember
+unohtaa	to forget
+ymmärtää	to understand
+tietää	to know
+tuntea	to know (a person), to feel
+ajatella	to think
+uskoa	to believe
+nauraa	to laugh
+itkeä	to cry
+hymyillä	to smile
+valmistua	to graduate
+harjoitella	to practise
+kerrata	to revise, to review
+opettaa	to teach
+selittää	to explain
+kääntää	to translate
+lausua	to pronounce
+hakea	to apply for, to fetch
+palkata	to hire
+irtisanoa	to dismiss, to terminate (a contract)
+ansaita	to earn
+järjestää	to arrange
+suunnitella	to plan
+osallistua	to take part in
+varata	to book, to reserve
+tilata	to order
+palauttaa	to return (something)
+vaihtaa	to change, to exchange
+säästää	to save
+sataa	to rain, to snow
+paistaa	to shine
+tuulla	to blow (of wind)
+jäätyä	to freeze
+sulaa	to melt
+nauttia	to enjoy
+pelätä	to be afraid
+toivoa	to hope
+huolestua	to become worried
+suuttua	to get angry
+korjata	to repair
+kuivata	to dry
+silittää	to iron
+tyhjentää	to empty
+täyttää	to fill, to fill in
+äänestää	to vote
+vaikuttaa	to influence, to affect
+kehittää	to develop
+edistää	to promote
+suojella	to protect
+noudattaa	to comply with, to follow
+rikkoa	to break, to violate
+sallia	to allow
+kieltää	to forbid
+vaatia	to demand, to require
+tarjota	to offer
+rahoittaa	to finance
+velkaantua	to get into debt
+kasvaa	to grow
+vähentyä	to decrease
+lisääntyä	to increase
+julkaista	to publish
+jakaa	to share, to divide
+ladata	to download, to upload
+tallentaa	to save (data)
+poistaa	to delete, to remove
+myöhästyä	to be late
+peruuttaa	to cancel
+yöpyä	to stay overnight
+majoittua	to stay, to lodge
+rekisteröityä	to register
+hengittää	to breathe
+venytellä	to stretch
+toipua	to recover
+ehkäistä	to prevent
+tutkia	to examine, to research
+verrata	to compare
+vertailla	to compare (several things)
+suositella	to recommend
+ehdottaa	to suggest
+päättää	to decide
+päätyä	to end up, to arrive at
+valita	to choose
+selvittää	to find out, to resolve
+tarkistaa	to check
+varmistaa	to confirm
+huomata	to notice
+havaita	to detect, to perceive
+tunnistaa	to recognise
+kuvailla	to describe
+kuvata	to describe, to depict
+mainita	to mention
+korostaa	to emphasise
+väittää	to claim
+perustella	to justify, to give reasons
+todistaa	to prove
+osoittautua	to turn out (to be)
+merkitä	to mean, to signify
+tarkoittaa	to mean
+sisältää	to contain
+kuulua	to belong to
+liittyä	to relate to, to join
+keskittyä	to concentrate
+keskeyttää	to interrupt
+jatkaa	to continue
+pyrkiä	to strive for
+saavuttaa	to achieve, to reach
+toteuttaa	to implement
+muodostaa	to form
+rakentaa	to build
+luoda	to create
+parantaa	to improve
+vähentää	to reduce
+lisätä	to add
+säilyttää	to preserve, to keep
+huolehtia	to take care of
+huomioida	to take into account
+suhtautua	to relate to, to regard
+käsitellä	to handle, to process
+edellyttää	to require
+mahdollistaa	to make possible
+estää	to prevent, to block
+välttää	to avoid
+kieltäytyä	to refuse
+suostua	to agree
+myöntää	to admit, to grant
+kiistää	to deny
+epäillä	to doubt, to suspect
+luottaa	to trust
+pettyä	to be disappointed
+yllättyä	to be surprised
+innostua	to get excited
+kiinnostua	to become interested
+riippua	to depend on
+maksaa takaisin	to pay back

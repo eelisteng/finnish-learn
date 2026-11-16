@@ -1,0 +1,10 @@
+Source workbook: finnish_A1-B1_vocabulary_database.xlsx
+Source SHA-256: e0d57e35ca0e16744e0752ff097b87526e9adf5f2f4bf12e8e2a1142b99a59ba
+Sheets: A1-B1词汇总库 (960), 固定表达 (44), 句子库 (30), 情景对话 (6), 语法目录 (29), 使用说明 (9)
+CEFR note: the workbook's 等级核验 column says 建议等级，非官方逐词CEFR定级.
+  Neither CEFR nor YKI publishes an official per-word word list; levels here are in-house suggestions.
+Third-party data: data/import/kotus-sanalista-2024.tsv and yle-frequency-2011-2024.tsv
+  are redistributed under CC BY 4.0. Required attribution is in data/import/KOTUS-NOTICE.txt
+  and data/sources.json. Do not remove that notice from a public deployment.
+Regenerate with: node scripts/export-sheets.mjs
+Then: node scripts/build-en-glosses.mjs && node scripts/import-a1-b1.mjs

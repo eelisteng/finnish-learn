@@ -207,10 +207,11 @@ export interface GroupIndex {
 
 export const GROUP_SIZE = 5
 
-/** Canonical word-group phase order (used for previews and tooling).
- *  At runtime the practice modes in the middle are shuffled per group, and
- *  the items inside each round are shuffled too; memorize stays first and
- *  complete stays last. Sentence groups skip word-only modes. */
+/** Fixed word-group phase order (easy -> hard), used at runtime and in
+ *  previews/tooling. The mode sequence is deliberately invariant: disabling a
+ *  mode in Settings only removes it, never reorders the survivors. Only the
+ *  five items inside a round may be shuffled. Memorize stays first, complete
+ *  stays last, and sentence groups skip word-only modes. */
 export const FLOW_PHASES = [
   'memorize', 'choice', 'listen', 'findImage', 'match', 'cloze', 'dictation', 'complete',
 ] as const

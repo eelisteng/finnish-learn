@@ -154,22 +154,41 @@ ok('preferences default to the full flow', st2.preferences.enabledModes.length =
 ok('find-image mode is named 找图 in Chinese', FI.MODE_META.findImage.short === '找图' && FI.MODE_META.findImage.label === '找图模式')
 ok('find-image mode has an English name', FI.modeShort('findImage', 'en') === 'Find pic' && FI.modeLabel('findImage', 'en') === 'Find the picture')
 
-console.log('Randomised mode & item order')
-const canonicalWord = FI.buildPipeline('word', FI.DEFAULT_MODES)
-const seededWord = FI.buildPipeline('word', FI.DEFAULT_MODES, 20261115)
-ok('seeded pipeline keeps memorize first and complete last',
-  seededWord[0] === 'memorize' && seededWord.at(-1) === 'complete')
-ok('seeded pipeline is a permutation of the canonical stages',
-  [...seededWord].sort().join(',') === [...canonicalWord].sort().join(','))
-ok('the same seed reproduces the same mode order',
-  FI.buildPipeline('word', FI.DEFAULT_MODES, 20261115).join(',') === seededWord.join(','))
-const seededOrders = new Set()
-for (let i = 1; i <= 40; i++) seededOrders.add(FI.buildPipeline('word', FI.DEFAULT_MODES, i * 7919).join(','))
-ok('different seeds produce many mode orders', seededOrders.size >= 6, `got ${seededOrders.size}`)
-ok('seeded sentence pipeline still skips word-only modes',
-  FI.buildPipeline('sentence', FI.DEFAULT_MODES, 42).slice(1, -1).sort().join(',') === 'choice,cloze,listen,match')
-ok('one enabled mode leaves nothing to shuffle',
+console.log('Fixed difficulty order & shuffled items')
+// The stage sequence is pedagogical (easy -> hard) and must never be shuffled.
+// A seed may only shuffle the five ITEMS inside a round.
+const FIXED_WORD = 'memorize,choice,listen,findImage,match,cloze,dictation,complete'
+const FIXED_SENTENCE = 'memorize,choice,listen,match,cloze,complete'
+ok('mode registry is the easy-to-hard difficulty order',
+  FI.PRACTICE_MODES.join(',') === 'choice,listen,findImage,match,cloze,dictation')
+ok('word pipeline is always the fixed sequence',
+  FI.buildPipeline('word', FI.DEFAULT_MODES).join(',') === FIXED_WORD)
+ok('sentence pipeline keeps the same relative order',
+  FI.buildPipeline('sentence', FI.DEFAULT_MODES).join(',') === FIXED_SENTENCE)
+const seededPipelines = new Set()
+for (let i = 1; i <= 40; i++) {
+  seededPipelines.add(FI.buildPipeline('word', FI.DEFAULT_MODES, i * 7919).join(','))
+  seededPipelines.add(FI.buildPipeline('sentence', FI.DEFAULT_MODES, i * 104729).join(','))
+}
+ok('a seed can NEVER reshuffle the modes', seededPipelines.size === 2 &&
+  seededPipelines.has(FIXED_WORD) && seededPipelines.has(FIXED_SENTENCE),
+  `got ${[...seededPipelines].join(' | ')}`)
+ok('the same seed reproduces the same order',
+  FI.buildPipeline('word', FI.DEFAULT_MODES, 20261115).join(',') ===
+  FI.buildPipeline('word', FI.DEFAULT_MODES, 20261115).join(','))
+ok('scrambled enabledModes is normalised to difficulty order',
+  FI.buildPipeline('word', ['dictation', 'choice', 'match', 'listen']).join(',') ===
+  'memorize,choice,listen,match,dictation,complete')
+ok('unchecking modes only removes them, never reorders',
+  FI.buildPipeline('word', FI.SLIM_MODES).join(',') ===
+  'memorize,choice,listen,match,dictation,complete')
+ok('one enabled mode keeps its place',
   FI.buildPipeline('word', ['dictation'], 7).join(',') === 'memorize,dictation,complete')
+ok('zh/en UI copy both state that the mode order is fixed',
+  FI.I18N.zh['home.hero.desc'].includes('固定顺序') &&
+  FI.I18N.zh['settings.flow.tip'].includes('不会随机打乱') &&
+  FI.I18N.en['home.hero.desc'].includes('never shuffled') &&
+  FI.I18N.en['settings.flow.tip'].includes('never shuffled'))
 const ids = wg.itemIds
 const firstOrder = FI.shuffleItems(ids, 123, ids)
 ok('shuffleItems returns a permutation of the five items',
@@ -187,6 +206,34 @@ const itemOrders = new Set()
 for (let i = 1; i <= 20; i++) itemOrders.add(FI.shuffleItems(ids, i * 104729, ids).join(','))
 ok('different seeds produce many item orders', itemOrders.size >= 4, `got ${itemOrders.size}`)
 ok('single-item retry is left alone', FI.shuffleItems(['talo'], 5, ids).join(',') === 'talo')
+
+console.log('Legacy shuffled session migration')
+const legacyState = FI.Store.load()
+// A session saved by the old build, paused on a result screen after a
+// dictation round that had been shuffled into first place.
+legacyState.session = {
+  groupId: 'A1-W-01', level: 'A1', kind: 'word',
+  itemIds: ids, scopeIds: ids, seed: 424242,
+  pipeline: ['memorize', 'dictation', 'match', 'choice', 'cloze', 'listen', 'findImage', 'complete'],
+  pipelineIndex: 1, phase: 'result',
+  round: { mode: 'dictation', scopeIds: ids, questions: [], pairs: null },
+  results: {}, attempt: 1, retryCount: 0, lastWrongIds: [], _spoken: null, _flipSpoken: null,
+}
+FI.Store.save(legacyState)
+const migrated = FI.Store.load()
+ok('a legacy shuffled pipeline is re-ordered into the fixed sequence',
+  migrated.session?.pipeline.join(',') === FIXED_WORD)
+ok('migration keeps the current round and remaps pipelineIndex',
+  migrated.session?.round?.mode === 'dictation' &&
+  migrated.session?.pipelineIndex === FIXED_WORD.split(',').indexOf('dictation'))
+ok('migration keeps the rest of the learner progress',
+  migrated.anonId === legacyState.anonId &&
+  migrated.eventLog.length === legacyState.eventLog.length)
+const reloaded = FI.Store.load()
+ok('re-loading an already migrated session is stable',
+  reloaded.session?.pipeline.join(',') === FIXED_WORD &&
+  reloaded.session?.pipelineIndex === FIXED_WORD.split(',').indexOf('dictation'))
+FI.Store.reset()
 
 console.log('Listen / find-picture rounds')
 const listenQs = FI.buildSelectQuestions(wg, pack, { seed: 11, optionCount: 4, hideLabel: true })

@@ -4,7 +4,7 @@
 <body>
 <div id="app"></div><div id="modal-root"></div><div id="toast" class="toast"></div>
 <pre id="smoke" style="padding:20px;font:13px monospace">RUNNING</pre>
-<script>localStorage.removeItem('finnish-learn:v1'); window.FI_FAST_TEST = true; window.FI_TEST_AUTOPLAY = true; window.FI_TEST_FIXED_ORDER = true</script>
+<script>localStorage.removeItem('finnish-learn:v1'); window.FI_FAST_TEST = true; window.FI_TEST_AUTOPLAY = true; window.FI_TEST_FIXED_ITEMS = true</script>
 <script>
   // Stub HTMLAudioElement so the clip-first playback path is asserted without
   // shipping or downloading a real recording in this regression page.
@@ -137,6 +137,11 @@
     // reviewed demo group as the first card instead of pinning a demo count.
     ok('home: A1 shows the reviewed first group', $$('.gcard').length >= 5 && $$('.gcard .gid')[0]?.textContent === 'A1-W-01')
     ok('home: hero shows the pipeline', $('.hero p')?.textContent.includes('听选') && $('.hero p')?.textContent.includes('听写'))
+    ok('home: hero shows the FIXED easy-to-hard arrow sequence', (() => {
+      const p = $('.hero p')?.textContent ?? ''
+      const chain = window.FI.DEFAULT_MODES.map((m) => window.FI.modeShort(m)).join(' → ')
+      return p.includes(chain) && p.includes('固定顺序') && !p.includes('随机排序')
+    })())
     ok('home: hero no longer mentions 拼写', !$('.hero p')?.textContent.includes('拼写'))
     ok('home: quick theme + music toggles', $('[data-act="theme-toggle"]') && $('[data-act="bgm-toggle"]'))
     ok('home: B1 has both word and sentence groups', (() => { $$('.leveltab').find((b) => b.dataset.level === 'B1').click(); const ids = $$('.gid').map((x) => x.textContent); return ids.some((x) => x === 'B1-S-01') && ids.some((x) => x?.startsWith('B1-W-')) })())
@@ -489,12 +494,13 @@
     click('[data-act="pause"]')
     click('[data-act="discard"]')
 
-    /* ── randomised mode & item order in real sessions ──────── */
-    // The fixed-order hook above keeps the six-mode walkthrough above
-    // deterministic; from here on the app behaves exactly as deployed.
-    delete window.FI_TEST_FIXED_ORDER
+    /* ── fixed mode order, shuffled items in real sessions ──── */
+    // The fixed-items hook above keeps the six-mode walkthrough deterministic.
+    // From here on the app behaves exactly as deployed: the five items are
+    // shuffled, but the easy-to-hard mode sequence must never change.
+    delete window.FI_TEST_FIXED_ITEMS
     const canonicalIds = window.FI_DATA.groups.groups.find((g) => g.id === 'A1-W-01').itemIds
-    const expectedStages = ['memorize', ...window.FI.DEFAULT_MODES, 'complete'].sort().join(',')
+    const FIXED_PIPELINE = ['memorize', ...window.FI.DEFAULT_MODES, 'complete'].join(',')
     const expectedItems = [...canonicalIds].sort().join(',')
     const modeOrders = new Set(), itemOrders = new Set()
     let shapeOk = true, cardOk = true
@@ -503,43 +509,45 @@
       const s = window.FI.Store.load().session
       modeOrders.add(s.pipeline.join(','))
       itemOrders.add(s.round.scopeIds.join(','))
-      if (s.pipeline[0] !== 'memorize' || s.pipeline.at(-1) !== 'complete' ||
-          [...s.pipeline].sort().join(',') !== expectedStages ||
+      // No permutation check: the exact SEQUENCE is the contract.
+      if (s.pipeline.join(',') !== FIXED_PIPELINE ||
           [...s.round.scopeIds].sort().join(',') !== expectedItems) shapeOk = false
       if ($('.lemma')?.textContent.trim() !== wordById(s.round.scopeIds[0]).lemma) cardOk = false
       click('[data-act="pause"]')
       click('[data-act="discard"]')
     }
-    ok('random: every pipeline is a valid permutation, memorize first', shapeOk)
-    ok('random: memorize shows the shuffled first item', cardOk)
-    ok('random: mode order changes between groups', modeOrders.size > 1, `got ${modeOrders.size}`)
-    ok('random: item order changes between groups', itemOrders.size > 1, `got ${itemOrders.size}`)
+    ok('flow: every group uses the same fixed difficulty pipeline', shapeOk)
+    ok('flow: memorize shows the shuffled first item', cardOk)
+    ok('flow: mode order NEVER changes between groups',
+      modeOrders.size === 1 && modeOrders.has(FIXED_PIPELINE),
+      `got ${[...modeOrders].join(' | ')}`)
+    ok('flow: item order still changes between groups', itemOrders.size > 1, `got ${itemOrders.size}`)
 
     click('[data-act="start-group"][data-id="A1-W-01"]')
     const s0 = window.FI.Store.load().session
     const pipeline0 = s0.pipeline.join(',')
     const order0 = s0.round.scopeIds.join(',')
+    ok('flow: the first practice stage is choice, not a random mode', s0.pipeline[1] === 'choice')
     click('[data-act="pause"]')
     click('[data-act="resume"]')
     const s1 = window.FI.Store.load().session
-    ok('random: pause/resume keeps the same mode + item order',
+    ok('flow: pause/resume keeps the same mode + item order',
       s1.pipeline.join(',') === pipeline0 && s1.round.scopeIds.join(',') === order0)
     for (let i = 0; i < 5; i++) { click('[data-act="mem-next"]'); if (i < 4) await wait(TICK / 2) }
     await wait(TICK)
-    ok('random: first practice mode follows the shuffled pipeline',
-      headIs(window.FI.modeShort(s0.pipeline[1])))
+    ok('flow: memorize is followed by 选词', headIs(window.FI.modeShort('choice')))
     click('[data-act="pause"]')
     click('[data-act="discard"]')
 
-    /* ── one whole group, in whatever order it was shuffled into ─ */
+    /* ── one whole group, always in the fixed order ──────────── */
     click('[data-act="start-group"][data-id="A1-W-01"]')
-    const shuffledModes = window.FI.Store.load().session.pipeline.slice(1, -1)
-    ok('random: shuffled pipeline contains each of the six modes once',
-      shuffledModes.length === 6 && new Set(shuffledModes).size === 6)
+    const fixedModes = window.FI.Store.load().session.pipeline.slice(1, -1)
+    ok('flow: the six practice modes appear in difficulty order',
+      fixedModes.join(',') === window.FI.DEFAULT_MODES.join(','))
     for (let i = 0; i < 5; i++) { click('[data-act="mem-next"]'); if (i < 4) await wait(TICK / 2) }
     await wait(TICK)
     const walked = []
-    for (const mode of shuffledModes) {
+    for (const mode of fixedModes) {
       if (!headIs(window.FI.modeShort(mode))) break
       walked.push(mode)
       if (mode === 'choice') {
@@ -558,10 +566,10 @@
       if (!headIs('本轮结果')) break
       click('[data-act="result-continue"]')
     }
-    ok('random: walked every mode in the shuffled order',
-      walked.length === 6 && walked.join(',') === shuffledModes.join(','),
-      `walked ${walked.join(',')} / expected ${shuffledModes.join(',')}`)
-    ok('random: the shuffled group still completes with six scores',
+    ok('flow: walked every mode in the fixed order',
+      walked.length === 6 && walked.join(',') === fixedModes.join(','),
+      `walked ${walked.join(',')} / expected ${fixedModes.join(',')}`)
+    ok('flow: the group still completes with six scores',
       headIs('本组完成') && $$('.complete-grid div').length >= 7)
     if ($('[data-act="complete-pause"]')) click('[data-act="complete-pause"]')
     else { click('[data-act="pause"]'); click('[data-act="discard"]') }

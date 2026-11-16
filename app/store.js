@@ -63,6 +63,25 @@
       state.session = null
       state.paused = false
     }
+    // Practice modes used to be shuffled per group. Re-order a paused session
+    // from that era into the fixed easy-to-hard sequence without losing the
+    // learner's current round. Rebuild from the session's OWN stages (not the
+    // current preferences, which may have changed since it was started), and
+    // remap pipelineIndex via round.mode — that also works on a result screen,
+    // where phase is "result" rather than the stage that produced it.
+    if (state.session && FI.buildPipeline) {
+      const s = state.session
+      const kind = s.kind === 'sentence' ? 'sentence' : 'word'
+      const canonical = FI.buildPipeline(kind, s.pipeline.slice(1, -1))
+      if (canonical.join(',') !== s.pipeline.join(',')) {
+        const currentMode = s.round?.mode ?? s.phase
+        const idx = canonical.indexOf(currentMode)
+        s.pipeline = canonical
+        s.pipelineIndex = Math.max(0, Math.min(
+          idx >= 0 ? idx : (s.pipelineIndex ?? 0), canonical.length - 1,
+        ))
+      }
+    }
     // A session paused in the old whole-word cloze has no letters/reveal
     // arrays. Drop it instead of crashing the underline-slot renderer.
     const letterPhase = ['cloze', 'dictation'].includes(state.session?.phase)

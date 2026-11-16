@@ -1,9 +1,11 @@
 /* Learning flow controller.
-   Configurable pipeline: memorise first, then the enabled practice modes in
-   a per-group random order, then complete. The five items inside every round
-   are shuffled too. Each session carries its seed, so a paused group resumes
-   with exactly the same mode and item order. Every practice round ends with
-   a result screen offering "continue" or "retry only the wrong items".
+   The stage order is FIXED and pedagogical: memorise first, then the enabled
+   practice modes in easy-to-hard registry order (choice, listen, findImage,
+   match, cloze, dictation), then complete. Mode order must never be shuffled.
+   Only the five items inside a round may be shuffled. Each session carries a
+   seed so a paused group resumes with exactly the same item order. Every
+   practice round ends with a result screen offering "continue" or "retry
+   only the wrong items".
 
    All interface strings come from app/i18n.js and follow preferences.uiLang
    (zh / en). Word and sentence meanings follow the separate meaningLang
@@ -29,9 +31,10 @@
   // Autoplay is normally suppressed in the headless suite; FI_TEST_AUTOPLAY
   // opts the regression page in so the memorise auto-read path is exercised.
   const AUTOPLAY = !FAST || Boolean(window.FI_TEST_AUTOPLAY)
-  // The browser regression drives a fixed, canonical order; real sessions
-  // are shuffled. Read dynamically so the harness can switch modes of order.
-  const fixedOrder = () => window.FI_TEST_FIXED_ORDER === true
+  // Mode order is always fixed. Only the item order is seeded. The browser
+  // regression freezes the items during its deterministic walkthrough and
+  // clears this hook afterwards to exercise real shuffled sessions.
+  const fixedItems = () => window.FI_TEST_FIXED_ITEMS === true
   const newSeed = () => (Math.random() * 0xffffffff) >>> 0
   const DELAY = {
     feedback: FAST ? 6 : 880,
@@ -248,7 +251,7 @@
     // in a row from presenting the same five words in the same sequence; for
     // the first round it is the canonical order from the content pack.
     const previousOrder = session.round?.scopeIds ?? session.itemIds
-    const order = fixedOrder()
+    const order = fixedItems()
       ? scope.slice()
       : FI.shuffleItems(scope, seed + 991, previousOrder)
     const r = {
@@ -296,16 +299,17 @@
     if (!g) { toast(t('toast.groupMissing')); return }
     stopTimers()
     ui.transition = false
-    // A fresh seed per group: mode order and item order change every time the
-    // group is started, but stay fixed while the group is in progress.
-    const seed = fixedOrder() ? 0 : newSeed()
+    // A fresh seed per group shuffles only the five items; the stage order
+    // stays fixed. The seed is persisted so pause/resume keeps the same item
+    // sequence, and is never used to reorder the practice modes.
+    const seed = fixedItems() ? 0 : newSeed()
     session = {
       groupId,
       level: g.level,
       kind: g.kind,
       itemIds: g.itemIds.slice(),
       seed,
-      pipeline: FI.buildPipeline(g.kind, state.preferences.enabledModes, fixedOrder() ? undefined : seed),
+      pipeline: FI.buildPipeline(g.kind, state.preferences.enabledModes),
       pipelineIndex: 0,
       phase: 'memorize',
       scopeIds: (opts.scopeIds ?? g.itemIds).slice(),
@@ -590,11 +594,11 @@
     const levelInfo = groupIndex.levels.find((l) => l.level === ui.level)
     const wordGroups = groupIndex.groups.filter((g) => g.level === ui.level && g.kind === 'word')
     const sentenceGroups = groupIndex.groups.filter((g) => g.level === ui.level && g.kind === 'sentence')
-    // A set, not an arrow: the practice modes are shuffled per group.
-    const pipelineSet = (kind) => FI.buildPipeline(kind, state.preferences.enabledModes)
-      .slice(1, -1).map(modeShort).join(' · ')
-    const wordPipeline = pipelineSet('word')
-    const sentencePipeline = pipelineSet('sentence')
+    // An arrow, not a set: the rounds run in a fixed easy-to-hard order.
+    const pipelineFlow = (kind) => FI.buildPipeline(kind, state.preferences.enabledModes)
+      .slice(1, -1).map(modeShort).join(' → ')
+    const wordPipeline = pipelineFlow('word')
+    const sentencePipeline = pipelineFlow('sentence')
 
     const resume = state.session ? (() => {
       const s = state.session

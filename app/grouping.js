@@ -8,7 +8,14 @@
 
   /* ── practice mode registry ──────────────────────────────────
      Word groups run all six rounds; sentence groups skip the word-only
-     rounds. "拼写" was removed: it duplicated the letter-slot cloze.  */
+     rounds. "拼写" was removed: it duplicated the letter-slot cloze.
+
+     IMPORTANT: this array IS the fixed, easy-to-hard teaching order. The
+     rounds build on each other — recognise a meaning, then recognise the
+     sound, then recall the word, then pair it, then spell part of it, then
+     write it from dictation. DO NOT shuffle or sort it differently. A seed
+     may still shuffle the five ITEMS inside a round (see shuffleItems), but
+     the mode sequence is deliberately invariant for every group.          */
   FI.PRACTICE_MODES = ['choice', 'listen', 'findImage', 'match', 'cloze', 'dictation']
   FI.DEFAULT_MODES = FI.PRACTICE_MODES.slice()
   FI.SLIM_MODES = ['choice', 'listen', 'match', 'dictation']
@@ -43,19 +50,22 @@
   }
   FI.sanitizeModes = function (list) {
     if (!Array.isArray(list)) return FI.DEFAULT_MODES.slice()
-    const picked = [...new Set(list)].filter((m) => FI.PRACTICE_MODES.includes(m))
-    return picked.length ? picked : ['choice']
+    const picked = new Set(list)
+    // Normalise to the registry order, not the caller's order. An imported
+    // progress file may list enabledModes in any order; difficulty order must
+    // never depend on how the checkboxes happened to be saved.
+    const ordered = FI.PRACTICE_MODES.filter((m) => picked.has(m))
+    return ordered.length ? ordered : ['choice']
   }
-  /** Build one group's stage list. Without a seed the registry order is
-      returned (home preview / domain harness). A seed shuffles the practice
-      modes so each group starts with a fresh sequence; memorise always
-      introduces the words first and the completion screen always closes. */
-  FI.buildPipeline = function (kind, enabled, seed) {
+  /** Build one group's stage list. The mode order is FIXED and pedagogical:
+      memorize -> choice -> listen -> findImage -> match -> cloze -> dictation
+      -> complete (easy to hard), with sentence groups skipping word-only
+      modes. `seed` is accepted only for backwards compatibility with old
+      saved sessions and is deliberately ignored: it must never reshuffle
+      the stages. Only the five items inside a round are shuffled.        */
+  FI.buildPipeline = function (kind, enabled, _seed) {
     const modes = FI.sanitizeModes(enabled).filter((m) => FI.modeApplies(m, kind))
-    const middle = typeof seed === 'number' && Number.isFinite(seed)
-      ? FI.shuffle(modes, seed >>> 0)
-      : modes
-    return ['memorize', ...middle, 'complete']
+    return ['memorize', ...modes, 'complete']
   }
 
   /* ── background music presets ────────────────────────────────

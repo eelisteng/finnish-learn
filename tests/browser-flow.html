@@ -334,6 +334,14 @@
       const s = getComputedStyle($('.optcard-label'))
       return s.wordBreak === 'normal' && /anywhere|break-word/.test(s.overflowWrap)
     })())
+    // One 3:2 ratio at every viewport: 197 x 132 on desktop, 126 x 84 at
+    // 320px. A fixed px height used to make the phone cards portrait.
+    ok('find-image: all four cards share one 3:2 aspect ratio', (() => {
+      const faces = $$('.flip-face')
+      return faces.length === 4 &&
+        faces.every((f) => Math.abs(f.offsetWidth / f.offsetHeight - 1.5) < 0.03) &&
+        getComputedStyle(faces[0]).aspectRatio === '3 / 2'
+    })(), JSON.stringify($$('.flip-face').map((f) => [f.offsetWidth, f.offsetHeight])))
     ok('find-image: prompt shows ONE meaning and no picture', $$('.quiz-prompt .quiz-pic').length === 0 &&
       $$('.quiz-prompt .zh').length === 1 && $('.quiz-prompt .zh')?.textContent.length > 0 &&
       $('.quiz-prompt .en')?.textContent.length > 0)
@@ -366,6 +374,12 @@
       return pic && (pic.tagName === 'IMG' ? String(pic.getAttribute('src')).includes(chosenWord) : pic.querySelector('svg') !== null)
     })())
     ok('find-image: the other three cards stay word-only', $$('.optcard:not(.flipped) .optcard-pic').length === 0)
+    // offsetWidth/offsetHeight are the LAYOUT box: getBoundingClientRect()
+    // during the 0.42s rotateY reveal returns the transformed (squashed) box
+    // and would falsely report a ratio change.
+    ok('find-image: the flip does not change any card ratio', $$('.flip-face').every((f) =>
+      Math.abs(f.offsetWidth / f.offsetHeight - 1.5) < 0.03),
+    JSON.stringify($$('.flip-face').map((f) => +(f.offsetWidth / f.offsetHeight).toFixed(3))))
     ok('find-image: correct pick auto-plays exactly once',
       window.__audioCalls.length + window.__ttsCalls.length === playsBefore + 1)
     ok('find-image: autoplay uses the chosen word (clip or TTS text)', (() => {

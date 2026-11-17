@@ -86,12 +86,54 @@ window.Audio = class {
   const grid = $('.optcards.find-image')
   const cards = $$('.optcard')
   const tracks = (css(grid, 'gridTemplateColumns') || '').trim().split(/\s+/).filter(Boolean)
-  ok('mobile: viewport is a phone width', window.innerWidth <= 640, `innerWidth=${window.innerWidth}`)
-  ok('mobile: find-image uses exactly 2 columns', tracks.length === 2, `tracks=${tracks.join(' | ')}`)
-  ok('mobile: four word options rendered', cards.length === 4, `got ${cards.length}`)
-  ok('mobile: cards do not overflow the viewport', cards.every((c) => {
+  const IS_PHONE = window.innerWidth <= 640
+  // Desktop reference measured on a 1280px viewport: 197 x 132 = 3:2.
+  // The runner compares every phone case against the desktop case below.
+  const DESKTOP_RATIO = 3 / 2
+  const ratio = (r) => r.w / r.h
+  const close = (a, b, tol = 0.02) => Math.abs(a - b) <= tol
+  ok('viewport: phone width or 4-column desktop-class width', IS_PHONE || window.innerWidth >= 641,
+    `innerWidth=${window.innerWidth}`)
+  ok('find-image grid columns match the viewport class', tracks.length === (IS_PHONE ? 2 : 4),
+    `tracks=${tracks.join(' | ')}`)
+  ok('four word options rendered', cards.length === 4, `got ${cards.length}`)
+  ok('cards do not overflow the viewport', cards.every((c) => {
     const r = rect(c); return r.x >= 0 && r.x + r.w <= window.innerWidth + 1
   }), JSON.stringify(cards.map(rect)))
+
+  /* The 3:2 ratio must be identical on every card, on both faces, and on
+     desktop AND phone. A fixed px height used to make 320px cards portrait
+     (126 x 136), and a height:100% chain inside <button> resolves to auto in
+     mobile WebKit so the flipped picture face could change height. */
+  const faceRects = cards.map((c) => rect(c.querySelector('.flip-face')))
+  const cardRects = cards.map(rect)
+  const faceRatios = faceRects.map(ratio)
+  window.__geometry = {
+    width: window.innerWidth, phone: IS_PHONE, cols: tracks.length,
+    faceRatios, cardRects: cardRects.map((r) => [r.w, r.h]),
+    faceRects: faceRects.map((r) => [r.w, r.h]),
+  }
+  ok('ratio: every face is 3:2 like desktop',
+    faceRatios.every((r) => close(r, DESKTOP_RATIO)), `ratios=${faceRatios.map((r) => r.toFixed(3)).join(', ')}`)
+  ok('ratio: all four cards have identical width and height',
+    cardRects.every((r) => close(r.w, cardRects[0].w, 1) && close(r.h, cardRects[0].h, 1)),
+    JSON.stringify(cardRects))
+  ok('ratio: the button box is exactly the face box (no extra height)',
+    cards.every((c, i) => close(rect(c).h, faceRects[i].h, 1)))
+  ok('ratio: the face height comes from aspect-ratio, not a fixed px height',
+    css(cards[0].querySelector('.flip-face'), 'aspectRatio') === '3 / 2',
+    `aspectRatio=${css(cards[0].querySelector('.flip-face'), 'aspectRatio')}`)
+  ok('ratio: no percentage-height chain inside the button',
+    css(cards[0].querySelector('.flip-inner'), 'height') !== 'auto' &&
+      parseFloat(css(cards[0].querySelector('.flip-inner'), 'height')) > 20,
+    `innerHeight=${css(cards[0].querySelector('.flip-inner'), 'height')}`)
+  ok('ratio: long labels still fit inside the face without clipping', cards.every((c) => {
+    const f = c.querySelector('.flip-face'), l = c.querySelector('.optcard-label')
+    const fr = rect(f), lr = rect(l), s = getComputedStyle(f)
+    const insetTop = fr.y + parseFloat(s.paddingTop) + parseFloat(s.borderTopWidth)
+    const insetBottom = fr.y + fr.h - parseFloat(s.paddingBottom) - parseFloat(s.borderBottomWidth)
+    return lr.y >= insetTop - 1 && lr.y + lr.h <= insetBottom + 1
+  }), JSON.stringify(cards.map((c) => rect(c.querySelector('.optcard-label')))))
 
   let definite = true, wrapOk = true, linesOk = true, flowOk = true, pointersOk = true
   const lineStats = []
@@ -109,12 +151,12 @@ window.Audio = class {
     if (lines > 3.2) linesOk = false
     if (css(inner, 'pointerEvents') !== 'none' || css(face, 'pointerEvents') !== 'none') pointersOk = false
   })
-  ok('mobile: each face has a definite full-width box (no abspos shrink)', definite)
-  ok('mobile: faces are in normal flow with no 3D backface dependency', flowOk)
-  ok('mobile: labels use standard wrapping, not legacy break-word', wrapOk)
-  ok('mobile: no label stacks one glyph per line', linesOk, `lines=${lineStats.join(', ')}`)
-  ok('mobile: overlay children never swallow the button tap', pointersOk)
-  ok('mobile: no picture before answering', $$('.optcard .optcard-pic').length === 0 && $$('.flip-back').length === 0)
+  ok('card: each face has a definite full-width box (no abspos shrink)', definite)
+  ok('card: faces are in normal flow with no 3D backface dependency', flowOk)
+  ok('card: labels use standard wrapping, not legacy break-word', wrapOk)
+  ok('card: no label stacks one glyph per line', linesOk, `lines=${lineStats.join(', ')}`)
+  ok('card: overlay children never swallow the button tap', pointersOk)
+  ok('card: no picture before answering', $$('.optcard .optcard-pic').length === 0 && $$('.flip-back').length === 0)
 
   const q0 = FI.Store.load().session.round.questions[0]
   const correctIdx = q0.options.findIndex((o) => o.id === q0.itemId)
@@ -146,6 +188,30 @@ window.Audio = class {
     ok('tap: the other three cards stay word-only', $$('.optcard:not(.flipped) .optcard-pic').length === 0)
     ok('tap: flipped card keeps the chosen word visible',
       $('.optcard.flipped .flip-word')?.textContent === q0.options[correctIdx].label)
+    // The reveal swaps ONE face in normal flow. Its box must be byte-for-byte
+    // the same 3:2 box, otherwise the card visibly changes shape on flip.
+    const afterCards = $$('.optcard')
+    // offsetWidth/offsetHeight are the layout box, unaffected by the rotateY
+    // reveal animation (getBoundingClientRect would report a squashed box).
+    const afterFaces = afterCards.map((c) => {
+      const f = c.querySelector('.flip-face')
+      return { w: f.offsetWidth, h: f.offsetHeight }
+    })
+    const beforeFaces = window.__geometry.faceRects.map(([w, h]) => ({ w, h }))
+    ok('tap: flipped face keeps the exact same 3:2 ratio',
+      afterFaces.every((r) => close(ratio(r), DESKTOP_RATIO)),
+      `ratios=${afterFaces.map((r) => ratio(r).toFixed(3)).join(', ')}`)
+    ok('tap: the picture face has the same box as the three word faces',
+      afterFaces.every((r) => close(r.w, afterFaces[0].w, 1) && close(r.h, afterFaces[0].h, 1)),
+      JSON.stringify(afterFaces))
+    ok('tap: no card changed size during the flip',
+      afterFaces.every((r, i) => close(r.w, beforeFaces[i].w, 1) && close(r.h, beforeFaces[i].h, 1)),
+      JSON.stringify({ before: beforeFaces, after: afterFaces }))
+    ok('tap: illustration stays inside the 3:2 face', Boolean(back && pic && (() => {
+      const br = rect(back)
+      return pr.x >= br.x - 1 && pr.y >= br.y - 1 &&
+        pr.x + pr.w <= br.x + br.w + 1 && pr.y + pr.h <= br.y + br.h + 1
+    })()), JSON.stringify({ back: rect(back), pic: pr }))
     window.__finish()
     return out.join('\n')
   }

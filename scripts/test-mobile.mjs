@@ -1,9 +1,11 @@
-/* Mobile regression for the find-image (找图) cards.
+/* Mobile + aspect-ratio regression for the find-image (找图) cards.
  *
  * Plain --window-size in headless Chrome has a 500px floor, so it cannot
  * reproduce a 320-390px phone. This runner uses the DevTools Protocol to
  * override device metrics and dispatch REAL touch events, then reads the
- * assertions from tests/mobile-find-image.html.
+ * assertions from tests/mobile-find-image.html. A 1280px desktop case is
+ * measured first, and every phone card ratio (before and after the flip)
+ * must match that desktop 3:2 reference.
  *
  *   node scripts/test-mobile.mjs
  *   CHROME=/path/to/chrome node scripts/test-mobile.mjs
@@ -94,16 +96,24 @@ await send('Runtime.enable')
 await send('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 5 })
 
 const CASES = [
+  // Desktop is the reference geometry: 197 x 132 cards = 3:2. The phone
+  // cases below must measure the same ratio, not just a plausible one.
+  { width: 1280, height: 900, long: false, desktop: true },
+  // Just above the 640px breakpoint: still 4 columns, but the cards are only
+  // 132px wide, so long lemmas must still fit inside the 3:2 face.
+  { width: 641, height: 900, long: true, desktop: true, name: ' (4-column breakpoint)' },
   { width: 390, height: 844, long: false },
+  { width: 390, height: 844, long: true },
   { width: 360, height: 740, long: true },
   { width: 320, height: 700, long: true },
 ]
 
 let totalPass = 0, totalFail = 0, harnessFail = 0
+const geometry = []
 for (const c of CASES) {
   await send('Emulation.setDeviceMetricsOverride', {
-    width: c.width, height: c.height, deviceScaleFactor: 3, mobile: true,
-    screenWidth: c.width, screenHeight: c.height,
+    width: c.width, height: c.height, deviceScaleFactor: c.desktop ? 1 : 3,
+    mobile: !c.desktop, screenWidth: c.width, screenHeight: c.height,
   })
   await evaluate('localStorage.clear(); sessionStorage.clear(); "cleared"')
   await send('Page.navigate', { url: `${PAGE}${c.long ? '?long=1' : ''}` })
@@ -119,6 +129,7 @@ for (const c of CASES) {
   }
   if (!ready) { console.log(`FAIL ${c.width}px: harness never reached the tap stage`); harnessFail++; continue }
 
+  geometry.push(await evaluate('window.__geometry'))
   const target = await evaluate('window.__prepareTap()')
   await sleep(120)
   await send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: target.x, y: target.y, id: 1 }] })
@@ -129,10 +140,28 @@ for (const c of CASES) {
   const pass = (text.match(/^PASS /gm) || []).length
   const fail = (text.match(/^FAIL /gm) || []).length
   totalPass += pass; totalFail += fail
-  console.log(`\n── ${c.width} x ${c.height}px${c.long ? ' (long Finnish lemmas)' : ''} : ${pass} passed, ${fail} failed ──`)
-  console.log(text.split('\n').filter((l) => l.startsWith('FAIL') || l.startsWith('PASS mobile: no label')).join('\n') || '(all assertions passed)')
+  const label = c.name ?? (c.desktop ? ' (desktop reference)' : c.long ? ' (long Finnish lemmas)' : '')
+  console.log(`\n── ${c.width} x ${c.height}px${label} : ${pass} passed, ${fail} failed ──`)
+  console.log(text.split('\n').filter((l) => l.startsWith('FAIL') ||
+    l.startsWith('PASS ratio: every face') || l.startsWith('PASS card: no label')).join('\n') || '(all assertions passed)')
+}
+
+/* Cross-viewport parity: the phone cards must be the desktop card scaled
+   down, not a taller/portrait variant. Compare each phone face ratio with
+   the desktop face ratio measured in the very same browser session. */
+const desktop = geometry.find((g) => g && g.width === 1280 && !g.phone)
+if (desktop) {
+  for (const g of geometry.filter((x) => x && x.phone)) {
+    const ref = desktop.faceRatios[0]
+    const same = g.faceRatios.length === 4 && g.faceRatios.every((r) => Math.abs(r - ref) <= 0.02)
+    if (same) totalPass++; else totalFail++
+    console.log(`${same ? 'PASS' : 'FAIL'} parity: ${g.width}px phone ratio ${g.faceRatios.map((r) => r.toFixed(3)).join(', ')} matches desktop ${ref.toFixed(3)}`)
+  }
+} else {
+  totalFail++
+  console.log('FAIL parity: desktop reference geometry was never captured')
 }
 
 ws.close()
-console.log(`\nMobile regression: ${totalPass} passed, ${totalFail + harnessFail} failed`)
+console.log(`\nMobile + ratio regression: ${totalPass} passed, ${totalFail + harnessFail} failed`)
 cleanup(totalFail + harnessFail ? 1 : 0)

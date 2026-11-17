@@ -219,10 +219,16 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
    taps on the overlay children get swallowed, and an abspos flex container
    with an indefinite width can shrink its label to one glyph per line.
    So only ONE face is in the DOM, in normal flow with a definite width, and
-   the reveal is a 2D-safe animation. No 3D/backface dependency anywhere. */
+   the reveal is a 2D-safe animation. No 3D/backface dependency anywhere.
+   That one face also owns the 3:2 ratio, so desktop and phone cards match and
+   the flip cannot change the card's shape. */
 .optcards.find-image,.optcards.with-meaning{grid-template-columns:repeat(4,minmax(0,1fr))}
+.optcards.find-image{align-items:start}
 .find-prompt{min-height:118px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.optcards.find-image .optcard{min-width:0;width:100%;min-height:0;height:132px;padding:0;border:0;background:transparent;box-shadow:none;display:block;overflow:visible;touch-action:manipulation;-webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent}
+/* The card height comes from the face below, never from a fixed px value:
+   one 3:2 ratio on every width keeps the phone cards landscape like desktop
+   (197 x 132) instead of turning 126 x 136 portrait on a 320px screen. */
+.optcards.find-image .optcard{min-width:0;width:100%;min-height:0;height:auto;padding:0;border:0;background:transparent;box-shadow:none;display:block;overflow:visible;touch-action:manipulation;-webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent}
 .optcards.find-image .optcard:hover:not(:disabled){border:0;background:transparent;transform:none}
 .optcards.find-image .optcard:hover:not(:disabled) .flip-front{border-color:var(--blue);background:var(--blue-soft)}
 .optcards.find-image .optcard.correct,.optcards.find-image .optcard.reveal,
@@ -233,8 +239,16 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 /* A definite width + standard wrapping keeps long Finnish compounds from
    stacking one character per line on narrow phone columns. */
 .optcards.find-image .optcard-label{max-width:100%;min-width:0;font-size:clamp(14px,2.4vw,17px);line-height:1.3;word-break:normal;overflow-wrap:anywhere;-webkit-hyphens:auto;hyphens:auto}
-.flip-inner{position:relative;display:block;width:100%;height:100%;min-width:0;pointer-events:none}
-.flip-face{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:100%;height:100%;min-width:0;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden;pointer-events:none}
+/* Only the face has a definite height, derived from its own definite width.
+   A height:100% chain through .flip-inner into a <button> resolves to auto in
+   mobile WebKit, which made each face size to its own content (four different
+   heights) and made the picture face a different height from the word face.
+   Front and back share this ONE rule, so the flip cannot change the ratio. */
+.flip-inner{position:relative;display:block;width:100%;height:auto;min-width:0;pointer-events:none}
+.flip-face{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:100%;height:132px;min-width:0;min-height:0;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden;pointer-events:none}
+/* Progressive enhancement: Safari 15+/Chrome 88+ get one 3:2 ratio at all
+   widths. Older engines keep the uniform 132px fallback above. */
+@supports (aspect-ratio:3 / 2){.optcards.find-image .flip-face{height:auto;aspect-ratio:3 / 2}}
 .flip-front .num{position:absolute;top:5px;left:7px;font-size:10px;color:var(--muted)}
 .flip-back .optcard-pic{width:100%;height:0;flex:1 1 0;min-height:0;border:0;border-radius:8px;background:var(--pic-bg);object-fit:contain;overflow:hidden}
 .flip-back .optcard-pic svg{width:100%;height:100%;display:block}
@@ -330,8 +344,11 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
   .quiz-prompt .zh{font-size:20px}
   .opts{grid-template-columns:repeat(2,1fr)}
   .optcards,.optcards.find-image,.optcards.with-meaning{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .optcards.find-image .optcard{height:136px}
+  /* Same 3:2 ratio as desktop; only the internal spacing gets tighter so a
+     scaled-down card still fits a long Finnish compound and its picture. */
+  .optcards.find-image .flip-face{padding:8px 9px;gap:4px}
   .optcards.find-image .optcard-label{font-size:15px;line-height:1.3}
+  .optcards.find-image .flip-word{font-size:10px;line-height:1.15}
   .optcard-pic{width:72px;height:72px}
   .match-row{grid-template-columns:repeat(2,1fr)}
   .slot{width:25px;height:36px;font-size:19px}

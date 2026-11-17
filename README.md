@@ -99,11 +99,14 @@ node scripts/validate-content.mjs --self-test  # 内容结构与分级校验
 node scripts/csv-pack.mjs --self-test          # CSV 往返与反例
 node scripts/import-a1-b1.mjs --dry-run        # 只出报告、不写文件
 node scripts/test-flow.mjs                     # 领域流程与练习行为测试
+node scripts/test-mobile.mjs                   # 找图模式手机适配（需 Node 22+ / 本地 Chrome）
 ```
 
 可复现性自检：依次重跑 `export-sheets.mjs → build-en-glosses.mjs → import-a1-b1.mjs → build-content.mjs → build-groups.mjs`，`git diff` 应为空（生成文件不含时间戳）。若出现差异，说明输入快照或推导规则被改过，需要复核。
 
 浏览器端到端回归：用 headless Chrome 打开 `tests/browser-flow.html`，页面内会输出逐项断言结果。
+
+`test-mobile.mjs` 通过 DevTools 协议把视口真正模拟成 390 / 360 / 320px 并派发**真实 touch 事件**（headless Chrome 的 `--window-size` 最小 500px，模拟不了手机），断言找图模式为 2 列栅格、长芬兰语单词不逐字竖排、点击后图片可见。缺少 Node 22 的 `WebSocket` 或本地 Chrome 时会 `SKIP` 并返回 0，不影响其它环境。
 
 ## 项目结构
 
@@ -125,8 +128,10 @@ scripts/export-sheets.mjs     工作簿 → 六份 CSV 快照
 scripts/build-en-glosses.mjs  中文 → 英文翻译缓存
 scripts/fi-morphology.mjs     芬兰语形态 / IPA 规则推导
 scripts/import-a1-b1.mjs      A1–B1 合并导入（幂等）
+scripts/test-mobile.mjs       找图模式手机适配回归（CDP 视口 + touch）
 scripts/                      其余构建、校验、CSV 桥接、领域测试
-tests/                        浏览器回归
+tests/browser-flow.html       全模式浏览器回归
+tests/mobile-find-image.html  手机视口 / 长单词 / 真实 touch 断言页
 ```
 
 ## 已知限制

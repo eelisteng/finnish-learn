@@ -213,10 +213,16 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .optcard.wrong{background:var(--no-bg);border-color:var(--no-line);color:var(--no-text)}
 .optcard:disabled{cursor:default}
 /* 找图模式：题干只有一条释义、没有配图；选项是纯文字单词，
-   答对的卡片原地翻面，背面才显示该词的配图。 */
-.optcards.find-image,.optcards.with-meaning{grid-template-columns:repeat(4,1fr)}
+   答对的卡片原地翻面，背面才显示该词的配图。
+   Mobile WebKit (iOS Safari / in-app WebViews) mishandles TWO absolutely
+   positioned faces with backface-visibility + preserve-3d inside a <button>:
+   taps on the overlay children get swallowed, and an abspos flex container
+   with an indefinite width can shrink its label to one glyph per line.
+   So only ONE face is in the DOM, in normal flow with a definite width, and
+   the reveal is a 2D-safe animation. No 3D/backface dependency anywhere. */
+.optcards.find-image,.optcards.with-meaning{grid-template-columns:repeat(4,minmax(0,1fr))}
 .find-prompt{min-height:118px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.optcards.find-image .optcard{min-height:0;height:132px;padding:0;border:0;background:transparent;box-shadow:none;display:block;overflow:visible;perspective:820px}
+.optcards.find-image .optcard{min-width:0;width:100%;min-height:0;height:132px;padding:0;border:0;background:transparent;box-shadow:none;display:block;overflow:visible;touch-action:manipulation;-webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent}
 .optcards.find-image .optcard:hover:not(:disabled){border:0;background:transparent;transform:none}
 .optcards.find-image .optcard:hover:not(:disabled) .flip-front{border-color:var(--blue);background:var(--blue-soft)}
 .optcards.find-image .optcard.correct,.optcards.find-image .optcard.reveal,
@@ -224,17 +230,22 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .optcards.find-image .optcard.correct .flip-face,
 .optcards.find-image .optcard.reveal .flip-face{background:var(--ok-bg);border-color:var(--ok-line);color:var(--ok-text)}
 .optcards.find-image .optcard.wrong .flip-face{background:var(--no-bg);border-color:var(--no-line);color:var(--no-text)}
-.optcards.find-image .optcard-label{font-size:17px}
-.flip-inner{position:relative;display:block;width:100%;height:100%;transform-style:preserve-3d}
-.flip-face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:10px 8px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
+/* A definite width + standard wrapping keeps long Finnish compounds from
+   stacking one character per line on narrow phone columns. */
+.optcards.find-image .optcard-label{max-width:100%;min-width:0;font-size:clamp(14px,2.4vw,17px);line-height:1.3;word-break:normal;overflow-wrap:anywhere;-webkit-hyphens:auto;hyphens:auto}
+.flip-inner{position:relative;display:block;width:100%;height:100%;min-width:0;pointer-events:none}
+.flip-face{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:100%;height:100%;min-width:0;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden;pointer-events:none}
 .flip-front .num{position:absolute;top:5px;left:7px;font-size:10px;color:var(--muted)}
-.flip-back{transform:rotateY(180deg)}
-.flip-back .optcard-pic{width:100%;height:auto;flex:1;min-height:0;border:0;border-radius:8px;background:var(--pic-bg);object-fit:contain;overflow:hidden}
+.flip-back .optcard-pic{width:100%;height:0;flex:1 1 0;min-height:0;border:0;border-radius:8px;background:var(--pic-bg);object-fit:contain;overflow:hidden}
 .flip-back .optcard-pic svg{width:100%;height:100%;display:block}
-.flip-word{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;font-weight:600;line-height:1.1;word-break:break-word}
-.optcards.find-image .optcard.flipped .flip-inner{transform:rotateY(180deg);animation:fi-flip .58s cubic-bezier(.2,.75,.3,1) both}
-@keyframes fi-flip{from{transform:rotateY(0deg)}to{transform:rotateY(180deg)}}
-@media (prefers-reduced-motion:reduce){.optcards.find-image .optcard.flipped .flip-inner{animation:none}}
+.flip-word{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;font-weight:600;line-height:1.2;max-width:100%;overflow-wrap:anywhere;text-align:center}
+.opts .opt,.optcards .optcard,.mtile{touch-action:manipulation}
+.optcards.find-image .optcard.flipped .flip-inner{animation:fi-flip .42s cubic-bezier(.2,.75,.3,1) both}
+/* Opacity is animated independently of the 3D transform: even if a browser
+   drops rotateY entirely, the illustration still becomes visible. */
+@keyframes fi-flip{from{opacity:.25;transform:perspective(600px) rotateY(-80deg)}to{opacity:1;transform:perspective(600px) rotateY(0deg)}}
+@keyframes fi-reveal{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.optcards.find-image .optcard.flipped .flip-inner{animation:fi-reveal .18s ease-out both}}
 .quiz-prompt .quiz-pic{width:118px;height:118px;margin-bottom:10px}
 /* 听选模式：每个选项是「图片 + 释义」，绝不显示芬兰语单词 */
 .optcard-meaning{display:flex;flex-direction:column;gap:1px;width:100%;min-width:0;text-align:center}
@@ -318,7 +329,9 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
   .lemma{font-size:28px}
   .quiz-prompt .zh{font-size:20px}
   .opts{grid-template-columns:repeat(2,1fr)}
-  .optcards,.optcards.find-image,.optcards.with-meaning{grid-template-columns:repeat(2,1fr)}
+  .optcards,.optcards.find-image,.optcards.with-meaning{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .optcards.find-image .optcard{height:136px}
+  .optcards.find-image .optcard-label{font-size:15px;line-height:1.3}
   .optcard-pic{width:72px;height:72px}
   .match-row{grid-template-columns:repeat(2,1fr)}
   .slot{width:25px;height:36px;font-size:19px}

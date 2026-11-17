@@ -38,6 +38,9 @@
   const newSeed = () => (Math.random() * 0xffffffff) >>> 0
   const DELAY = {
     feedback: FAST ? 6 : 880,
+    // The find-image reward has to stay on screen long enough for the flip,
+    // the illustration and the pronunciation to register on a phone.
+    flipReward: FAST ? 6 : 1500,
     transition: FAST ? 6 : 1000,
     matchWrong: FAST ? 6 : 640,
     matchClear: FAST ? 6 : 1050,
@@ -473,7 +476,7 @@
     }
     persist()
     render()
-    later(nextQuestion, DELAY.feedback)
+    later(nextQuestion, correct && session.phase === 'findImage' ? DELAY.flipReward : DELAY.feedback)
   }
 
   function assemble(q, r) {
@@ -846,15 +849,21 @@
       // Find-image: the prompt holds ONE meaning and no picture; the four
       // options are plain words. Only a correctly picked card turns over to
       // reveal the target illustration, so pictures never give the answer away.
+      //
+      // Only ONE face exists in the DOM. The old two-sided card kept both
+      // faces absolutely positioned and relied on backface-visibility +
+      // preserve-3d; mobile WebKit (iOS Safari, in-app WebViews) swallows
+      // taps on those overlay children and can shrink an abspos flex face
+      // to one glyph per line. A single normal-flow face has a definite
+      // width, always shows the picture, and never intercepts the button's
+      // own click. See .flip-face in styles.css.
       const flipped = isFind && Boolean(fb?.correct) && i === fb.idx
       if (flipped) cls += ' flipped'
       const front = `<span class="flip-face flip-front"><span class="num">${i + 1}</span><span class="optcard-label fi">${esc(o.label)}</span></span>`
-      const back = flipped
-        ? `<span class="flip-face flip-back">${picture(q.image, q.itemId, 'optcard-pic')}<span class="flip-word fi">${esc(o.label)}</span></span>`
-        : ''
+      const back = `<span class="flip-face flip-back">${picture(q.image, q.itemId, 'optcard-pic')}<span class="flip-word fi">${esc(o.label)}</span></span>`
       const body = isListen
         ? `${picture(o.image, o.id, 'optcard-pic')}${meaningOption(o.zh, o.en)}`
-        : `<span class="flip-inner">${front}${back}</span>`
+        : `<span class="flip-inner">${flipped ? back : front}</span>`
       return `<button class="${cls}" data-act="pick" data-idx="${i}" ${fb ? 'disabled' : ''}>
         ${isListen ? `<span class="num">${i + 1}</span>` : ''}${body}
       </button>`

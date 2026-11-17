@@ -311,8 +311,29 @@
     /* ── ④ find-picture (找图) ─────────────────────────────── */
     ok('entered find-picture round', headIs('找图模式'))
     ok('find-image: exactly four word options', $$('.optcard').length === 4 && $('.optcards.find-image') !== null)
+    ok('find-image: desktop keeps the 4-column grid', window.innerWidth <= 640 ||
+      getComputedStyle($('.optcards.find-image')).gridTemplateColumns.trim().split(/\s+/).length === 4,
+      `innerWidth=${window.innerWidth}`)
     ok('find-image: options carry no pictures before answering',
       $$('.optcard .optcard-pic').length === 0 && $$('.flip-back').length === 0)
+    // Mobile WebKit regression: only one face may exist, in normal flow, and
+    // its children must never intercept the button's own tap.
+    ok('find-image: one face per card, in normal flow, not a 3D layer', (() => {
+      const c = $('.optcard'), face = c?.querySelector('.flip-face')
+      const s = face && getComputedStyle(face), inner = c?.querySelector('.flip-inner')
+      return $$('.flip-face').length === 4 && s?.position === 'relative' &&
+        s.backfaceVisibility !== 'hidden' && getComputedStyle(inner).transformStyle !== 'preserve-3d'
+    })())
+    ok('find-image: face children cannot swallow taps', (() => {
+      const c = $('.optcard')
+      return getComputedStyle(c.querySelector('.flip-inner')).pointerEvents === 'none' &&
+        getComputedStyle(c.querySelector('.flip-face')).pointerEvents === 'none' &&
+        getComputedStyle(c).touchAction === 'manipulation'
+    })())
+    ok('find-image: labels wrap with standard CSS, not legacy break-word', (() => {
+      const s = getComputedStyle($('.optcard-label'))
+      return s.wordBreak === 'normal' && /anywhere|break-word/.test(s.overflowWrap)
+    })())
     ok('find-image: prompt shows ONE meaning and no picture', $$('.quiz-prompt .quiz-pic').length === 0 &&
       $$('.quiz-prompt .zh').length === 1 && $('.quiz-prompt .zh')?.textContent.length > 0 &&
       $('.quiz-prompt .en')?.textContent.length > 0)

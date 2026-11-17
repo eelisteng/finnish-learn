@@ -99,11 +99,14 @@ node scripts/validate-content.mjs --self-test  # content structure and level che
 node scripts/csv-pack.mjs --self-test          # CSV round-trip and negative cases
 node scripts/import-a1-b1.mjs --dry-run        # report only, writes nothing
 node scripts/test-flow.mjs                     # domain and practice-behavior tests
+node scripts/test-mobile.mjs                   # find-image on phones (needs Node 22+ / local Chrome)
 ```
 
 Reproducibility check: rerun `export-sheets.mjs -> build-en-glosses.mjs -> import-a1-b1.mjs -> build-content.mjs -> build-groups.mjs`; `git diff` should be empty because no generated file contains a timestamp. Any diff means an input snapshot or derivation rule changed and needs review.
 
 For the browser end-to-end regression, open `tests/browser-flow.html` in headless Chrome; the page prints each assertion result.
+
+`test-mobile.mjs` uses the DevTools Protocol to emulate genuine 390 / 360 / 320px viewports and dispatch **real touch events** (plain `--window-size` has a 500px floor in headless Chrome, so it cannot reproduce a phone). It asserts the 2-column grid, that long Finnish lemmas never stack one glyph per line, and that the illustration is visible after a tap. It prints `SKIP` and exits 0 when Node 22's `WebSocket` or a local Chrome is unavailable, so other environments stay green.
 
 ## Project structure
 
@@ -125,8 +128,10 @@ scripts/export-sheets.mjs     workbook -> six CSV snapshots
 scripts/build-en-glosses.mjs  zh -> en translation cache
 scripts/fi-morphology.mjs     Finnish morphology / IPA rule derivation
 scripts/import-a1-b1.mjs      idempotent A1-B1 merge importer
+scripts/test-mobile.mjs       mobile find-image regression (CDP viewport + touch)
 scripts/                      other build, validation, CSV bridge and domain tests
-tests/                        browser regression
+tests/browser-flow.html       full browser regression
+tests/mobile-find-image.html  phone viewport / long-word / real-touch assertions
 ```
 
 ## Known limitations

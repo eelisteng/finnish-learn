@@ -123,6 +123,14 @@ window.Audio = class {
   ok('ratio: the face height comes from aspect-ratio, not a fixed px height',
     css(cards[0].querySelector('.flip-face'), 'aspectRatio') === '3 / 2',
     `aspectRatio=${css(cards[0].querySelector('.flip-face'), 'aspectRatio')}`)
+  /* Engine-independent guard for the real WebKit bug: <button> keeps an
+     anonymous flex box that inherits .optcard's align-items:center, which
+     shrink-wraps .flip-inner to the label width on iOS Safari and makes the
+     four 3:2 faces four different sizes. Chrome ignores it, so this must be
+     asserted explicitly rather than inferred from Chrome's geometry. */
+  ok('ratio: button flex alignment is reset so faces stretch to full width',
+    cards.every((c) => css(c, 'alignItems') === 'stretch'),
+    `alignItems=${cards.map((c) => css(c, 'alignItems')).join(', ')}`)
   ok('ratio: no percentage-height chain inside the button',
     css(cards[0].querySelector('.flip-inner'), 'height') !== 'auto' &&
       parseFloat(css(cards[0].querySelector('.flip-inner'), 'height')) > 20,
@@ -185,6 +193,11 @@ window.Audio = class {
     ok('tap: back face is not a rotated 3D layer', Boolean(back) &&
       !/matrix3d/.test(css(back, 'transform') || '') && css(back, 'backfaceVisibility') !== 'hidden',
       `transform=${css(back, 'transform')}`)
+    /* rotateY()/perspective() used to squash the visual box during the flip.
+       The reveal must be opacity-only so no engine can change the ratio. */
+    ok('tap: the reveal applies no squashing transform',
+      css($('.optcard.flipped .flip-inner'), 'transform') === 'none',
+      `transform=${css($('.optcard.flipped .flip-inner'), 'transform')}`)
     ok('tap: the other three cards stay word-only', $$('.optcard:not(.flipped) .optcard-pic').length === 0)
     ok('tap: flipped card keeps the chosen word visible',
       $('.optcard.flipped .flip-word')?.textContent === q0.options[correctIdx].label)

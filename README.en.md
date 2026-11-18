@@ -121,6 +121,7 @@ node scripts/import-a1-b1.mjs --dry-run        # report only, writes nothing
 node scripts/test-flow.mjs                     # domain and practice-behavior tests
 node scripts/generate-illustrations.mjs --check # 977 SVGs: size / uniqueness / determinism
 node scripts/test-mobile.mjs                   # find-image on phones (needs Node 22+ / local Chrome)
+node scripts/test-webkit.mjs                   # real-WebKit find-image regression (needs macOS + swiftc)
 ```
 
 Reproducibility check: rerun `export-sheets.mjs -> build-en-glosses.mjs -> import-a1-b1.mjs -> generate-illustrations.mjs -> build-content.mjs -> build-groups.mjs`; `git diff` should be empty because no generated file contains a timestamp. Any diff means an input snapshot or derivation rule changed and needs review.
@@ -128,6 +129,8 @@ Reproducibility check: rerun `export-sheets.mjs -> build-en-glosses.mjs -> impor
 For the browser end-to-end regression, open `tests/browser-flow.html` in headless Chrome; the page prints each assertion result.
 
 `test-mobile.mjs` uses the DevTools Protocol to emulate genuine 1280 (desktop reference) / 641 (4-column breakpoint) / 390 / 360 / 320px viewports and dispatch **real touch events** (plain `--window-size` has a 500px floor in headless Chrome, so it cannot reproduce a phone). It asserts the 2-column grid, that long Finnish lemmas never stack one glyph per line, that the illustration is visible after a tap, and that every card's 3:2 ratio — before AND after the flip — matches the desktop reference at each phone width. It prints `SKIP` and exits 0 when Node 22's `WebSocket` or a local Chrome is unavailable, so other environments stay green.
+
+`test-webkit.mjs` covers the engine difference Chrome cannot see: it compiles `tests/webkit-find-image.swift` and runs the same assertion page inside a **WKWebView** (the layout engine behind iOS Safari and WeChat in-app browsers). WebKit keeps an anonymous flex box inside every `<button>` and inherits `align-items:center` from `.optcard`; unless the find-image rule resets it to `stretch`, `.flip-inner` shrink-wraps to each label's content width, so four words of different lengths produce four different card widths (and therefore four different 3:2 heights), and the flipped card jumps back to full width. Blink ignores `align-items` on a block button, which is why a Chrome-only suite stayed green. The runner also checks that the listen (听选) options fill the same grid column and that the reveal uses no 3D transform capable of squashing the box, and compares every phone ratio with the desktop 3:2 reference. It prints `SKIP` and exits 0 off macOS or without `swiftc`.
 
 ## Project structure
 
@@ -152,9 +155,11 @@ scripts/fi-morphology.mjs     Finnish morphology / IPA rule derivation
 scripts/import-a1-b1.mjs      idempotent A1-B1 merge importer
 scripts/generate-illustrations.mjs  deterministic semantic SVG illustration generator
 scripts/test-mobile.mjs       mobile find-image regression (CDP viewport + touch)
+scripts/test-webkit.mjs       real-WKWebView find-image regression (macOS)
 scripts/                      other build, validation, CSV bridge and domain tests
 tests/browser-flow.html       full browser regression
 tests/mobile-find-image.html  phone viewport / long-word / real-touch assertions
+tests/webkit-find-image.swift WKWebView geometry probe (compiled by test-webkit.mjs)
 ```
 
 ## Known limitations

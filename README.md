@@ -123,6 +123,7 @@ node scripts/import-a1-b1.mjs --dry-run        # 只出报告、不写文件
 node scripts/test-flow.mjs                     # 领域流程与练习行为测试
 node scripts/generate-illustrations.mjs --check # 977 张 SVG 的尺寸 / 唯一性 / 确定性
 node scripts/test-mobile.mjs                   # 找图模式手机适配（需 Node 22+ / 本地 Chrome）
+node scripts/test-webkit.mjs                   # 找图模式真实 WebKit 回归（需 macOS + swiftc）
 ```
 
 可复现性自检：依次重跑 `export-sheets.mjs → build-en-glosses.mjs → import-a1-b1.mjs → generate-illustrations.mjs → build-content.mjs → build-groups.mjs`，`git diff` 应为空（生成文件不含时间戳）。若出现差异，说明输入快照或推导规则被改过，需要复核。
@@ -130,6 +131,8 @@ node scripts/test-mobile.mjs                   # 找图模式手机适配（需 
 浏览器端到端回归：用 headless Chrome 打开 `tests/browser-flow.html`，页面内会输出逐项断言结果。
 
 `test-mobile.mjs` 通过 DevTools 协议把视口真正模拟成 1280（桌面基准）/ 641（4 列断点）/ 390 / 360 / 320px 并派发**真实 touch 事件**（headless Chrome 的 `--window-size` 最小 500px，模拟不了手机），断言找图模式为 2 列栅格、长芬兰语单词不逐字竖排、点击后图片可见，并把每个手机视口下四张卡片与翻面后的 3:2 宽高比逐一和桌面基准比对。缺少 Node 22 的 `WebSocket` 或本地 Chrome 时会 `SKIP` 并返回 0，不影响其它环境。
+
+`test-webkit.mjs` 补的是 Chrome 测不到的引擎差异：它会编译 `tests/webkit-find-image.swift`，在 **WKWebView**（iOS Safari、微信内置浏览器的同一排版引擎）里跑同一个断言页。WebKit 会在每个 `<button>` 内部保留一个匿名弹性盒，并继承 `.optcard` 的 `align-items:center`；若找图模式没有把它重置成 `stretch`，`.flip-inner` 就会收缩到单词的内容宽度，四个不同长度的词得到四种不同宽度（进而四种 3:2 高度），翻面后又变成整卡宽。Blink 会忽略块级按钮上的 `align-items`，所以纯 Chrome 回归一直全绿。该脚本同时校验听选模式卡片填满同一栅格列、翻面动画不含任何会压缩盒子的 3D transform，并把所有手机视口的宽高比与桌面 3:2 基准比对；非 macOS 或缺 `swiftc` 时 `SKIP` 并返回 0。
 
 ## 项目结构
 
@@ -154,9 +157,11 @@ scripts/fi-morphology.mjs     芬兰语形态 / IPA 规则推导
 scripts/import-a1-b1.mjs      A1–B1 合并导入（幂等）
 scripts/generate-illustrations.mjs  全量语义 SVG 配图生成器
 scripts/test-mobile.mjs       找图模式手机适配回归（CDP 视口 + touch）
+scripts/test-webkit.mjs       找图模式真实 WKWebView 回归（macOS）
 scripts/                      其余构建、校验、CSV 桥接、领域测试
 tests/browser-flow.html       全模式浏览器回归
 tests/mobile-find-image.html  手机视口 / 长单词 / 真实 touch 断言页
+tests/webkit-find-image.swift WKWebView 几何探针（由 test-webkit.mjs 编译）
 ```
 
 ## 已知限制

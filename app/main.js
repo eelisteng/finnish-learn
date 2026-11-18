@@ -857,7 +857,11 @@
       // to one glyph per line. A single normal-flow face has a definite
       // width, always shows the picture, and never intercepts the button's
       // own click. Both faces share one 3:2 ratio on desktop and phones, so
-      // flipping never changes the card's shape. See .flip-face in styles.css.
+      // flipping never changes the card's shape. WebKit additionally keeps an
+      // anonymous flex box inside <button> and inherits align-items:center
+      // from .optcard; the find-image rule resets it to stretch so the face
+      // fills the whole column instead of shrink-wrapping to the word.
+      // See .optcards.find-image .optcard in styles.css.
       const flipped = isFind && Boolean(fb?.correct) && i === fb.idx
       if (flipped) cls += ' flipped'
       const front = `<span class="flip-face flip-front"><span class="num">${i + 1}</span><span class="optcard-label fi">${esc(o.label)}</span></span>`

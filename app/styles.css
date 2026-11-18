@@ -221,14 +221,27 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
    So only ONE face is in the DOM, in normal flow with a definite width, and
    the reveal is a 2D-safe animation. No 3D/backface dependency anywhere.
    That one face also owns the 3:2 ratio, so desktop and phone cards match and
-   the flip cannot change the card's shape. */
+   the flip cannot change the card's shape.
+   WebKit (iOS Safari / WeChat WKWebView) keeps an ANONYMOUS FLEX BOX inside
+   every <button> even when the button itself is display:block. It inherits
+   align-items from .optcard's base rule: the leftover `center` shrink-wraps
+   .flip-inner to the label's max-content width, so four cards with different
+   word lengths get four different face widths (and thus four different 3:2
+   heights). Blink ignores align-items on a block button, so desktop Chrome
+   hid the bug. The find-image override MUST reset align-items to stretch. */
 .optcards.find-image,.optcards.with-meaning{grid-template-columns:repeat(4,minmax(0,1fr))}
 .optcards.find-image{align-items:start}
+/* Same WebKit button shrink-wrap applies to the listen options: without a
+   definite width the card becomes 157px inside a 161px phone column (193px
+   inside 197px on desktop), so the two option grids do not line up. Stretch
+   also lets the meaning block use the whole card width; the picture keeps its
+   explicit 72/84px size and the text stays centred. */
+.optcards.with-meaning .optcard{width:100%;align-items:stretch}
 .find-prompt{min-height:118px;display:flex;flex-direction:column;align-items:center;justify-content:center}
 /* The card height comes from the face below, never from a fixed px value:
    one 3:2 ratio on every width keeps the phone cards landscape like desktop
    (197 x 132) instead of turning 126 x 136 portrait on a 320px screen. */
-.optcards.find-image .optcard{min-width:0;width:100%;min-height:0;height:auto;padding:0;border:0;background:transparent;box-shadow:none;display:block;overflow:visible;touch-action:manipulation;-webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent}
+.optcards.find-image .optcard{min-width:0;width:100%;min-height:0;height:auto;padding:0;border:0;background:transparent;box-shadow:none;display:block;align-items:stretch;justify-content:stretch;overflow:visible;touch-action:manipulation;-webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent}
 .optcards.find-image .optcard:hover:not(:disabled){border:0;background:transparent;transform:none}
 .optcards.find-image .optcard:hover:not(:disabled) .flip-front{border-color:var(--blue);background:var(--blue-soft)}
 .optcards.find-image .optcard.correct,.optcards.find-image .optcard.reveal,
@@ -254,12 +267,15 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .flip-back .optcard-pic svg{width:100%;height:100%;display:block}
 .flip-word{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;font-weight:600;line-height:1.2;max-width:100%;overflow-wrap:anywhere;text-align:center}
 .opts .opt,.optcards .optcard,.mtile{touch-action:manipulation}
-.optcards.find-image .optcard.flipped .flip-inner{animation:fi-flip .42s cubic-bezier(.2,.75,.3,1) both}
-/* Opacity is animated independently of the 3D transform: even if a browser
-   drops rotateY entirely, the illustration still becomes visible. */
-@keyframes fi-flip{from{opacity:.25;transform:perspective(600px) rotateY(-80deg)}to{opacity:1;transform:perspective(600px) rotateY(0deg)}}
+/* A purely 2D reveal. The old perspective()/rotateY() swing squashed the
+   face's visual box while animating (and WebKit can leave the composited
+   layer on the -80deg frame in a backgrounded tab), which reads exactly like
+   "the card changed its width/height ratio after the flip". Opacity never
+   touches layout, so all four 3:2 boxes stay identical before, during and
+   after the reveal, on every engine. */
+.optcards.find-image .optcard.flipped .flip-inner{animation:fi-reveal .42s ease-out both}
 @keyframes fi-reveal{from{opacity:0}to{opacity:1}}
-@media (prefers-reduced-motion:reduce){.optcards.find-image .optcard.flipped .flip-inner{animation:fi-reveal .18s ease-out both}}
+@media (prefers-reduced-motion:reduce){.optcards.find-image .optcard.flipped .flip-inner{animation-duration:.18s}}
 .quiz-prompt .quiz-pic{width:118px;height:118px;margin-bottom:10px}
 /* 听选模式：每个选项是「图片 + 释义」，绝不显示芬兰语单词 */
 .optcard-meaning{display:flex;flex-direction:column;gap:1px;width:100%;min-width:0;text-align:center}

@@ -109,7 +109,7 @@ node scripts/generate-illustrations.mjs --check  # 只校验（画布、唯一�
 | 大小一致 | 全部 `100 × 100`、`viewBox="0 0 100 100"`，同一浅色底框、光晕、线宽与底部中文释义条；浅色 / 深色主题下对比度一致 |
 | 简明反映词义 | 中文释义 + 英文释义 + 主题 + 人工 override 组成的确定性语义链，只从经过筛选的 Lucide 具象图标中取图；数字、月份、星期、序数、颜色、季节另有专用数字 / 日历 / 色卡卡面（共 57 张）。底部中文标签让「仅仅」「诊断」这类抽象词也不会有歧义 |
 
-图标取自 **Lucide Icons v1.74.0（ISC）**，图标名与线条数据放在 `data/import/lucide-icons.json`，许可全文见 `data/import/LUCIDE-NOTICE.txt`。生成器会拒绝纯 UI / 编辑器 / 品牌图标和 `file-x`、`percent-square`、`scan-box` 一类的状态变体，避免词义被无关的图形带偏。生成结果、映射表和审阅页都写在 `data/import/illustration-report.json` 与 `tools/illustration-review.html`；**打开审阅页**可以按芬兰语 / 中文 / 英文 / 图标名搜索并按匹配方式筛选，逐张人工复核（当前全部 `image_reviewStatus=pending`）。
+图标取自 **Lucide Icons v1.74.0（ISC）**，图标名与线条数据放在 `data/import/lucide-icons.json`，许可全文见 `data/import/LUCIDE-NOTICE.txt`。生成器会拒绝纯 UI / 编辑器 / 品牌图标和 `file-x`、`percent-square`、`scan-box` 一类的状态变体，避免词义被无关的图形带偏。生成结果、映射表和审阅页都写在 `data/import/illustration-report.json` 与 `tools/illustration-review.html`；**打开审阅页**可以按芬兰语 / 中文 / 英文 / 图标名搜索并按匹配方式筛选，逐张人工复核（当前全部 `image_reviewStatus=pending`）。审阅页把 977 张 SVG 直接内嵌，完全自包含，`file://` 打开或只发布单个 HTML 也能正常显示，无需起服务器。
 
 输出是确定性的：没有时间戳、没有随机数，输入不变时连跑两遍 977 个 SVG、CSV、报告与审阅页都字节一致。重跑 `import-a1-b1.mjs` 会把导入行的图片列重置为 `pending`，所以重建链路里必须紧接着执行本脚本。
 

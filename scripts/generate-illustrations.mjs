@@ -1071,8 +1071,14 @@ function buildPlans(rows) {
 /* ── 6. visual review sheet ──────────────────────────────────────────── */
 /* A self-contained page: it works over file:// as well as HTTP, so all 977
    cards can be eyeballed without starting a server. */
-function renderSheet(report) {
-  const data = JSON.stringify(report.mapping).replace(/</g, '\\u003c')
+function renderSheet(report, cardById) {
+  // Embed the SVG markup directly instead of linking sibling files: the page
+  // then works from file://, a static server, and preview panels that serve
+  // only the HTML file (no directory access).
+  const sheetData = report.mapping.map((m) => ({ ...m, svg: cardById.get(m.id) }))
+  const data = JSON.stringify(sheetData)
+    .replace(/<\/script/gi, '<\\/script')
+    .replace(/\u2028|\u2029/g, (c) => `\\u${c.charCodeAt(0).toString(16)}`)
   return `<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1091,7 +1097,7 @@ input,select{font:14px inherit;padding:8px 10px;border:1px solid var(--line);bor
 input{flex:1;min-width:220px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:12px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;overflow:hidden}
-.card img{width:100px;height:100px;display:block;margin:0 auto 8px}
+.card svg{width:100px;height:100px;display:block;margin:0 auto 8px}
 .fi{font-weight:600;font-size:13px;word-break:break-word}
 .zh{color:var(--muted);font-size:12px;margin-top:2px;word-break:break-word}
 .en{color:#8a99a8;font-size:10px;margin-top:2px;word-break:break-word}
@@ -1121,7 +1127,7 @@ function draw(){
   const list = DATA.filter(d => (!k || d.match===k) && (!q || [d.lemma,d.zh,d.en,d.icon,d.caption,d.id].join(' ').toLowerCase().includes(q)));
   document.getElementById('count').textContent = '显示 ' + list.length + ' / ' + DATA.length;
   document.getElementById('grid').innerHTML = list.map(d =>
-    '<div class="card"><img src="../assets/illustrations/' + encodeURIComponent(d.id) + '.svg" alt="' + esc(d.zh) + '">' +
+    '<div class="card">' + d.svg +
     '<div class="fi">' + esc(d.lemma) + '</div><div class="zh">' + esc(d.zh) + '</div>' +
     '<div class="en">' + esc(d.en) + '</div><div class="meta">' + esc(d.icon || d.match) + ' · ' + esc(d.match) + '</div></div>').join('');
 }
@@ -1163,6 +1169,9 @@ function main() {
   const kept = rows.filter((r) => !isGenerated(r))
   const { plans, usedIcons, families, viaCounts, maxReuse } = buildPlans(rows)
   const generated = rows.filter(isGenerated)
+  // Render every card once; the same string is written to disk, compared by
+  // --check, and embedded in the self-contained review page.
+  const cardById = new Map(generated.map((row) => [row.id, renderCard(row, plans.get(row.id))]))
   const prospective = rows.map((r) => ({ ...r, image_path: isGenerated(r) ? `${IMAGE_DIR}${r.id}.svg` : r.image_path }))
   const stats = verifyFiles(prospective)
   const resolution = Object.fromEntries([...viaCounts].sort((a, b) => b[1] - a[1]))
@@ -1189,7 +1198,7 @@ function main() {
     duplicateOrInvalid: stats.problems,
     mapping,
   }
-  const sheet = renderSheet(report)
+  const sheet = renderSheet(report, cardById)
 
   if (CHECK_ONLY) {
     const pending = rows.filter((r) => !r.image_path).length
@@ -1200,7 +1209,7 @@ function main() {
       if (!row.image_path.endsWith('.svg')) continue
       const path = join(root, row.image_path)
       if (!existsSync(path)) continue
-      if (readFileSync(path, 'utf8') !== renderCard(row, plans.get(row.id))) drift.push(row.image_path)
+      if (readFileSync(path, 'utf8') !== cardById.get(row.id)) drift.push(row.image_path)
     }
     for (const [label, path, expected] of [
       ['manifest', REPORT, `${JSON.stringify(report, null, 2)}\n`],
@@ -1223,7 +1232,7 @@ function main() {
   for (const row of rows) {
     if (!isGenerated(row)) continue
     const rel = `${IMAGE_DIR}${row.id}.svg`
-    writeFileSync(join(root, rel), renderCard(row, plans.get(row.id)), 'utf8')
+    writeFileSync(join(root, rel), cardById.get(row.id), 'utf8')
     row.image_path = rel
     row.image_status = 'ready'
     row.image_source = 'lucide-svg'

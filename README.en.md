@@ -57,6 +57,7 @@ The workbook contains only Finnish lemmas, Chinese glosses, part of speech, sugg
 node scripts/export-sheets.mjs        # XLSX -> six reviewable CSV snapshots (dependency-free OOXML reader)
 node scripts/build-en-glosses.mjs     # zh -> en cache (committed; normal builds need no network)
 node scripts/import-a1-b1.mjs         # merge into data/words.csv / data/sentences.csv
+node scripts/generate-illustrations.mjs  # full SVG illustration set (see below; required after a re-import)
 node scripts/build-content.mjs && node scripts/build-groups.mjs
 ```
 
@@ -91,6 +92,25 @@ Audio convention: put files at `assets/audio/<id>.mp3` (`ogg` / `m4a` / `wav` / 
 
 Keep image and audio metadata in the CSV, not in `app/*.js` or `data/content-source.mjs`: the CSV is the authoritative editing layer and overrides the seed on every rebuild. Once clips are present the UI plays them automatically — no code changes needed.
 
+### Full illustration coverage (977 deterministic SVGs)
+
+Besides the 3 hand-made sample PNGs, every one of the 977 remaining headwords has an `assets/illustrations/<id>.svg` produced by `scripts/generate-illustrations.mjs` from `data/words.csv`. **No image-generation service is called and no credits are spent.**
+
+```bash
+node scripts/generate-illustrations.mjs          # write SVGs + CSV image columns + report + review page
+node scripts/generate-illustrations.mjs --check  # verify only (canvas, uniqueness, byte drift)
+```
+
+| Requirement | How it is met |
+| --- | --- |
+| No repeated pictures | Every SVG has a distinct SHA-256 (977/977), and no five-word learning group contains two cards sharing both glyph and accent colour. Accent, pattern and corner badge are derived from a SHA-256 of the word ID |
+| Uniform size | All are `100 x 100` with `viewBox="0 0 100 100"`, one opaque light frame, halo, stroke and bottom meaning band — identical contrast in light and dark themes |
+| Concisely reflects meaning | A deterministic chain (Chinese gloss → English gloss → motif → topic → reviewed overrides) picks from a curated set of *depictive* Lucide glyphs. Numbers, months, weekdays, ordinals, colours and seasons get bespoke numeral / calendar / colour-swatch cards (57 in total). A short Chinese meaning label on every card keeps abstract words such as "only" or "diagnosis" unambiguous |
+
+Glyphs come from **Lucide Icons v1.74.0 (ISC)**; names and line art are vendored in `data/import/lucide-icons.json`, with the licence text in `data/import/LUCIDE-NOTICE.txt`. Pure UI / editor / brand icons and state variants such as `file-x`, `percent-square` or `scan-box` are excluded so a word is never paired with an unrelated glyph. The mapping, statistics and a searchable review page live in `data/import/illustration-report.json` and `tools/illustration-review.html` — **open the review page** to filter by Finnish / Chinese / English / glyph and check cards by eye (all are still `image_reviewStatus: pending`).
+
+Output is deterministic: no timestamps, no randomness. With unchanged input, two consecutive runs produce byte-identical SVGs, CSV, report and review page. Re-running `import-a1-b1.mjs` resets imported image columns to `pending`, so this generator must always follow it in the rebuild chain.
+
 ## Validation
 
 ```bash
@@ -99,10 +119,11 @@ node scripts/validate-content.mjs --self-test  # content structure and level che
 node scripts/csv-pack.mjs --self-test          # CSV round-trip and negative cases
 node scripts/import-a1-b1.mjs --dry-run        # report only, writes nothing
 node scripts/test-flow.mjs                     # domain and practice-behavior tests
+node scripts/generate-illustrations.mjs --check # 977 SVGs: size / uniqueness / determinism
 node scripts/test-mobile.mjs                   # find-image on phones (needs Node 22+ / local Chrome)
 ```
 
-Reproducibility check: rerun `export-sheets.mjs -> build-en-glosses.mjs -> import-a1-b1.mjs -> build-content.mjs -> build-groups.mjs`; `git diff` should be empty because no generated file contains a timestamp. Any diff means an input snapshot or derivation rule changed and needs review.
+Reproducibility check: rerun `export-sheets.mjs -> build-en-glosses.mjs -> import-a1-b1.mjs -> generate-illustrations.mjs -> build-content.mjs -> build-groups.mjs`; `git diff` should be empty because no generated file contains a timestamp. Any diff means an input snapshot or derivation rule changed and needs review.
 
 For the browser end-to-end regression, open `tests/browser-flow.html` in headless Chrome; the page prints each assertion result.
 
@@ -121,13 +142,15 @@ app/styles.css                light / dark themes
 app/bgm.js                    live synthesis, preview and switching of the five ambient tracks
 data/                         content pack, groups, CSV files, topic map, source inventory
 data/import/                  source XLSX, six CSV snapshots, en cache, Kotus list, import report
-assets/illustrations/         finished illustrations
+assets/illustrations/         finished illustrations (3 PNG samples + 977 SVG cards)
 assets/audio/                 pre-recorded clips (empty for now; declared in CSV)
+tools/illustration-review.html  searchable review page for all 977 SVG cards
 scripts/xlsx-read.mjs         dependency-free XLSX reader (inlineStr / sharedStrings)
 scripts/export-sheets.mjs     workbook -> six CSV snapshots
 scripts/build-en-glosses.mjs  zh -> en translation cache
 scripts/fi-morphology.mjs     Finnish morphology / IPA rule derivation
 scripts/import-a1-b1.mjs      idempotent A1-B1 merge importer
+scripts/generate-illustrations.mjs  deterministic semantic SVG illustration generator
 scripts/test-mobile.mjs       mobile find-image regression (CDP viewport + touch)
 scripts/                      other build, validation, CSV bridge and domain tests
 tests/browser-flow.html       full browser regression
@@ -136,7 +159,7 @@ tests/mobile-find-image.html  phone viewport / long-word / real-touch assertions
 
 ## Known limitations
 
-- Only 3 finished illustrations (`talo`, `kauppa`, `puhua`); the other 977 are geometric placeholders, all with `image_reviewStatus: pending`.
+- All 980 illustrations are finished (3 hand-made sample PNGs + 977 deterministic SVGs); geometric placeholders are gone. **All are still `image_reviewStatus: pending`** and need a human pass in `tools/illustration-review.html` before being marked `human-verified`. Abstract words rely on the printed Chinese label because a single line-art glyph cannot literally depict them.
 - The pack declares 0 audio clips, so every item currently uses browser speech synthesis. Most devices lack a `fi-FI` voice, which distorts long/short vowels and `ä/ö/å`. Filling the `audio_*` columns and adding the files automatically switches playback to the recordings.
 - **On imported rows the IPA, English glosses, stems, six basic cases and verb principal parts are all `auto-derived` rule output and have NOT been checked by a Finnish linguist — do not publish them as teaching material.** 800/930 imported lemmas had a Kotus class; the rest were inferred from word shape or marked `paradigm pending`. The workbook's levels are suggestions only.
 - Imported sentences carry token chips without `senseId` / case annotation (the workbook has no interlinear glosses), so no CEFR gate is inferred from glosses.
@@ -148,4 +171,4 @@ tests/mobile-find-image.html  phone viewport / long-word / real-touch assertions
 
 ## License
 
-MIT License — see [LICENSE](LICENSE).
+Project source is MIT License — see [LICENSE](LICENSE). Third-party assets carry their own licences: Lucide Icons v1.74.0 is ISC (`data/import/LUCIDE-NOTICE.txt`), Kotus / Yle word lists are CC BY 4.0 (`data/import/KOTUS-NOTICE.txt`), and the user-provided A1–B1 workbook is used with the project owner's permission. Full inventory: `data/sources.json`.

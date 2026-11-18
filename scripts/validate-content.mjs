@@ -227,7 +227,12 @@ function runSelfTest(p, gi) {
     ['六个基本格', (q) => { findWord(q, 'talo').nominal.caseForms = findWord(q, 'talo').nominal.caseForms.slice(0, 5) }, 'basic case'],
     ['音标必填', (q) => { delete findWord(q, 'talo').ipa }, 'ipa missing'],
     ['单复数必填', (q) => { delete findWord(q, 'talo').number }, 'number.singular/plural'],
-    ['占位图 motif', (q) => { delete findWord(q, 'katu').senses[0].image.motif }, 'motif placeholder'],
+    // Every shipped word now has a ready illustration, so force a pending
+    // placeholder explicitly instead of relying on a word that used to be one.
+    ['占位图 motif', (q) => {
+      const im = findWord(q, 'katu').senses[0].image
+      im.status = 'pending'; delete im.path; delete im.motif
+    }, 'motif placeholder'],
     ['分组不得超 5 条', (q) => { findGroup(q, 'A1-W-01').itemIds.push('kirja'); findGroup(q, 'A1-W-01').size = 6 }, 'group size'],
     ['分组等级一致', (q) => { findGroup(q, 'A1-W-01').level = 'B2' }, 'group level'],
     ['分组引用有效', (q) => { findGroup(q, 'A1-W-01').itemIds[0] = 'ghost' }, 'unknown item'],

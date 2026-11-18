@@ -64,18 +64,28 @@
       "caveat": "Reference only. OPH states there is no official textbook or word list for YKI."
     },
     {
+      "id": "lucide-icons",
+      "name": "Lucide Icons v1.74.0 (lucide-static)",
+      "url": "https://lucide.dev/",
+      "localCopy": "data/import/lucide-icons.json",
+      "attribution": "data/import/LUCIDE-NOTICE.txt",
+      "license": "ISC",
+      "provides": ["2401 line-art glyph names used as the depot for semantic SVG illustrations"],
+      "caveat": "Only a curated, depictive subset is used. UI/editor/brand glyphs and modifier variants are excluded. Every card also carries the word's Chinese meaning label, because a single line-art glyph cannot literally depict most abstract words."
+    },
+    {
       "id": "own",
       "name": "In-house: 50 demo words / 35 demo sentences, rule-derived morphology, illustrations",
       "license": "own",
-      "provides": ["reviewed demo rows", "scripts/fi-morphology.mjs paradigms", "IPA", "images"],
-      "caveat": "Human QA is our responsibility."
+      "provides": ["reviewed demo rows", "scripts/fi-morphology.mjs paradigms", "IPA", "3 hand-made PNG sample illustrations", "977 deterministic SVG cards from scripts/generate-illustrations.mjs"],
+      "caveat": "Human QA is our responsibility. All generated illustrations are image_reviewStatus=pending until a person reviews them."
     }
   ],
   "importPolicy": {
     "authoritativeEditingLayer": "data/words.csv + data/sentences.csv",
-    "regenerate": "node scripts/export-sheets.mjs && node scripts/build-en-glosses.mjs && node scripts/import-a1-b1.mjs && node scripts/build-content.mjs && node scripts/build-groups.mjs",
-    "reviewStatus": "every imported row is auto-derived; no imported illustration or audio is human-verified",
-    "imageStatus": "977 pending motif placeholders, 3 ready demo illustrations",
+    "regenerate": "node scripts/export-sheets.mjs && node scripts/build-en-glosses.mjs && node scripts/import-a1-b1.mjs && node scripts/generate-illustrations.mjs && node scripts/build-content.mjs && node scripts/build-groups.mjs",
+    "reviewStatus": "every imported row is auto-derived; all 977 generated illustrations are pending human review, no audio is human-verified",
+    "imageStatus": "980 ready illustrations: 977 deterministic 100x100 SVG cards + 3 hand-made PNG samples; 0 pending motif placeholders",
     "audioStatus": "0 clips declared; browser TTS fallback for all items",
     "morphology": "IPA, case tables, stems and verb principal parts are derived from Kotus class + word shape by scripts/fi-morphology.mjs. Unresolved words show — and are labelled paradigm pending, never indeclinable unless they genuinely are.",
     "cefr": "suggested level copied from the workbook; treated as an in-house product convention only",

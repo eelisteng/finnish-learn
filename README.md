@@ -57,6 +57,7 @@ python3 -m http.server 8000
 node scripts/export-sheets.mjs        # XLSX → 6 份可审阅的 CSV 快照（零依赖 OOXML 解析）
 node scripts/build-en-glosses.mjs     # 中文 → 英文缓存（已提交，正常构建无需联网）
 node scripts/import-a1-b1.mjs         # 合并生成 data/words.csv / data/sentences.csv
+node scripts/generate-illustrations.mjs  # 生成全量 SVG 配图（见下节；重跑导入后必须执行）
 node scripts/build-content.mjs && node scripts/build-groups.mjs
 ```
 
@@ -91,6 +92,27 @@ node scripts/build-content.mjs && node scripts/build-groups.mjs && node scripts/
 
 图片与音频元数据都写在 CSV，不要写进 `app/*.js` 或 `data/content-source.mjs`——CSV 是权威编辑层，从种子重建时也会覆盖回去。素材齐了以后前端会自动优先播放预录文件，无需改代码。
 
+### 全量配图（977 张确定性 SVG）
+
+`assets/illustrations/` 里除了 3 张手工示例 PNG，其余 977 个词条各有一张 `assets/illustrations/<id>.svg`，全部由 `scripts/generate-illustrations.mjs` 从 `data/words.csv` 生成，**不调用任何生图服务、不消耗积分**：
+
+```bash
+node scripts/generate-illustrations.mjs          # 生成 SVG + 回写 CSV 图片列 + 报告 + 审阅页
+node scripts/generate-illustrations.mjs --check  # 只校验（画布、唯一性、字节漂移），不写文件
+```
+
+三条硬约束与实现方式：
+
+| 要求 | 实现 |
+| --- | --- |
+| 图不重复 | 每张 SVG 的 SHA-256 都不同（977/977）；同一五词学习组内不会出现「相同图形 + 相同配色」的两张卡。底色 / 装饰纹样 / 角标由词条 ID 的 SHA-256 决定 |
+| 大小一致 | 全部 `100 × 100`、`viewBox="0 0 100 100"`，同一浅色底框、光晕、线宽与底部中文释义条；浅色 / 深色主题下对比度一致 |
+| 简明反映词义 | 中文释义 + 英文释义 + 主题 + 人工 override 组成的确定性语义链，只从经过筛选的 Lucide 具象图标中取图；数字、月份、星期、序数、颜色、季节另有专用数字 / 日历 / 色卡卡面（共 57 张）。底部中文标签让「仅仅」「诊断」这类抽象词也不会有歧义 |
+
+图标取自 **Lucide Icons v1.74.0（ISC）**，图标名与线条数据放在 `data/import/lucide-icons.json`，许可全文见 `data/import/LUCIDE-NOTICE.txt`。生成器会拒绝纯 UI / 编辑器 / 品牌图标和 `file-x`、`percent-square`、`scan-box` 一类的状态变体，避免词义被无关的图形带偏。生成结果、映射表和审阅页都写在 `data/import/illustration-report.json` 与 `tools/illustration-review.html`；**打开审阅页**可以按芬兰语 / 中文 / 英文 / 图标名搜索并按匹配方式筛选，逐张人工复核（当前全部 `image_reviewStatus=pending`）。
+
+输出是确定性的：没有时间戳、没有随机数，输入不变时连跑两遍 977 个 SVG、CSV、报告与审阅页都字节一致。重跑 `import-a1-b1.mjs` 会把导入行的图片列重置为 `pending`，所以重建链路里必须紧接着执行本脚本。
+
 ## 验证
 
 ```bash
@@ -99,10 +121,11 @@ node scripts/validate-content.mjs --self-test  # 内容结构与分级校验
 node scripts/csv-pack.mjs --self-test          # CSV 往返与反例
 node scripts/import-a1-b1.mjs --dry-run        # 只出报告、不写文件
 node scripts/test-flow.mjs                     # 领域流程与练习行为测试
+node scripts/generate-illustrations.mjs --check # 977 张 SVG 的尺寸 / 唯一性 / 确定性
 node scripts/test-mobile.mjs                   # 找图模式手机适配（需 Node 22+ / 本地 Chrome）
 ```
 
-可复现性自检：依次重跑 `export-sheets.mjs → build-en-glosses.mjs → import-a1-b1.mjs → build-content.mjs → build-groups.mjs`，`git diff` 应为空（生成文件不含时间戳）。若出现差异，说明输入快照或推导规则被改过，需要复核。
+可复现性自检：依次重跑 `export-sheets.mjs → build-en-glosses.mjs → import-a1-b1.mjs → generate-illustrations.mjs → build-content.mjs → build-groups.mjs`，`git diff` 应为空（生成文件不含时间戳）。若出现差异，说明输入快照或推导规则被改过，需要复核。
 
 浏览器端到端回归：用 headless Chrome 打开 `tests/browser-flow.html`，页面内会输出逐项断言结果。
 
@@ -121,13 +144,15 @@ app/styles.css                浅色 / 深色主题
 app/bgm.js                    背景音乐：5 首氛围音轨的实时合成与试听/切换
 data/                         词包、分组、CSV、主题映射、素材清单
 data/import/                  原始 XLSX、六份 CSV 快照、英文缓存、Kotus 词表、导入报告
-assets/illustrations/         成品插画
+assets/illustrations/         成品插画（3 PNG 示例 + 977 SVG）
 assets/audio/                 预录音频（当前为空，按 CSV 声明填充）
+tools/illustration-review.html  977 张插画的可搜索审阅页
 scripts/xlsx-read.mjs         零依赖 XLSX 解析（inlineStr / sharedStrings）
 scripts/export-sheets.mjs     工作簿 → 六份 CSV 快照
 scripts/build-en-glosses.mjs  中文 → 英文翻译缓存
 scripts/fi-morphology.mjs     芬兰语形态 / IPA 规则推导
 scripts/import-a1-b1.mjs      A1–B1 合并导入（幂等）
+scripts/generate-illustrations.mjs  全量语义 SVG 配图生成器
 scripts/test-mobile.mjs       找图模式手机适配回归（CDP 视口 + touch）
 scripts/                      其余构建、校验、CSV 桥接、领域测试
 tests/browser-flow.html       全模式浏览器回归
@@ -136,7 +161,7 @@ tests/mobile-find-image.html  手机视口 / 长单词 / 真实 touch 断言页
 
 ## 已知限制
 
-- 插画目前 3 张成品（`talo` / `kauppa` / `puhua`），其余 977 条为几何占位图；全部 `image_reviewStatus` 均为 `pending`，仍需人工复核。
+- 980 条配图现在全部是成品（3 张手工示例 PNG + 977 张确定性 SVG），不再是几何占位图；但**全部 `image_reviewStatus` 仍是 `pending`**，需用 `tools/illustration-review.html` 人工复核语义与观感后才能标记为 `human-verified`。抽象词靠底部中文标签表意，单个线稿图标无法逐字「画出」词义。
 - 词包目前 0 条预录音频，全部走浏览器语音合成；多数设备没有 `fi-FI` 语音，长短音与 `ä/ö/å` 会失真。补齐 CSV 的 `audio_*` 列并放入文件后会自动切换为预录播放。
 - **导入行的 IPA、英文释义、词干、6 个基本格、动词主干形式全部是 `auto-derived` 规则推导，未经芬兰语专家校对，不可直接当教材发布。** 800/930 个词条有 Kotus 类号，其余按词形猜测或标 `paradigm pending`。工作簿的等级只是建议值，CEFR / YKI 并无官方词表。
 - 句子目前只提供逐词 chip，没有 `senseId` / 格标注（工作簿未给逐词注解），因此句子的 CEFR 门槛不会由 gloss 反推。
@@ -148,4 +173,4 @@ tests/mobile-find-image.html  手机视口 / 长单词 / 真实 touch 断言页
 
 ## 许可
 
-MIT License，详见 [LICENSE](LICENSE)。
+项目源码为 MIT License，详见 [LICENSE](LICENSE)。第三方素材另有许可：Lucide Icons v1.74.0 为 ISC（见 `data/import/LUCIDE-NOTICE.txt`），Kotus / Yle 词表为 CC BY 4.0（见 `data/import/KOTUS-NOTICE.txt`），用户提供的 A1–B1 工作簿按项目所有者授权使用。来源清单见 `data/sources.json`。

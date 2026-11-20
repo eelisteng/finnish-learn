@@ -777,12 +777,26 @@ const BADGES = [
   (a) => `<circle cx="80" cy="18" r="2" fill="${a}" fill-opacity=".55"/><circle cx="86" cy="18" r="2" fill="${a}" fill-opacity=".55"/>`,
   (a) => `<path d="M78 16 H86 M78 20 H86" stroke="${a}" stroke-opacity=".6" stroke-width="1.8" stroke-linecap="round"/>`,
 ]
-/* An opaque, light card keeps identical contrast in the app's light AND dark
-   themes and matches the three hand-made PNG samples. Art occupies the upper
-   54 x 54 box (centre 50,44); the bottom band carries the Chinese meaning. */
-const CARD_BG = '#F8FAFC'
-const FRAME = (a) => `<rect x="1" y="1" width="98" height="98" rx="18" fill="${CARD_BG}" stroke="${a}" stroke-opacity=".42" stroke-width="1.8"/>`
-const HALO = (a) => `<circle cx="50" cy="44" r="27" fill="${a}" fill-opacity=".10"/>`
+/* Each card is rendered TWICE: a light variant and a dark variant. The app
+   loads them as <img>, so the parent page's CSS cannot reach inside the SVG
+   document -- a hardcoded light frame would stay a white block in dark mode.
+   picture() picks <id>.svg or <id>.dark.svg from the current theme; no data
+   model, CSV column or build step needs a second path. Dark accents are the
+   same hues lifted towards white so they keep their contrast on the dark
+   card, while the meaning band and halo get a slightly stronger fill. */
+const THEMES = {
+  light: { bg: '#F8FAFC', lift: 0, halo: '.10', band: '.13' },
+  dark: { bg: '#22303E', lift: .42, halo: '.16', band: '.22' },
+}
+function liftHex(hex, amount) {
+  if (!amount) return hex
+  const n = parseInt(hex.slice(1), 16)
+  const ch = [(n >> 16) & 255, (n >> 8) & 255, n & 255]
+  return '#' + ch.map((v) => Math.round(v + (255 - v) * amount).toString(16).padStart(2, '0')).join('').toUpperCase()
+}
+const CARD_BG = THEMES.light.bg
+const FRAME = (a, bg = CARD_BG) => `<rect x="1" y="1" width="98" height="98" rx="18" fill="${bg}" stroke="${a}" stroke-opacity=".42" stroke-width="1.8"/>`
+const HALO = (a, opacity = '.10') => `<circle cx="50" cy="44" r="27" fill="${a}" fill-opacity="${opacity}"/>`
 const FONT = "Arial, Helvetica, 'PingFang SC', 'Microsoft YaHei', sans-serif"
 
 function glyph(iconName, accent) {
@@ -800,10 +814,10 @@ function captionLabel(row) {
   const first = (zh.split(/[；;、,，/／()（）\s]/)[0] || row.sense_en || '').trim()
   return Array.from(first).slice(0, 5).join('')
 }
-function caption(row, accent) {
+function caption(row, accent, bandOpacity = '.13') {
   const label = captionLabel(row)
   const size = label.length >= 5 ? 10 : 12
-  return `<rect x="9" y="76" width="82" height="17" rx="8.5" fill="${accent}" fill-opacity=".13"/>` +
+  return `<rect x="9" y="76" width="82" height="17" rx="8.5" fill="${accent}" fill-opacity="${bandOpacity}"/>` +
     `<text x="50" y="84.6" text-anchor="middle" dominant-baseline="central" font-family="${FONT}" font-size="${size}" font-weight="600" fill="${accent}">${esc(label)}</text>`
 }
 
@@ -828,9 +842,10 @@ function ordinalCard(value, accent) {
   return bars + `<text x="50" y="23" text-anchor="middle" dominant-baseline="central" font-family="${FONT}" font-size="20" font-weight="700" fill="${accent}">${value}</text>`
 }
 
-function renderCard(row, plan) {
-  const { accent, pattern, badge, family, icon } = plan
-  const a = accent
+function renderCard(row, plan, themeName = 'light') {
+  const th = THEMES[themeName]
+  const { pattern, badge, family, icon } = plan
+  const a = liftHex(plan.accent, th.lift)
   const art = family
     ? family.kind === 'number' ? numberCard(family.value, a)
       : family.kind === 'month' ? calendarCard(family.value, a)
@@ -840,7 +855,7 @@ function renderCard(row, plan) {
               : glyph(family.icon, a)
     : glyph(icon, a)
   return `<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" role="img" aria-label="${esc(row.sense_zh)} / ${esc(row.sense_en)}">` +
-    FRAME(a) + PATTERNS[pattern](a) + HALO(a) + art + BADGES[badge](a) + caption(row, a) + `</svg>\n`
+    FRAME(a, th.bg) + PATTERNS[pattern](a) + HALO(a, th.halo) + art + BADGES[badge](a) + caption(row, a, th.band) + `</svg>\n`
 }
 
 /* ── 5. deterministic meaning resolution ─────────────────────────────── */
@@ -1071,11 +1086,13 @@ function buildPlans(rows) {
 /* ── 6. visual review sheet ──────────────────────────────────────────── */
 /* A self-contained page: it works over file:// as well as HTTP, so all 977
    cards can be eyeballed without starting a server. */
-function renderSheet(report, cardById) {
-  // Embed the SVG markup directly instead of linking sibling files: the page
-  // then works from file://, a static server, and preview panels that serve
-  // only the HTML file (no directory access).
-  const sheetData = report.mapping.map((m) => ({ ...m, svg: cardById.get(m.id) }))
+function renderSheet(report, cardById, darkCardById) {
+  // Embed BOTH theme variants directly instead of linking sibling files: the
+  // page then works from file://, a static server, and preview panels that
+  // serve only the HTML file (no directory access).
+  const sheetData = report.mapping.map((m) => ({
+    ...m, svg: cardById.get(m.id), svgDark: darkCardById.get(m.id),
+  }))
   const data = JSON.stringify(sheetData)
     .replace(/<\/script/gi, '<\\/script')
     .replace(/\u2028|\u2029/g, (c) => `\\u${c.charCodeAt(0).toString(16)}`)
@@ -1085,6 +1102,7 @@ function renderSheet(report, cardById) {
 <title>插画审阅 · Illustration review</title>
 <style>
 :root{--bg:#f4f7fa;--surface:#fff;--line:#e1e8ef;--text:#1c2b3a;--muted:#6b7c8d}
+:root[data-theme="dark"]{--bg:#0f1720;--surface:#18232e;--line:#2c3b49;--text:#e8eff6;--muted:#9dacbd}
 *{box-sizing:border-box}
 body{margin:0;padding:24px;background:var(--bg);color:var(--text);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,"PingFang SC","Microsoft YaHei",sans-serif}
 h1{font-size:22px;margin:0 0 6px}h2{font-size:15px;margin:24px 0 10px}
@@ -1103,34 +1121,43 @@ input{flex:1;min-width:220px}
 .en{color:#8a99a8;font-size:10px;margin-top:2px;word-break:break-word}
 .meta{color:#9aa8b6;font-size:9px;margin-top:6px;border-top:1px solid var(--line);padding-top:5px;word-break:break-all}
 .count{color:var(--muted);font-size:12px;margin:0 0 10px}
+button.toggle{padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text);cursor:pointer;font:14px inherit}
 </style></head><body>
 <h1>插画审阅 / Illustration review</h1>
-<p class="note">每张卡片均为 100 × 100 SVG，统一浅色底框、光晕与线宽；底部中文标签直接给出词义，因此抽象词也不会产生歧义。图标来自 Lucide Icons v1.74.0（ISC 许可），见 <code>data/import/LUCIDE-NOTICE.txt</code>。所有 SVG 的 SHA-256 均不相同，且同一五词学习组内不会出现「相同图形 + 相同配色」的两张卡。</p>
+<p class="note">每张卡片均为 100 × 100 SVG，统一底框、光晕与线宽；底部中文标签直接给出词义，因此抽象词也不会产生歧义。图标来自 Lucide Icons v1.74.0（ISC 许可），见 <code>data/import/LUCIDE-NOTICE.txt</code>。所有 SVG 的 SHA-256 均不相同，且同一五词学习组内不会出现「相同图形 + 相同配色」的两张卡。<b>用「暗色预览」切换主题</b>：浅色 / 暗色是两份独立 SVG，与应用内主题一一对应。</p>
 <div class="stats" id="stats"></div>
 <div class="bar">
   <input id="q" type="search" placeholder="搜索芬兰语 / 中文 / English / 图标名…" aria-label="search">
   <select id="kind"><option value="">全部匹配方式</option></select>
+  <button class="toggle" id="theme" type="button">暗色预览 / Dark preview</button>
   <span class="count" id="count"></span>
 </div>
 <div class="grid" id="grid"></div>
 <script>
 const DATA = ${data};
-const SUMMARY = ${JSON.stringify({ words: report.words, generated: report.generated, keptPngSamples: report.keptPngSamples, exactMeaningCards: report.exactMeaningCards, distinctGlyphs: report.distinctGlyphs, maxGlyphReuse: report.maxGlyphReuse, distinctSvgHashes: report.distinctSvgHashes, resolution: report.resolution }).replace(/</g, '\\u003c')};
-const stats = [['单词总数', SUMMARY.words],['本次生成', SUMMARY.generated],['保留 PNG 样例', SUMMARY.keptPngSamples],['定制数字/月份/颜色卡', SUMMARY.exactMeaningCards],['不同图形', SUMMARY.distinctGlyphs],['唯一 SVG 哈希', SUMMARY.distinctSvgHashes]];
+const SUMMARY = ${JSON.stringify({ words: report.words, generated: report.generated, keptPngSamples: report.keptPngSamples, exactMeaningCards: report.exactMeaningCards, distinctGlyphs: report.distinctGlyphs, maxGlyphReuse: report.maxGlyphReuse, distinctSvgHashes: report.distinctSvgHashes, darkDistinctSvgHashes: report.darkDistinctSvgHashes, resolution: report.resolution }).replace(/</g, '\\u003c')};
+const stats = [['单词总数', SUMMARY.words],['本次生成', SUMMARY.generated],['保留 PNG 样例', SUMMARY.keptPngSamples],['定制数字/月份/颜色卡', SUMMARY.exactMeaningCards],['不同图形', SUMMARY.distinctGlyphs],['唯一浅色哈希', SUMMARY.distinctSvgHashes],['唯一暗色哈希', SUMMARY.darkDistinctSvgHashes]];
 document.getElementById('stats').innerHTML = stats.map(([k,v]) => '<div class="stat"><b>'+v+'</b><span>'+k+'</span></div>').join('');
 const kinds = [...new Set(DATA.map(d => d.match))].sort();
 const sel = document.getElementById('kind');
 for (const k of kinds) { const o = document.createElement('option'); o.value = k; o.textContent = k + ' (' + DATA.filter(d=>d.match===k).length + ')'; sel.appendChild(o); }
 function esc(s){ return String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+let dark = false;
 function draw(){
   const q = document.getElementById('q').value.trim().toLowerCase(), k = sel.value;
   const list = DATA.filter(d => (!k || d.match===k) && (!q || [d.lemma,d.zh,d.en,d.icon,d.caption,d.id].join(' ').toLowerCase().includes(q)));
   document.getElementById('count').textContent = '显示 ' + list.length + ' / ' + DATA.length;
   document.getElementById('grid').innerHTML = list.map(d =>
-    '<div class="card">' + d.svg +
+    '<div class="card">' + (dark ? d.svgDark : d.svg) +
     '<div class="fi">' + esc(d.lemma) + '</div><div class="zh">' + esc(d.zh) + '</div>' +
     '<div class="en">' + esc(d.en) + '</div><div class="meta">' + esc(d.icon || d.match) + ' · ' + esc(d.match) + '</div></div>').join('');
 }
+document.getElementById('theme').addEventListener('click', function(){
+  dark = !dark;
+  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  this.textContent = dark ? '浅色预览 / Light preview' : '暗色预览 / Dark preview';
+  draw();
+});
 document.getElementById('q').addEventListener('input', draw);
 sel.addEventListener('change', draw);
 draw();
@@ -1139,21 +1166,44 @@ draw();
 }
 
 /* ── 7. main ──────────────────────────────────────────────────────────── */
-function verifyFiles(rows) {
+/* Validate the strings we are about to write. This must not depend on the
+   files already existing: a first run (or a new theme variant) would
+   otherwise report hundreds of "missing" files and fail after succeeding. */
+function verifyCards(generated, cardById, variant) {
+  const problems = []
+  const hashes = new Map()
+  for (const row of generated) {
+    const rel = `${IMAGE_DIR}${row.id}${variant}.svg`
+    const svg = cardById.get(row.id)
+    if (!svg) { problems.push(`missing render ${rel}`); continue }
+    if (!/^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg" width="100" height="100" viewBox="0 0 100 100"/.test(svg)) {
+      problems.push(`wrong canvas ${rel}`)
+    }
+    if (/<script|href=|url\(|xlink:href/i.test(svg)) problems.push(`external reference ${rel}`)
+    const h = sha(svg)
+    if (hashes.has(h)) problems.push(`duplicate ${rel} == ${hashes.get(h)}`)
+    hashes.set(h, rel)
+  }
+  return { count: generated.length, unique: hashes.size, problems }
+}
+
+/* --check additionally walks the real files on disk. */
+function verifyFiles(rows, variant = '') {
   const generated = rows.filter((r) => r.image_path?.endsWith('.svg'))
   const problems = []
   const hashes = new Map()
   for (const row of generated) {
-    const file = join(root, row.image_path)
-    if (!existsSync(file)) { problems.push(`missing ${row.image_path}`); continue }
+    const rel = variant ? row.image_path.replace(/\.svg$/i, `${variant}.svg`) : row.image_path
+    const file = join(root, rel)
+    if (!existsSync(file)) { problems.push(`missing ${rel}`); continue }
     const svg = readFileSync(file, 'utf8')
     if (!/^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg" width="100" height="100" viewBox="0 0 100 100"/.test(svg)) {
-      problems.push(`wrong canvas ${row.image_path}`)
+      problems.push(`wrong canvas ${rel}`)
     }
-    if (/<script|href=|url\(|xlink:href/i.test(svg)) problems.push(`external reference ${row.image_path}`)
+    if (/<script|href=|url\(|xlink:href/i.test(svg)) problems.push(`external reference ${rel}`)
     const h = sha(svg)
-    if (hashes.has(h)) problems.push(`duplicate ${row.image_path} == ${hashes.get(h)}`)
-    hashes.set(h, row.image_path)
+    if (hashes.has(h)) problems.push(`duplicate ${rel} == ${hashes.get(h)}`)
+    hashes.set(h, rel)
   }
   return { count: generated.length, unique: hashes.size, problems }
 }
@@ -1169,11 +1219,14 @@ function main() {
   const kept = rows.filter((r) => !isGenerated(r))
   const { plans, usedIcons, families, viaCounts, maxReuse } = buildPlans(rows)
   const generated = rows.filter(isGenerated)
-  // Render every card once; the same string is written to disk, compared by
-  // --check, and embedded in the self-contained review page.
-  const cardById = new Map(generated.map((row) => [row.id, renderCard(row, plans.get(row.id))]))
+  // Render every card once per theme; the same strings are written to disk,
+  // compared by --check, and embedded in the self-contained review page.
+  const cardById = new Map(generated.map((row) => [row.id, renderCard(row, plans.get(row.id), 'light')]))
+  const darkCardById = new Map(generated.map((row) => [row.id, renderCard(row, plans.get(row.id), 'dark')]))
   const prospective = rows.map((r) => ({ ...r, image_path: isGenerated(r) ? `${IMAGE_DIR}${r.id}.svg` : r.image_path }))
-  const stats = verifyFiles(prospective)
+  const stats = verifyCards(generated, cardById, '')
+  const darkStats = verifyCards(generated, darkCardById, '.dark')
+  const allProblems = [...stats.problems, ...darkStats.problems]
   const resolution = Object.fromEntries([...viaCounts].sort((a, b) => b[1] - a[1]))
   const mapping = generated.map((row) => {
     const plan = plans.get(row.id)
@@ -1184,9 +1237,13 @@ function main() {
   const report = {
     note: 'Deterministic illustration manifest. No timestamps; re-running the generator on unchanged input is byte-stable. Run `node scripts/generate-illustrations.mjs --check` to verify.',
     glyphSource: 'Lucide Icons v1.74.0 (ISC), see data/import/LUCIDE-NOTICE.txt',
-    design: 'Every card is 100x100 SVG with the same opaque light frame, halo and stroke. A Chinese meaning label on the bottom band makes the meaning exact even for abstract words; accent, pattern and badge make every card visually distinct.',
+    design: 'Every card is 100x100 SVG with the same frame / halo / stroke / meaning band. Two theme variants are generated: a light card (#F8FAFC) and a dark card (#22303E) with lifted accents. A Chinese meaning label on the bottom band makes the meaning exact even for abstract words; accent, pattern and badge make every card visually distinct.',
     canvas: '100 x 100 SVG, identical frame / halo / stroke / meaning band for every card',
-    uniqueness: 'SHA-256 of each SVG is distinct; related words may share a glyph, but two words in the same five-word learning group never share both glyph and accent colour.',
+    themes: {
+      light: { frame: THEMES.light.bg, suffix: '.svg', note: 'default; referenced by words.csv image_path' },
+      dark: { frame: THEMES.dark.bg, suffix: '.dark.svg', note: 'selected by app/main.js picture() when data-theme is dark' },
+    },
+    uniqueness: 'Within each theme the SHA-256 of each SVG is distinct; related words may share a glyph, but two words in the same five-word learning group never share both glyph and accent colour.',
     words: rows.length,
     keptPngSamples: kept.length,
     generated: generated.length,
@@ -1195,21 +1252,29 @@ function main() {
     maxGlyphReuse: maxReuse,
     resolution,
     distinctSvgHashes: stats.unique,
-    duplicateOrInvalid: stats.problems,
+    darkDistinctSvgHashes: darkStats.unique,
+    duplicateOrInvalid: allProblems,
     mapping,
   }
-  const sheet = renderSheet(report, cardById)
+  const sheet = renderSheet(report, cardById, darkCardById)
 
   if (CHECK_ONLY) {
     const pending = rows.filter((r) => !r.image_path).length
-    // Byte-stability check: every SVG, the manifest and the review page must
-    // be exactly what the generator produces from the current CSV + icon set.
+    const disk = verifyFiles(prospective)
+    const darkDisk = verifyFiles(prospective, '.dark')
+    const diskProblems = [...disk.problems, ...darkDisk.problems]
+    // Byte-stability check: every SVG of BOTH themes, the manifest and the
+    // review page must be exactly what the generator produces from the
+    // current CSV + icon set.
     const drift = []
     for (const row of prospective) {
       if (!row.image_path.endsWith('.svg')) continue
-      const path = join(root, row.image_path)
-      if (!existsSync(path)) continue
-      if (readFileSync(path, 'utf8') !== cardById.get(row.id)) drift.push(row.image_path)
+      const light = join(root, row.image_path)
+      const dark = join(root, row.image_path.replace(/\.svg$/i, '.dark.svg'))
+      if (existsSync(light) && readFileSync(light, 'utf8') !== cardById.get(row.id)) drift.push(row.image_path)
+      else if (!existsSync(light)) drift.push(`missing ${row.image_path}`)
+      if (existsSync(dark) && readFileSync(dark, 'utf8') !== darkCardById.get(row.id)) drift.push(`${row.id}.dark.svg`)
+      else if (!existsSync(dark)) drift.push(`missing ${row.id}.dark.svg`)
     }
     for (const [label, path, expected] of [
       ['manifest', REPORT, `${JSON.stringify(report, null, 2)}\n`],
@@ -1219,11 +1284,11 @@ function main() {
       else if (readFileSync(path, 'utf8') !== expected) drift.push(`${label} drift`)
     }
     console.log(`Check: ${rows.length} words, ${rows.length - pending} declared, ${pending} pending`)
-    console.log(`  ${stats.count} SVG files, ${stats.unique} unique hashes, ${stats.problems.length} file problem(s)`)
+    console.log(`  light: ${disk.count} SVG, ${disk.unique} unique hashes | dark: ${darkDisk.count} SVG, ${darkDisk.unique} unique hashes | ${diskProblems.length} file problem(s)`)
     console.log(`  ${drift.length} file(s) drifted from the deterministic plan`)
     console.log(`  resolution: ${JSON.stringify(resolution)}`)
-    for (const p of [...stats.problems, ...drift.map((d) => `drift ${d}`)].slice(0, 20)) console.log('  ERROR ' + p)
-    if (pending || stats.problems.length || drift.length) process.exitCode = 1
+    for (const p of [...diskProblems, ...drift.map((d) => `drift ${d}`)].slice(0, 20)) console.log('  ERROR ' + p)
+    if (pending || diskProblems.length || drift.length || allProblems.length) process.exitCode = 1
     return
   }
 
@@ -1233,6 +1298,7 @@ function main() {
     if (!isGenerated(row)) continue
     const rel = `${IMAGE_DIR}${row.id}.svg`
     writeFileSync(join(root, rel), cardById.get(row.id), 'utf8')
+    writeFileSync(join(root, rel.replace(/\.svg$/i, '.dark.svg')), darkCardById.get(row.id), 'utf8')
     row.image_path = rel
     row.image_status = 'ready'
     row.image_source = 'lucide-svg'
@@ -1243,12 +1309,12 @@ function main() {
   writeFileSync(REPORT, `${JSON.stringify(report, null, 2)}\n`, 'utf8')
   writeFileSync(SHEET, sheet, 'utf8')
 
-  console.log(`Generated ${generated.length} SVG illustrations -> ${IMAGE_DIR}`)
+  console.log(`Generated ${generated.length} light + ${generated.length} dark SVG illustrations -> ${IMAGE_DIR}`)
   console.log(`  kept ${kept.length} existing PNG samples | exact-meaning cards ${families} | distinct glyphs ${usedIcons.size} | max glyph reuse ${maxReuse}`)
   console.log(`  resolution: ${JSON.stringify(resolution)}`)
-  console.log(`  unique SVG hashes ${stats.unique}/${generated.length} | problems ${stats.problems.length}`)
+  console.log(`  unique light hashes ${stats.unique}/${generated.length} | unique dark hashes ${darkStats.unique}/${generated.length} | problems ${allProblems.length}`)
   console.log(`  updated ${WORDS_CSV}, ${REPORT} and ${SHEET}`)
-  if (stats.problems.length) { for (const p of stats.problems.slice(0, 20)) console.error('  ERROR ' + p); process.exitCode = 1 }
+  if (allProblems.length) { for (const p of allProblems.slice(0, 20)) console.error('  ERROR ' + p); process.exitCode = 1 }
 }
 
 main()

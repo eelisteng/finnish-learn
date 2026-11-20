@@ -145,6 +145,10 @@
   function imageAlt(image) {
     return uiLang() === 'en' ? (image?.altEn ?? image?.altZh) : (image?.altZh ?? image?.altEn)
   }
+  /* Illustrations are full-colour WebP paintings from Word Atlas. They are
+     shown as-is in both light and dark themes (the art carries its own
+     background), so no theme-dependent src rewrite is needed. Any other
+     format kept for reference is also displayed unchanged. */
   function picture(image, seed, cls, alt) {
     const label = esc(alt ?? imageAlt(image) ?? t('mem.imageFallback'))
     if (image?.path) {

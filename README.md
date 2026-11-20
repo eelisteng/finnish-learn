@@ -57,7 +57,7 @@ python3 -m http.server 8000
 node scripts/export-sheets.mjs        # XLSX → 6 份可审阅的 CSV 快照（零依赖 OOXML 解析）
 node scripts/build-en-glosses.mjs     # 中文 → 英文缓存（已提交，正常构建无需联网）
 node scripts/import-a1-b1.mjs         # 合并生成 data/words.csv / data/sentences.csv
-node scripts/generate-illustrations.mjs  # 生成全量 SVG 配图（见下节；重跑导入后必须执行）
+node scripts/import-atlas-images.mjs  # 用 Word Atlas WebP 替换全部配图（见下节；重跑导入后必须执行）
 node scripts/build-content.mjs && node scripts/build-groups.mjs
 ```
 
@@ -92,26 +92,26 @@ node scripts/build-content.mjs && node scripts/build-groups.mjs && node scripts/
 
 图片与音频元数据都写在 CSV，不要写进 `app/*.js` 或 `data/content-source.mjs`——CSV 是权威编辑层，从种子重建时也会覆盖回去。素材齐了以后前端会自动优先播放预录文件，无需改代码。
 
-### 全量配图（977 张确定性 SVG）
+### 全量配图（980 张 Word Atlas WebP 插画）
 
-`assets/illustrations/` 里除了 3 张手工示例 PNG，其余 977 个词条各有一张 `assets/illustrations/<id>.svg`，全部由 `scripts/generate-illustrations.mjs` 从 `data/words.csv` 生成，**不调用任何生图服务、不消耗积分**：
+`assets/illustrations/` 里每个词条各有一张 `<id>.webp`（共 980 张、互不重复），来自兄弟项目 **Word Atlas** 的 `word-atlas-main/public/atlas/img/`（**CC BY 4.0**），全部由 `scripts/import-atlas-images.mjs` 按词义映射并复制，**不调用任何生图服务、不消耗积分**。这批 512 × 512 全彩插画比之前的矢量图标质量更高、画面更丰富：
 
 ```bash
-node scripts/generate-illustrations.mjs          # 生成 SVG + 回写 CSV 图片列 + 报告 + 审阅页
-node scripts/generate-illustrations.mjs --check  # 只校验（画布、唯一性、字节漂移），不写文件
+node scripts/import-atlas-images.mjs          # 按词义替换全部配图 + 回写 CSV + 报告 + 审阅页
+node scripts/import-atlas-images.mjs --check  # 只校验（唯一性 / 文件存在 / 字节漂移），不写文件
 ```
-
-三条硬约束与实现方式：
 
 | 要求 | 实现 |
 | --- | --- |
-| 图不重复 | 每张 SVG 的 SHA-256 都不同（977/977）；同一五词学习组内不会出现「相同图形 + 相同配色」的两张卡。底色 / 装饰纹样 / 角标由词条 ID 的 SHA-256 决定 |
-| 大小一致 | 全部 `100 × 100`、`viewBox="0 0 100 100"`，同一浅色底框、光晕、线宽与底部中文释义条；浅色 / 深色主题下对比度一致 |
-| 简明反映词义 | 中文释义 + 英文释义 + 主题 + 人工 override 组成的确定性语义链，只从经过筛选的 Lucide 具象图标中取图；数字、月份、星期、序数、颜色、季节另有专用数字 / 日历 / 色卡卡面（共 57 张）。底部中文标签让「仅仅」「诊断」这类抽象词也不会有歧义 |
+| 图不重复 | 980/980 张 WebP 的 SHA-256 都不同。词义首选图片被同义词占用时，按人工维护的 `ALTERNATES` → Word Atlas 词族 / 同义词 → 同主题同等级的顺序挑一张未占用的图，保证一条一词一图 |
+| 大小一致 | 源图统一 512 × 512，复制后按 `<id>.webp` 命名；前端所有图片盒统一 `object-fit:contain`，卡片宽高比由 CSS 决定 |
+| 简明反映词义 | 匹配链为「人工 override（101 个无对应图片的数字 / 代词 / 功能词）→ 英文释义精确匹配 → 去 to / 单数 / 去括号变体 → 中文释义对应 Word Atlas 词义」。数字、代词、语法术语用最接近的具象图（如 `kaksi`→一双、`kolme`→三角形、`minä`→自己） |
 
-图标取自 **Lucide Icons v1.74.0（ISC）**，图标名与线条数据放在 `data/import/lucide-icons.json`，许可全文见 `data/import/LUCIDE-NOTICE.txt`。生成器会拒绝纯 UI / 编辑器 / 品牌图标和 `file-x`、`percent-square`、`scan-box` 一类的状态变体，避免词义被无关的图形带偏。生成结果、映射表和审阅页都写在 `data/import/illustration-report.json` 与 `tools/illustration-review.html`；**打开审阅页**可以按芬兰语 / 中文 / 英文 / 图标名搜索并按匹配方式筛选，逐张人工复核（当前全部 `image_reviewStatus=pending`）。审阅页把 977 张 SVG 直接内嵌，完全自包含，`file://` 打开或只发布单个 HTML 也能正常显示，无需起服务器。
+**主题处理**：WebP 是自带背景的完整画作，浅色 / 暗色主题下**原样显示**，不再做 `.dark.svg` 变体替换。`app/main.js` 的 `picture()` 直接使用 CSV 声明的路径，主题切换不再改动图片 URL。
 
-输出是确定性的：没有时间戳、没有随机数，输入不变时连跑两遍 977 个 SVG、CSV、报告与审阅页都字节一致。重跑 `import-a1-b1.mjs` 会把导入行的图片列重置为 `pending`，所以重建链路里必须紧接着执行本脚本。
+**来源与署名**：插画取自 [Word Atlas](../../word-atlas-main)（内容 CC BY 4.0），署名 **Word Atlas contributors — CC BY 4.0**（授权链接 https://creativecommons.org/licenses/by/4.0/）；原图仅复制并按芬兰语词 id 重命名，未做视觉修改。许可与来源也记在 `data/sources.json` 与 `data/import/atlas-image-report.json`。映射表含每张图的源文件名、匹配方式与 SHA-256；**打开 `tools/illustration-review.html`** 可按芬兰语 / 中文 / 英文 / 源图名搜索并按匹配方式筛选，逐张人工复核（当前全部 `image_reviewStatus=pending`）。审阅页把 980 张 WebP 的 256px 缩略图以 base64 内嵌（成品仍是 512 × 512），完全自包含，`file://` 打开或只发布单个 HTML 也能显示。
+
+输出是确定性的：没有时间戳、没有随机数，输入不变时连跑两遍 980 张 WebP、CSV、报告与审阅页都字节一致。重跑 `import-a1-b1.mjs` 会把导入行的图片列重置为 `pending`，所以重建链路里必须紧接着执行本脚本。旧的 SVG 生成器 `generate-illustrations.mjs` 仅作后备保留，默认构建链不再调用它。
 
 ## 验证
 
@@ -121,18 +121,23 @@ node scripts/validate-content.mjs --self-test  # 内容结构与分级校验
 node scripts/csv-pack.mjs --self-test          # CSV 往返与反例
 node scripts/import-a1-b1.mjs --dry-run        # 只出报告、不写文件
 node scripts/test-flow.mjs                     # 领域流程与练习行为测试
-node scripts/generate-illustrations.mjs --check # 977 张 SVG 的尺寸 / 唯一性 / 确定性
+node scripts/import-atlas-images.mjs --check # 980 张 WebP 的唯一性 / 文件存在 / 字节漂移
 node scripts/test-mobile.mjs                   # 找图模式手机适配（需 Node 22+ / 本地 Chrome）
-node scripts/test-webkit.mjs                   # 找图模式真实 WebKit 回归（需 macOS + swiftc）
+node scripts/test-webkit.mjs                   # 全 6 种练习模式真实 WebKit 回归（需 macOS + swiftc）
 ```
 
-可复现性自检：依次重跑 `export-sheets.mjs → build-en-glosses.mjs → import-a1-b1.mjs → generate-illustrations.mjs → build-content.mjs → build-groups.mjs`，`git diff` 应为空（生成文件不含时间戳）。若出现差异，说明输入快照或推导规则被改过，需要复核。
+可复现性自检：依次重跑 `export-sheets.mjs → build-en-glosses.mjs → import-a1-b1.mjs → import-atlas-images.mjs → build-content.mjs → build-groups.mjs`，`git diff` 应为空（生成文件不含时间戳）。若出现差异，说明输入快照或推导规则被改过，需要复核。
 
 浏览器端到端回归：用 headless Chrome 打开 `tests/browser-flow.html`，页面内会输出逐项断言结果。
 
 `test-mobile.mjs` 通过 DevTools 协议把视口真正模拟成 1280（桌面基准）/ 641（4 列断点）/ 390 / 360 / 320px 并派发**真实 touch 事件**（headless Chrome 的 `--window-size` 最小 500px，模拟不了手机），断言找图模式为 2 列栅格、长芬兰语单词不逐字竖排、点击后图片可见，并把每个手机视口下四张卡片与翻面后的 3:2 宽高比逐一和桌面基准比对。缺少 Node 22 的 `WebSocket` 或本地 Chrome 时会 `SKIP` 并返回 0，不影响其它环境。
 
-`test-webkit.mjs` 补的是 Chrome 测不到的引擎差异：它会编译 `tests/webkit-find-image.swift`，在 **WKWebView**（iOS Safari、微信内置浏览器的同一排版引擎）里跑同一个断言页。WebKit 会在每个 `<button>` 内部保留一个匿名弹性盒，并继承 `.optcard` 的 `align-items:center`；若找图模式没有把它重置成 `stretch`，`.flip-inner` 就会收缩到单词的内容宽度，四个不同长度的词得到四种不同宽度（进而四种 3:2 高度），翻面后又变成整卡宽。Blink 会忽略块级按钮上的 `align-items`，所以纯 Chrome 回归一直全绿。该脚本同时校验听选模式卡片填满同一栅格列、翻面动画不含任何会压缩盒子的 3D transform，并把所有手机视口的宽高比与桌面 3:2 基准比对；非 macOS 或缺 `swiftc` 时 `SKIP` 并返回 0。
+`test-webkit.mjs` 补的是 Chrome 测不到的引擎差异：它会编译 `tests/webkit-find-image.swift`，在 **WKWebView**（iOS Safari、微信内置浏览器的同一排版引擎）里跑两套断言页。WebKit 会在每个 `<button>` 内部保留一个匿名弹性盒并继承 `align-items`，所以块级按钮里的子元素会收缩到内容宽度：找图模式曾因此让四个不同长度的词得到四种卡宽（进而四种 3:2 高度），选词与匹配按钮也曾比栅格列窄 4px；Blink 会忽略块级按钮上的 `align-items`，纯 Chrome 回归一直全绿。
+
+- **深度套件**：`tests/mobile-find-image.html` 在 1280 / 641 / 390 / 360 / 320px 量四张 face 与翻面后的盒子、听选栅格列宽，并与桌面 3:2 基准比对。
+- **全模式套件**：`tests/mobile-all-modes.html` 把暂停中的会话直接落到指定模式，覆盖选词 / 听选 / 找图 / 匹配 / 填空 / 听写，在 390 / 360 / 320px 检查横向溢出、逐字竖排、卡片与栅格列对齐、可用点击区域，并**真的点一次**（答题反馈 / 选中 tile / 提示展开），避免「画出来了但点不动」蒙混过关。另有 3 个暗色用例验证 `<img>` 加载的是与浅色主题相同的 `.webp` 路径，而不是变体文件或占位图。
+
+非 macOS 或缺 `swiftc` 时 `SKIP` 并返回 0，不影响其它环境。
 
 ## 项目结构
 
@@ -147,26 +152,28 @@ app/styles.css                浅色 / 深色主题
 app/bgm.js                    背景音乐：5 首氛围音轨的实时合成与试听/切换
 data/                         词包、分组、CSV、主题映射、素材清单
 data/import/                  原始 XLSX、六份 CSV 快照、英文缓存、Kotus 词表、导入报告
-assets/illustrations/         成品插画（3 PNG 示例 + 977 SVG）
+assets/illustrations/         成品插画（980 张 Word Atlas WebP，一词一图）
 assets/audio/                 预录音频（当前为空，按 CSV 声明填充）
-tools/illustration-review.html  977 张插画的可搜索审阅页
+tools/illustration-review.html  980 张 WebP 的可搜索自包含审阅页
 scripts/xlsx-read.mjs         零依赖 XLSX 解析（inlineStr / sharedStrings）
 scripts/export-sheets.mjs     工作簿 → 六份 CSV 快照
 scripts/build-en-glosses.mjs  中文 → 英文翻译缓存
 scripts/fi-morphology.mjs     芬兰语形态 / IPA 规则推导
 scripts/import-a1-b1.mjs      A1–B1 合并导入（幂等）
-scripts/generate-illustrations.mjs  全量语义 SVG 配图生成器
+scripts/import-atlas-images.mjs     词义匹配 Word Atlas WebP 配图导入器
+scripts/generate-illustrations.mjs  旧版语义 SVG 生成器（后备，默认链不调用）
 scripts/test-mobile.mjs       找图模式手机适配回归（CDP 视口 + touch）
-scripts/test-webkit.mjs       找图模式真实 WKWebView 回归（macOS）
+scripts/test-webkit.mjs       全 6 模式真实 WKWebView 回归（macOS）
 scripts/                      其余构建、校验、CSV 桥接、领域测试
 tests/browser-flow.html       全模式浏览器回归
-tests/mobile-find-image.html  手机视口 / 长单词 / 真实 touch 断言页
+tests/mobile-find-image.html  找图深度断言页（视口 / 长单词 / 真实 touch）
+tests/mobile-all-modes.html   6 种练习模式的布局 / 交互 / 主题断言页
 tests/webkit-find-image.swift WKWebView 几何探针（由 test-webkit.mjs 编译）
 ```
 
 ## 已知限制
 
-- 980 条配图现在全部是成品（3 张手工示例 PNG + 977 张确定性 SVG），不再是几何占位图；但**全部 `image_reviewStatus` 仍是 `pending`**，需用 `tools/illustration-review.html` 人工复核语义与观感后才能标记为 `human-verified`。抽象词靠底部中文标签表意，单个线稿图标无法逐字「画出」词义。
+- 980 条配图现在全部是成品 Word Atlas WebP（512 × 512 全彩插画，一词一图），不再是几何占位图；但**全部 `image_reviewStatus` 仍是 `pending`**，需用 `tools/illustration-review.html` 逐张人工复核语义与观感后才能标记为 `human-verified`。数字、代词、功能词用最接近的近似图（语义可能不精确，审阅页可按匹配方式 `override` / `topic` 筛选重点复核）。
 - 词包目前 0 条预录音频，全部走浏览器语音合成；多数设备没有 `fi-FI` 语音，长短音与 `ä/ö/å` 会失真。补齐 CSV 的 `audio_*` 列并放入文件后会自动切换为预录播放。
 - **导入行的 IPA、英文释义、词干、6 个基本格、动词主干形式全部是 `auto-derived` 规则推导，未经芬兰语专家校对，不可直接当教材发布。** 800/930 个词条有 Kotus 类号，其余按词形猜测或标 `paradigm pending`。工作簿的等级只是建议值，CEFR / YKI 并无官方词表。
 - 句子目前只提供逐词 chip，没有 `senseId` / 格标注（工作簿未给逐词注解），因此句子的 CEFR 门槛不会由 gloss 反推。
@@ -178,4 +185,4 @@ tests/webkit-find-image.swift WKWebView 几何探针（由 test-webkit.mjs 编�
 
 ## 许可
 
-项目源码为 MIT License，详见 [LICENSE](LICENSE)。第三方素材另有许可：Lucide Icons v1.74.0 为 ISC（见 `data/import/LUCIDE-NOTICE.txt`），Kotus / Yle 词表为 CC BY 4.0（见 `data/import/KOTUS-NOTICE.txt`），用户提供的 A1–B1 工作簿按项目所有者授权使用。来源清单见 `data/sources.json`。
+项目源码为 MIT License，详见 [LICENSE](LICENSE)。第三方素材另有许可：**配图来自 Word Atlas，内容 CC BY 4.0，署名 Word Atlas contributors**（授权链接 https://creativecommons.org/licenses/by/4.0/；原图仅复制并按词 id 重命名）；旧版 Lucide Icons v1.74.0 为 ISC（见 `data/import/LUCIDE-NOTICE.txt`，仅作后备生成器的图标源），Kotus / Yle 词表为 CC BY 4.0（见 `data/import/KOTUS-NOTICE.txt`），用户提供的 A1–B1 工作簿按项目所有者授权使用。完整来源清单见 `data/sources.json`。

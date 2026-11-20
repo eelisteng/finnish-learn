@@ -1,9 +1,21 @@
 {
   "note": "Deterministic illustration manifest. No timestamps; re-running the generator on unchanged input is byte-stable. Run `node scripts/generate-illustrations.mjs --check` to verify.",
   "glyphSource": "Lucide Icons v1.74.0 (ISC), see data/import/LUCIDE-NOTICE.txt",
-  "design": "Every card is 100x100 SVG with the same opaque light frame, halo and stroke. A Chinese meaning label on the bottom band makes the meaning exact even for abstract words; accent, pattern and badge make every card visually distinct.",
+  "design": "Every card is 100x100 SVG with the same frame / halo / stroke / meaning band. Two theme variants are generated: a light card (#F8FAFC) and a dark card (#22303E) with lifted accents. A Chinese meaning label on the bottom band makes the meaning exact even for abstract words; accent, pattern and badge make every card visually distinct.",
   "canvas": "100 x 100 SVG, identical frame / halo / stroke / meaning band for every card",
-  "uniqueness": "SHA-256 of each SVG is distinct; related words may share a glyph, but two words in the same five-word learning group never share both glyph and accent colour.",
+  "themes": {
+    "light": {
+      "frame": "#F8FAFC",
+      "suffix": ".svg",
+      "note": "default; referenced by words.csv image_path"
+    },
+    "dark": {
+      "frame": "#22303E",
+      "suffix": ".dark.svg",
+      "note": "selected by app/main.js picture() when data-theme is dark"
+    }
+  },
+  "uniqueness": "Within each theme the SHA-256 of each SVG is distinct; related words may share a glyph, but two words in the same five-word learning group never share both glyph and accent colour.",
   "words": 980,
   "keptPngSamples": 3,
   "generated": 977,
@@ -25,6 +37,7 @@
     "concept": 1
   },
   "distinctSvgHashes": 977,
+  "darkDistinctSvgHashes": 977,
   "duplicateOrInvalid": [],
   "mapping": [
     {

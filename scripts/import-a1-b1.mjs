@@ -25,11 +25,11 @@
  *  - English glosses come from a committed, reviewable translation cache;
  *    verbs use hand-checked English infinitives from en-verbs.tsv.
  *
- * After running, ALWAYS regenerate the illustrations before rebuilding:
+ * After running, ALWAYS re-import the illustrations before rebuilding:
  * this script drops and recreates every imported row, so their image columns
- * are reset to `pending`. scripts/generate-illustrations.mjs deterministically
- * restores all generated SVG paths, licence fields and the review manifest.
- *   node scripts/generate-illustrations.mjs && node scripts/build-content.mjs &&
+ * are reset to `pending`. scripts/import-atlas-images.mjs deterministically
+ * restores all WebP paths, licence fields and the review manifest.
+ *   node scripts/import-atlas-images.mjs && node scripts/build-content.mjs &&
  *   node scripts/build-groups.mjs && node scripts/validate-content.mjs --self-test &&
  *   node scripts/test-flow.mjs
  */
@@ -397,7 +397,7 @@ function main() {
       'Every imported word is reviewStatus=auto-derived: IPA, case tables, stems and verb principal parts are rule-derived and need a Finnish linguist to verify.',
       'Genuinely indeclinable words (Kotus 99, adverbs, conjunctions) show "—"; words whose paradigm could not be derived are labelled "paradigm pending" / "pluralia tantum (paradigm pending)" and also show "—" until a linguist fills them in.',
       'Imported sentences carry token chips only; interlinear senseId/caseForm annotation is a future step, so no CEFR gate is inferred from glosses.',
-      'Imported rows are emitted with pending image/audio columns; run scripts/generate-illustrations.mjs afterwards to restore the deterministic SVG illustrations. Browser TTS is used until native recordings are reviewed.',
+      'Imported rows are emitted with pending image/audio columns; run scripts/import-atlas-images.mjs afterwards to restore the Word Atlas WebP illustrations. Browser TTS is used until native recordings are reviewed.',
       'Colloquial (Puhekieli) variants, collocations and grammar notes from the workbook are preserved in data/import/*.csv but not yet surfaced in the app.',
       'This report is deterministic (content hashes, no wall-clock timestamp): regenerating from unchanged inputs must produce an empty git diff.',
     ],

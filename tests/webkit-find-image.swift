@@ -1,17 +1,20 @@
-/* Real-WebKit geometry probe for the find-image (找图) cards.
+/* Real-WebKit geometry probe for the practice option cards.
  *
  * Chrome passes the layout because Blink ignores `align-items` on a block
  * button. WebKit keeps an anonymous flex box inside every <button>, so an
  * inherited `align-items:center` shrink-wraps the face to the label width:
  * four words => four different card widths => four different 3:2 heights.
- * This harness runs the SAME assertion page as scripts/test-mobile.mjs inside
- * a WKWebView (the engine used by iOS Safari and WeChat's in-app browser).
- * It is driven by scripts/test-webkit.mjs, which compiles and parses it.
+ * This harness runs the browser assertion pages inside a WKWebView (the
+ * engine used by iOS Safari and WeChat's in-app browser). It is driven by
+ * scripts/test-webkit.mjs, which compiles and parses it.
  *
  *   swiftc -O tests/webkit-find-image.swift -o /tmp/fi-webkit-probe
  *   /tmp/fi-webkit-probe 390 844 [--long]
+ *   /tmp/fi-webkit-probe 390 844 --page=tests/mobile-all-modes.html --query=mode=choice
  *
- * Output is one line: RESULT {json}
+ * Output is one line: RESULT {json}. A page that exposes
+ * window.__WEBKIT_PROBE() is measured through that hook (all-modes page);
+ * otherwise the original find-image before/after-tap flow is used.
  */
 import AppKit
 import WebKit
@@ -24,7 +27,10 @@ var root = URL(fileURLWithPath: "/Users/eelisteng/Workspaces/finnish-learn", isD
 /* Allow the harness to live in a checkout at any path. */
 let repoFromEnv = ProcessInfo.processInfo.environment["FI_REPO"]
 if let repoFromEnv { root = URL(fileURLWithPath: repoFromEnv, isDirectory: true) }
-let page = root.appendingPathComponent("tests/mobile-find-image.html")
+let pageArg = CommandLine.arguments.first(where: { $0.hasPrefix("--page=") })?.dropFirst(7)
+let queryArg = CommandLine.arguments.first(where: { $0.hasPrefix("--query=") })?.dropFirst(8)
+let page = root.appendingPathComponent(pageArg.map(String.init) ?? "tests/mobile-find-image.html")
+let defaultQuery = queryArg.map(String.init) ?? (isLong ? "long=1" : "")
 
 let beforeJS = """
 (function(){
@@ -131,14 +137,28 @@ final class Probe: NSObject, WKNavigationDelegate {
     func fail(_ reason: String) { emit("\"error\":\(Self.quote(reason))") }
 
     func start() {
-        let target = URL(string: "file://\(page.path)\(isLong ? "?long=1" : "")")!
+        let target = URL(string: "file://\(page.path)\(defaultQuery.isEmpty ? "" : "?\(defaultQuery)")")!
         web.loadFileURL(target, allowingReadAccessTo: root)
         waitReady(attempt: 0)
     }
 
+    func emitRaw(_ json: String) {
+        print("RESULT \(json)")
+        fflush(stdout)
+        window.close()
+        DispatchQueue.main.async { NSApplication.shared.terminate(nil) }
+    }
+
+    func generic() {
+        eval("window.__WEBKIT_PROBE()") { json in
+            self.emitRaw(json)
+        }
+    }
+
     func waitReady(attempt: Int) {
         eval("(function(){try{return String(document.getElementById('out')?.textContent ?? '')}catch(e){return 'ERR'}})()") { r in
-            if r.contains("WAITING_FOR_TAP") { self.before() }
+            if r.contains("WAITING_FOR_PROBE") { self.generic() }
+            else if r.contains("WAITING_FOR_TAP") { self.before() }
             else if r.contains("FAIL ") { self.fail("harness: \(r)") }
             else if attempt < 100 {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { self.waitReady(attempt: attempt + 1) }

@@ -1,11 +1,15 @@
-/* Real-WebKit regression for the find-image (找图) option cards.
+/* Real-WebKit regression for every practice mode's option cards.
  *
  * scripts/test-mobile.mjs drives headless Chrome/Blink through CDP, which
  * hides WebKit-only button layout bugs. This runner compiles
  * tests/webkit-find-image.swift into a WKWebView probe (the engine behind
- * iOS Safari and WeChat in-app WebViews), measures the four option boxes at
- * desktop and phone widths, taps the correct card, and compares every ratio
- * with the desktop 3:2 reference.
+ * iOS Safari and WeChat in-app WebViews) and runs two suites:
+ *   1. the deep find-image suite: six viewports, the four 3:2 option boxes
+ *      before/after the flip, the listen grid and cross-viewport parity;
+ *   2. the all-modes suite: choice / listen / findImage / match / cloze /
+ *      dictation at 390 / 360 / 320px, plus dark-theme illustration variants.
+ *      tests/mobile-all-modes.html owns the per-mode assertions and a real
+ *      interaction so a painted-but-dead card cannot pass.
  *
  *   node scripts/test-webkit.mjs
  *   FI_REPO=/path/to/checkout node scripts/test-webkit.mjs
@@ -155,5 +159,93 @@ if (desktop?.data?.before?.cards?.length === 4) {
   console.log('FAIL parity: desktop reference geometry was never captured')
 }
 
-console.log(`\nWebKit find-image regression: ${totalPass} passed, ${totalFail} failed`)
+/* ── all six practice modes in the same WebKit engine ─────────────────
+   The find-image bug was invisible to a Chrome-only suite; the other five
+   modes had no WebKit coverage at all. tests/mobile-all-modes.html seeds a
+   paused session directly in one mode and exposes __WEBKIT_PROBE(). */
+const MODES = ['choice', 'listen', 'findImage', 'match', 'cloze', 'dictation']
+const modeCases = []
+for (const mode of MODES) {
+  for (const width of [390, 360, 320]) {
+    modeCases.push({ width, height: width === 390 ? 844 : width === 360 ? 740 : 700,
+      mode, long: width === 320 })
+  }
+}
+modeCases.push({ width: 390, height: 844, mode: 'choice', dark: true })
+modeCases.push({ width: 390, height: 844, mode: 'listen', dark: true })
+modeCases.push({ width: 390, height: 844, mode: 'findImage', dark: true })
+
+console.log('\n── all practice modes in WKWebView ──')
+const modeResults = []
+for (const c of modeCases) {
+  const label = `${c.mode} @ ${c.width}px${c.dark ? ' (dark)' : c.long ? ' (long words)' : ''}`
+  const query = `mode=${c.mode}${c.long ? '&long=1' : ''}${c.dark ? '&dark=1' : ''}`
+  const args = [String(c.width), String(c.height),
+    '--page=tests/mobile-all-modes.html', `--query=${query}`]
+  let raw
+  try {
+    raw = execFileSync(bin, args, {
+      encoding: 'utf8', timeout: 90000, env: { ...process.env, FI_REPO: ROOT },
+    })
+  } catch (err) {
+    console.log(`FAIL ${label}: probe did not finish :: ${err.message}`)
+    totalFail++
+    continue
+  }
+  const line = raw.split('\n').find((l) => l.startsWith('RESULT '))
+  let data
+  try { data = JSON.parse(line.slice('RESULT '.length)) } catch {
+    console.log(`FAIL ${label}: malformed probe output :: ${raw.slice(0, 300)}`)
+    totalFail++
+    continue
+  }
+  const checks = Array.isArray(data.checks) ? data.checks : []
+  const pass = checks.filter((x) => x.pass).length
+  let fail = checks.filter((x) => !x.pass).length
+  for (const x of checks.filter((x) => !x.pass)) {
+    console.log(`  FAIL [${label}] ${x.name}${x.detail ? ' :: ' + x.detail : ''}`)
+  }
+  if (data.error || !checks.length) { fail++; console.log(`  FAIL [${label}] probe returned no checks :: ${data.error ?? 'empty'}`) }
+  if (data.mode !== c.mode) { fail++; console.log(`  FAIL [${label}] wrong mode :: ${data.mode}`) }
+  if (data.innerWidth !== c.width) { fail++; console.log(`  FAIL [${label}] wrong viewport :: ${data.innerWidth}`) }
+  if (data.dark !== Boolean(c.dark)) { fail++; console.log(`  FAIL [${label}] wrong theme flag :: ${data.dark}`) }
+
+  totalPass += pass; totalFail += fail
+  modeResults.push({ ...c, data })
+  console.log(`── ${label} : ${pass} passed, ${fail} failed ──`)
+}
+
+/* Every mode must be green at every phone width, and the dark suite must
+   actually have exercised WebP illustrations. */
+for (const mode of MODES) {
+  const own = modeResults.filter((r) => r.mode === mode && !r.dark)
+  const green = own.length === 3 && own.every((r) => r.data?.fail === 0 && r.data?.checks?.length > 0)
+  if (green) totalPass++; else totalFail++
+  console.log(`${green ? 'PASS' : 'FAIL'} coverage: ${mode} is green at 390 / 360 / 320px in WebKit`)
+}
+const darkCases = modeResults.filter((r) => r.dark)
+if (darkCases.length === 3 && darkCases.every((r) => r.data?.theme === 'dark' && r.data?.fail === 0)) {
+  totalPass++
+  console.log('PASS coverage: dark-theme WebP illustrations render in WebKit')
+} else {
+  totalFail++
+  console.log('FAIL coverage: dark-theme WebP illustrations were not verified')
+}
+/* A vacuous pass is impossible: both light and dark cases must show real
+   WebP srcs, and no case may show a theme-dependent variant. */
+const srcsOf = (r) => r.data?.geometry?.imgSrcs ?? []
+const webpSrcs = (r) => srcsOf(r).filter((s) => /\.webp$/i.test(s))
+const darkWebpSeen = darkCases.some((r) => webpSrcs(r).length > 0)
+const lightWebpSeen = modeResults.filter((r) => !r.dark)
+  .some((r) => webpSrcs(r).length > 0)
+if (darkWebpSeen) totalPass++; else totalFail++
+console.log(`${darkWebpSeen ? 'PASS' : 'FAIL'} coverage: a WebP src was actually rendered in dark theme`)
+if (lightWebpSeen) totalPass++; else totalFail++
+console.log(`${lightWebpSeen ? 'PASS' : 'FAIL'} coverage: a WebP src was actually rendered in light theme`)
+const badThemePaths = modeResults.flatMap((r) => srcsOf(r)
+  .filter((s) => /\.dark\./i.test(s) || !/\.webp$/i.test(s)))
+if (badThemePaths.length === 0) totalPass++; else totalFail++
+console.log(`${badThemePaths.length === 0 ? 'PASS' : 'FAIL'} coverage: every illustration path is a theme-neutral WebP :: ${JSON.stringify(badThemePaths.slice(0, 5))}`)
+
+console.log(`\nWebKit full-mode regression: ${totalPass} passed, ${totalFail} failed`)
 cleanup(totalFail ? 1 : 0)

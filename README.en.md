@@ -57,7 +57,7 @@ The workbook contains only Finnish lemmas, Chinese glosses, part of speech, sugg
 node scripts/export-sheets.mjs        # XLSX -> six reviewable CSV snapshots (dependency-free OOXML reader)
 node scripts/build-en-glosses.mjs     # zh -> en cache (committed; normal builds need no network)
 node scripts/import-a1-b1.mjs         # merge into data/words.csv / data/sentences.csv
-node scripts/generate-illustrations.mjs  # full SVG illustration set (see below; required after a re-import)
+node scripts/import-atlas-images.mjs  # replace all illustrations with Word Atlas WebP (see below; required after a re-import)
 node scripts/build-content.mjs && node scripts/build-groups.mjs
 ```
 
@@ -92,24 +92,26 @@ Audio convention: put files at `assets/audio/<id>.mp3` (`ogg` / `m4a` / `wav` / 
 
 Keep image and audio metadata in the CSV, not in `app/*.js` or `data/content-source.mjs`: the CSV is the authoritative editing layer and overrides the seed on every rebuild. Once clips are present the UI plays them automatically — no code changes needed.
 
-### Full illustration coverage (977 deterministic SVGs)
+### Full illustration coverage (980 Word Atlas WebP paintings)
 
-Besides the 3 hand-made sample PNGs, every one of the 977 remaining headwords has an `assets/illustrations/<id>.svg` produced by `scripts/generate-illustrations.mjs` from `data/words.csv`. **No image-generation service is called and no credits are spent.**
+Every one of the 980 headwords has one `<id>.webp` (980 files, all distinct) sourced from the sibling **Word Atlas** project's `word-atlas-main/public/atlas/img/` (**CC BY 4.0**), mapped and copied by `scripts/import-atlas-images.mjs`. **No image-generation service is called and no credits are spent.** These 512 x 512 full-colour paintings are richer and higher-quality than the previous vector icons:
 
 ```bash
-node scripts/generate-illustrations.mjs          # write SVGs + CSV image columns + report + review page
-node scripts/generate-illustrations.mjs --check  # verify only (canvas, uniqueness, byte drift)
+node scripts/import-atlas-images.mjs          # replace all art by meaning + rewrite CSV + report + review page
+node scripts/import-atlas-images.mjs --check  # verify only (uniqueness / files / byte drift)
 ```
 
 | Requirement | How it is met |
 | --- | --- |
-| No repeated pictures | Every SVG has a distinct SHA-256 (977/977), and no five-word learning group contains two cards sharing both glyph and accent colour. Accent, pattern and corner badge are derived from a SHA-256 of the word ID |
-| Uniform size | All are `100 x 100` with `viewBox="0 0 100 100"`, one opaque light frame, halo, stroke and bottom meaning band — identical contrast in light and dark themes |
-| Concisely reflects meaning | A deterministic chain (Chinese gloss → English gloss → motif → topic → reviewed overrides) picks from a curated set of *depictive* Lucide glyphs. Numbers, months, weekdays, ordinals, colours and seasons get bespoke numeral / calendar / colour-swatch cards (57 in total). A short Chinese meaning label on every card keeps abstract words such as "only" or "diagnosis" unambiguous |
+| No repeated pictures | 980/980 WebP files have distinct SHA-256 hashes. When a synonym already owns the best image, the importer tries curated `ALTERNATES`, then Word Atlas synonym / family words, then same-topic same-level words — so one word gets one distinct picture |
+| Uniform size | All source art is 512 x 512, copied as `<id>.webp`; the UI uses one `object-fit: contain` rule for every image box, and CSS owns the card aspect ratio |
+| Concisely reflects meaning | Resolution chain: curated override (101 numbers / pronouns / function words with no literal image) → exact English gloss → de-"to" / singular / de-parenthesis variants → Chinese gloss mapped to a Word Atlas sense. Function words and numerals use the closest concrete image (e.g. `kaksi` → a pair, `kolme` → a triangle, `minä` → oneself) |
 
-Glyphs come from **Lucide Icons v1.74.0 (ISC)**; names and line art are vendored in `data/import/lucide-icons.json`, with the licence text in `data/import/LUCIDE-NOTICE.txt`. Pure UI / editor / brand icons and state variants such as `file-x`, `percent-square` or `scan-box` are excluded so a word is never paired with an unrelated glyph. The mapping, statistics and a searchable review page live in `data/import/illustration-report.json` and `tools/illustration-review.html` — **open the review page** to filter by Finnish / Chinese / English / glyph and check cards by eye (all are still `image_reviewStatus: pending`). All 977 SVGs are inlined, so the page is fully self-contained: it works over `file://` or when only the single HTML file is published — no server needed.
+**Themes:** WebP art carries its own background, so it is shown **as-is** in both light and dark themes; there is no `.dark.svg` swap. `picture()` in `app/main.js` uses the CSV path directly and theme changes no longer touch the image URL.
 
-Output is deterministic: no timestamps, no randomness. With unchanged input, two consecutive runs produce byte-identical SVGs, CSV, report and review page. Re-running `import-a1-b1.mjs` resets imported image columns to `pending`, so this generator must always follow it in the rebuild chain.
+**Provenance and attribution:** art comes from [Word Atlas](../../word-atlas-main) (content CC BY 4.0), credited as **Word Atlas contributors — CC BY 4.0** (licence: https://creativecommons.org/licenses/by/4.0/); images were only copied and renamed to Finnish word IDs, with no visual edits. This is recorded in `data/sources.json` and `data/import/atlas-image-report.json`. The report lists each image's source name, match method and SHA-256; **open `tools/illustration-review.html`** to filter by Finnish / Chinese / English / source name and by match method, and review each card (all are still `image_reviewStatus: pending`). All 980 WebP thumbnails (256px; shipped art is 512x512) are base64-inlined, so the page is fully self-contained: it works over `file://` or when only the single HTML file is published.
+
+Output is deterministic: no timestamps, no randomness. With unchanged input, two consecutive runs produce byte-identical WebP files (980), CSV, report and review page. Re-running `import-a1-b1.mjs` resets imported image columns to `pending`, so this importer must always follow it in the rebuild chain. The legacy SVG generator `generate-illustrations.mjs` is kept only as a fallback and is no longer part of the default chain.
 
 ## Validation
 
@@ -119,18 +121,23 @@ node scripts/validate-content.mjs --self-test  # content structure and level che
 node scripts/csv-pack.mjs --self-test          # CSV round-trip and negative cases
 node scripts/import-a1-b1.mjs --dry-run        # report only, writes nothing
 node scripts/test-flow.mjs                     # domain and practice-behavior tests
-node scripts/generate-illustrations.mjs --check # 977 SVGs: size / uniqueness / determinism
+node scripts/import-atlas-images.mjs --check # 980 WebP: uniqueness / files / byte drift
 node scripts/test-mobile.mjs                   # find-image on phones (needs Node 22+ / local Chrome)
-node scripts/test-webkit.mjs                   # real-WebKit find-image regression (needs macOS + swiftc)
+node scripts/test-webkit.mjs                   # all 6 modes in real WebKit (needs macOS + swiftc)
 ```
 
-Reproducibility check: rerun `export-sheets.mjs -> build-en-glosses.mjs -> import-a1-b1.mjs -> generate-illustrations.mjs -> build-content.mjs -> build-groups.mjs`; `git diff` should be empty because no generated file contains a timestamp. Any diff means an input snapshot or derivation rule changed and needs review.
+Reproducibility check: rerun `export-sheets.mjs -> build-en-glosses.mjs -> import-a1-b1.mjs -> import-atlas-images.mjs -> build-content.mjs -> build-groups.mjs`; `git diff` should be empty because no generated file contains a timestamp. Any diff means an input snapshot or derivation rule changed and needs review.
 
 For the browser end-to-end regression, open `tests/browser-flow.html` in headless Chrome; the page prints each assertion result.
 
 `test-mobile.mjs` uses the DevTools Protocol to emulate genuine 1280 (desktop reference) / 641 (4-column breakpoint) / 390 / 360 / 320px viewports and dispatch **real touch events** (plain `--window-size` has a 500px floor in headless Chrome, so it cannot reproduce a phone). It asserts the 2-column grid, that long Finnish lemmas never stack one glyph per line, that the illustration is visible after a tap, and that every card's 3:2 ratio — before AND after the flip — matches the desktop reference at each phone width. It prints `SKIP` and exits 0 when Node 22's `WebSocket` or a local Chrome is unavailable, so other environments stay green.
 
-`test-webkit.mjs` covers the engine difference Chrome cannot see: it compiles `tests/webkit-find-image.swift` and runs the same assertion page inside a **WKWebView** (the layout engine behind iOS Safari and WeChat in-app browsers). WebKit keeps an anonymous flex box inside every `<button>` and inherits `align-items:center` from `.optcard`; unless the find-image rule resets it to `stretch`, `.flip-inner` shrink-wraps to each label's content width, so four words of different lengths produce four different card widths (and therefore four different 3:2 heights), and the flipped card jumps back to full width. Blink ignores `align-items` on a block button, which is why a Chrome-only suite stayed green. The runner also checks that the listen (听选) options fill the same grid column and that the reveal uses no 3D transform capable of squashing the box, and compares every phone ratio with the desktop 3:2 reference. It prints `SKIP` and exits 0 off macOS or without `swiftc`.
+`test-webkit.mjs` covers the engine difference Chrome cannot see: it compiles `tests/webkit-find-image.swift` and runs two assertion pages inside a **WKWebView** (the layout engine behind iOS Safari and WeChat in-app browsers). WebKit keeps an anonymous flex box inside every `<button>` and inherits `align-items`, so children of a block button shrink-wrap to their content: the find-image faces once got four different widths (and four different 3:2 heights), and the choice / match buttons were ~4px narrower than their grid column. Blink ignores `align-items` on a block button, which is why a Chrome-only suite stayed green.
+
+- **Deep suite**: `tests/mobile-find-image.html` measures the four faces and the flipped box at 1280 / 641 / 390 / 360 / 320px, checks the listen grid column, and compares every phone ratio with the desktop 3:2 reference.
+- **All-modes suite**: `tests/mobile-all-modes.html` seeds a paused session directly in one mode and covers choice / listen / findImage / match / cloze / dictation at 390 / 360 / 320px — horizontal overflow, one-glyph-per-line wrapping, alignment to the grid column, usable tap targets — and performs a **real interaction** (answer feedback / tile selection / hint reveal) so a painted-but-dead card cannot pass. Three dark-theme cases also assert that `<img>` keeps the same `.webp` path as the light theme rather than a variant or a placeholder fallback.
+
+It prints `SKIP` and exits 0 off macOS or without `swiftc`.
 
 ## Project structure
 
@@ -145,26 +152,28 @@ app/styles.css                light / dark themes
 app/bgm.js                    live synthesis, preview and switching of the five ambient tracks
 data/                         content pack, groups, CSV files, topic map, source inventory
 data/import/                  source XLSX, six CSV snapshots, en cache, Kotus list, import report
-assets/illustrations/         finished illustrations (3 PNG samples + 977 SVG cards)
+assets/illustrations/         finished illustrations (980 Word Atlas WebP, one per word)
 assets/audio/                 pre-recorded clips (empty for now; declared in CSV)
-tools/illustration-review.html  searchable review page for all 977 SVG cards
+tools/illustration-review.html  searchable self-contained review page for all 980 WebP images
 scripts/xlsx-read.mjs         dependency-free XLSX reader (inlineStr / sharedStrings)
 scripts/export-sheets.mjs     workbook -> six CSV snapshots
 scripts/build-en-glosses.mjs  zh -> en translation cache
 scripts/fi-morphology.mjs     Finnish morphology / IPA rule derivation
 scripts/import-a1-b1.mjs      idempotent A1-B1 merge importer
-scripts/generate-illustrations.mjs  deterministic semantic SVG illustration generator
+scripts/import-atlas-images.mjs     Word Atlas WebP illustration importer (semantic matching)
+scripts/generate-illustrations.mjs  legacy SVG generator (fallback only, not in default chain)
 scripts/test-mobile.mjs       mobile find-image regression (CDP viewport + touch)
-scripts/test-webkit.mjs       real-WKWebView find-image regression (macOS)
+scripts/test-webkit.mjs       all-6-mode real-WKWebView regression (macOS)
 scripts/                      other build, validation, CSV bridge and domain tests
 tests/browser-flow.html       full browser regression
-tests/mobile-find-image.html  phone viewport / long-word / real-touch assertions
+tests/mobile-find-image.html  find-image deep assertions (viewport / long words / real touch)
+tests/mobile-all-modes.html   layout / interaction / theme assertions for all 6 modes
 tests/webkit-find-image.swift WKWebView geometry probe (compiled by test-webkit.mjs)
 ```
 
 ## Known limitations
 
-- All 980 illustrations are finished (3 hand-made sample PNGs + 977 deterministic SVGs); geometric placeholders are gone. **All are still `image_reviewStatus: pending`** and need a human pass in `tools/illustration-review.html` before being marked `human-verified`. Abstract words rely on the printed Chinese label because a single line-art glyph cannot literally depict them.
+- All 980 illustrations are finished Word Atlas WebP paintings (512 x 512 full-colour, one distinct image per word); geometric placeholders are gone. **All are still `image_reviewStatus: pending`** and need a human pass in `tools/illustration-review.html` before being marked `human-verified`. Numbers, pronouns and function words use the closest approximation (filter the review page by `override` / `topic` to focus on those), so their semantics may be imprecise.
 - The pack declares 0 audio clips, so every item currently uses browser speech synthesis. Most devices lack a `fi-FI` voice, which distorts long/short vowels and `ä/ö/å`. Filling the `audio_*` columns and adding the files automatically switches playback to the recordings.
 - **On imported rows the IPA, English glosses, stems, six basic cases and verb principal parts are all `auto-derived` rule output and have NOT been checked by a Finnish linguist — do not publish them as teaching material.** 800/930 imported lemmas had a Kotus class; the rest were inferred from word shape or marked `paradigm pending`. The workbook's levels are suggestions only.
 - Imported sentences carry token chips without `senseId` / case annotation (the workbook has no interlinear glosses), so no CEFR gate is inferred from glosses.
@@ -176,4 +185,4 @@ tests/webkit-find-image.swift WKWebView geometry probe (compiled by test-webkit.
 
 ## License
 
-Project source is MIT License — see [LICENSE](LICENSE). Third-party assets carry their own licences: Lucide Icons v1.74.0 is ISC (`data/import/LUCIDE-NOTICE.txt`), Kotus / Yle word lists are CC BY 4.0 (`data/import/KOTUS-NOTICE.txt`), and the user-provided A1–B1 workbook is used with the project owner's permission. Full inventory: `data/sources.json`.
+Project source is MIT License — see [LICENSE](LICENSE). Third-party assets carry their own licences: **illustrations come from Word Atlas, content CC BY 4.0, credited to Word Atlas contributors** (licence: https://creativecommons.org/licenses/by/4.0/; images were only copied and renamed to word IDs). Legacy Lucide Icons v1.74.0 is ISC (`data/import/LUCIDE-NOTICE.txt`, only the fallback generator's glyph source), Kotus / Yle word lists are CC BY 4.0 (`data/import/KOTUS-NOTICE.txt`), and the user-provided A1–B1 workbook is used with the project owner's permission. Full inventory: `data/sources.json`.

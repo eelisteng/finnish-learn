@@ -64,28 +64,37 @@
       "caveat": "Reference only. OPH states there is no official textbook or word list for YKI."
     },
     {
+      "id": "word-atlas-illustrations",
+      "name": "Word Atlas illustrations (word-atlas-main/public/atlas/img)",
+      "localCopy": "assets/illustrations/<word-id>.webp",
+      "attribution": "Word Atlas contributors — CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)",
+      "license": "CC BY 4.0",
+      "provides": ["980 distinct 512x512 WebP illustrations, one per word, matched by meaning and renamed to the Finnish word id"],
+      "caveat": "Images were copied and renamed only, with no visual edits. Numbers, pronouns, function words and grammatical terms use the closest available image; every source name, match method and SHA-256 is listed in data/import/atlas-image-report.json. All rows remain image_reviewStatus=pending until a person reviews them."
+    },
+    {
       "id": "lucide-icons",
       "name": "Lucide Icons v1.74.0 (lucide-static)",
       "url": "https://lucide.dev/",
       "localCopy": "data/import/lucide-icons.json",
       "attribution": "data/import/LUCIDE-NOTICE.txt",
       "license": "ISC",
-      "provides": ["2401 line-art glyph names used as the depot for semantic SVG illustrations"],
-      "caveat": "Only a curated, depictive subset is used. UI/editor/brand glyphs and modifier variants are excluded. Every card also carries the word's Chinese meaning label, because a single line-art glyph cannot literally depict most abstract words."
+      "provides": ["2401 line-art glyph names used only by the legacy fallback SVG generator (scripts/generate-illustrations.mjs), no longer in the default image set"],
+      "caveat": "Retained for reproducibility of the previous SVG set; the shipped illustrations are the Word Atlas WebP images above."
     },
     {
       "id": "own",
-      "name": "In-house: 50 demo words / 35 demo sentences, rule-derived morphology, illustrations",
+      "name": "In-house: 50 demo words / 35 demo sentences, rule-derived morphology",
       "license": "own",
-      "provides": ["reviewed demo rows", "scripts/fi-morphology.mjs paradigms", "IPA", "3 hand-made PNG sample illustrations", "977 deterministic SVG cards from scripts/generate-illustrations.mjs"],
-      "caveat": "Human QA is our responsibility. All generated illustrations are image_reviewStatus=pending until a person reviews them."
+      "provides": ["reviewed demo rows", "scripts/fi-morphology.mjs paradigms", "IPA"],
+      "caveat": "Human QA is our responsibility. All illustrations are imported Word Atlas art and remain image_reviewStatus=pending until a person reviews them."
     }
   ],
   "importPolicy": {
     "authoritativeEditingLayer": "data/words.csv + data/sentences.csv",
-    "regenerate": "node scripts/export-sheets.mjs && node scripts/build-en-glosses.mjs && node scripts/import-a1-b1.mjs && node scripts/generate-illustrations.mjs && node scripts/build-content.mjs && node scripts/build-groups.mjs",
-    "reviewStatus": "every imported row is auto-derived; all 977 generated illustrations are pending human review, no audio is human-verified",
-    "imageStatus": "980 ready illustrations: 977 deterministic 100x100 SVG cards + 3 hand-made PNG samples; 0 pending motif placeholders",
+    "regenerate": "node scripts/export-sheets.mjs && node scripts/build-en-glosses.mjs && node scripts/import-a1-b1.mjs && node scripts/import-atlas-images.mjs && node scripts/build-content.mjs && node scripts/build-groups.mjs",
+    "reviewStatus": "every imported row is auto-derived; all 980 Word Atlas WebP illustrations are pending human review, no audio is human-verified",
+    "imageStatus": "980 ready illustrations: 980 distinct 512x512 CC BY 4.0 Word Atlas WebP files, one per word; 0 pending motif placeholders",
     "audioStatus": "0 clips declared; browser TTS fallback for all items",
     "morphology": "IPA, case tables, stems and verb principal parts are derived from Kotus class + word shape by scripts/fi-morphology.mjs. Unresolved words show — and are labelled paradigm pending, never indeclinable unless they genuinely are.",
     "cefr": "suggested level copied from the workbook; treated as an in-house product convention only",

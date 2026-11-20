@@ -140,7 +140,7 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 
 /* choice / quiz */
 .quiz-prompt{text-align:center;padding:4px 0 18px}
-.quiz-pic{width:132px;height:132px;border-radius:12px;border:1px solid var(--line);background:var(--bg);object-fit:contain;display:block;margin:0 auto 12px;overflow:hidden}
+.quiz-pic{width:132px;height:132px;border-radius:12px;border:1px solid var(--line);background:var(--pic-bg);object-fit:contain;display:block;margin:0 auto 12px;overflow:hidden}
 .quiz-pic svg{width:100%;height:100%}
 .quiz-prompt .zh{font-size:23px;font-weight:600;margin:0}
 .quiz-prompt .en{font-size:13px;color:var(--muted);margin:4px 0 0}
@@ -149,7 +149,11 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .cloze-q .en.solo{font-size:14px;font-weight:500;color:var(--text)}
 .quiz-prompt .hintline{font-size:11px;color:var(--muted);margin-top:8px}
 .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
-.opt{border:1.5px solid var(--line);background:var(--surface);border-radius:11px;padding:14px 10px;font-size:16px;font-weight:500;text-align:center;transition:.12s;min-height:56px;display:flex;align-items:center;justify-content:center;gap:8px;word-break:break-word}
+/* WebKit's anonymous flex box inside <button> shrink-wraps an auto-width
+   button to its label: .opt and .mtile were 157/157.5px inside a 161px phone
+   grid column while Chrome stretched them to 161px. A definite width keeps
+   every option aligned to the grid on both engines. */
+.opt{border:1.5px solid var(--line);background:var(--surface);border-radius:11px;padding:14px 10px;font-size:16px;font-weight:500;text-align:center;transition:.12s;min-height:56px;display:flex;align-items:center;justify-content:center;gap:8px;word-break:break-word;width:100%}
 .opt:hover:not(:disabled){border-color:var(--blue);background:var(--blue-soft)}
 .opt .num{font-size:11px;color:var(--muted);font-weight:400}
 .opt.correct{background:var(--ok-bg);border-color:var(--ok-line);color:var(--ok-text)}
@@ -205,7 +209,7 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .optcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:10px}
 .optcard{position:relative;border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 8px 12px;display:flex;flex-direction:column;align-items:center;gap:7px;transition:.12s;min-height:136px}
 .optcard:hover:not(:disabled){border-color:var(--blue);background:var(--blue-soft)}
-.optcard-pic{width:84px;height:84px;border-radius:9px;border:1px solid var(--line);background:var(--bg);object-fit:contain;overflow:hidden}
+.optcard-pic{width:84px;height:84px;border-radius:9px;border:1px solid var(--line);background:var(--pic-bg);object-fit:contain;overflow:hidden}
 .optcard-pic svg{width:100%;height:100%;display:block}
 .optcard-label{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;font-weight:600;word-break:break-word;text-align:center}
 .optcard .num{position:absolute;top:5px;left:7px;font-size:10px;color:var(--muted)}
@@ -286,7 +290,7 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 
 /* ── 单词匹配：两排卡片 ─────────────────────────────────────── */
 .match-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:9px;min-height:52px}
-.mtile{border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:11px 10px;font-size:13px;min-height:48px;transition:.12s;word-break:break-word}
+.mtile{border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:11px 10px;font-size:13px;min-height:48px;transition:.12s;word-break:break-word;width:100%}
 .mtile.fi{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;font-weight:600}
 .mtile:hover:not(:disabled){border-color:var(--blue);background:var(--blue-soft)}
 .mtile.selected{border-color:var(--blue);background:var(--blue-soft);box-shadow:0 0 0 2px rgba(24,95,165,.18)}

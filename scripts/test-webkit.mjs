@@ -4,7 +4,7 @@
  * hides WebKit-only button layout bugs. This runner compiles
  * tests/webkit-find-image.swift into a WKWebView probe (the engine behind
  * iOS Safari and WeChat in-app WebViews) and runs two suites:
- *   1. the deep find-image suite: six viewports, the four 3:2 option boxes
+ *   1. the deep find-image suite: six viewports, the four 1:1 option boxes
  *      before/after the flip, the listen grid and cross-viewport parity;
  *   2. the all-modes suite: choice / listen / findImage / match / cloze /
  *      dictation at 390 / 360 / 320px, plus dark-theme illustration variants.
@@ -126,14 +126,14 @@ for (const c of CASES) {
   ok('all four faces share one identical box',
     before.length === 4 && before.every((x) => close(x.face[0], before[0].face[0], 1) && close(x.face[1], before[0].face[1], 1)),
     JSON.stringify(before.map((x) => x.face)))
-  ok('all four faces are 3:2',
-    before.length === 4 && before.every((x) => close(ratio(x.face), 1.5)),
+  ok('all four faces are 1:1 squares',
+    before.length === 4 && before.every((x) => close(ratio(x.face), 1)),
     JSON.stringify(before.map((x) => +ratio(x.face).toFixed(3))))
   ok('all four flipped/word faces keep one identical box',
     after.length === 4 && after.every((x) => close(x.box[0], after[0].box[0], 1) && close(x.box[1], after[0].box[1], 1)),
     JSON.stringify(after.map((x) => x.box)))
-  ok('all four boxes stay 3:2 after the reveal',
-    after.length === 4 && after.every((x) => close(ratio(x.box), 1.5)),
+  ok('all four boxes stay 1:1 after the reveal',
+    after.length === 4 && after.every((x) => close(ratio(x.box), 1)),
     JSON.stringify(after.map((x) => +ratio(x.box).toFixed(3))))
   ok('the reveal is opacity-only (no 3D/squashing transform)',
     after.length === 4 && after.every((x) => x.transform === 'none'),
@@ -144,7 +144,7 @@ for (const c of CASES) {
   results.push({ ...c, data })
 }
 
-/* Cross-engine parity: phone cards must be a scaled 3:2 desktop card. */
+/* Cross-engine parity: phone cards must be a scaled 1:1 desktop square. */
 const desktop = results.find((r) => r.desktop)
 if (desktop?.data?.before?.cards?.length === 4) {
   const ref = ratio(desktop.data.before.cards[0].face)

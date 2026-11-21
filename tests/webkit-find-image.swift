@@ -3,7 +3,7 @@
  * Chrome passes the layout because Blink ignores `align-items` on a block
  * button. WebKit keeps an anonymous flex box inside every <button>, so an
  * inherited `align-items:center` shrink-wraps the face to the label width:
- * four words => four different card widths => four different 3:2 heights.
+ * four words => four different card widths => four different square heights.
  * This harness runs the browser assertion pages inside a WKWebView (the
  * engine used by iOS Safari and WeChat's in-app browser). It is driven by
  * scripts/test-webkit.mjs, which compiles and parses it.
@@ -59,7 +59,7 @@ let beforeJS = """
     innerWidth: window.innerWidth,
     phone: window.innerWidth <= 640,
     cols: getComputedStyle(grid).gridTemplateColumns.split(/\\s+/).filter(Boolean).length,
-    supportsAspectRatio: CSS.supports('aspect-ratio', '3 / 2'),
+    supportsAspectRatio: CSS.supports('aspect-ratio', '1 / 1'),
     listen,
     cards: cards.map(c => {
       const f = c.querySelector('.flip-face'), i = c.querySelector('.flip-inner');

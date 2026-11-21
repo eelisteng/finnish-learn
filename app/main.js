@@ -860,9 +860,10 @@
       // taps on those overlay children and can shrink an abspos flex face
       // to one glyph per line. A single normal-flow face has a definite
       // width, always shows the picture, and never intercepts the button's
-      // own click. Both faces share one 3:2 ratio on desktop and phones, so
-      // flipping never changes the card's shape. WebKit additionally keeps an
-      // anonymous flex box inside <button> and inherits align-items:center
+      // own click. Both faces share one 1:1 square box on desktop and phones,
+      // so the WebP art fills it and flipping never changes the card's shape.
+      // WebKit additionally keeps an anonymous flex box inside <button> and
+      // inherits align-items:center
       // from .optcard; the find-image rule resets it to stretch so the face
       // fills the whole column instead of shrink-wrapping to the word.
       // See .optcards.find-image .optcard in styles.css.

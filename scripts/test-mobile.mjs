@@ -5,7 +5,7 @@
  * override device metrics and dispatch REAL touch events, then reads the
  * assertions from tests/mobile-find-image.html. A 1280px desktop case is
  * measured first, and every phone card ratio (before and after the flip)
- * must match that desktop 3:2 reference.
+ * must match that desktop 1:1 reference.
  *
  *   node scripts/test-mobile.mjs
  *   CHROME=/path/to/chrome node scripts/test-mobile.mjs
@@ -96,11 +96,11 @@ await send('Runtime.enable')
 await send('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 5 })
 
 const CASES = [
-  // Desktop is the reference geometry: 197 x 132 cards = 3:2. The phone
-  // cases below must measure the same ratio, not just a plausible one.
+  // Desktop is the reference geometry: square cards. The phone cases below
+  // must measure the same ratio, not just a plausible one.
   { width: 1280, height: 900, long: false, desktop: true },
   // Just above the 640px breakpoint: still 4 columns, but the cards are only
-  // 132px wide, so long lemmas must still fit inside the 3:2 face.
+  // 132px wide, so long lemmas must still fit inside the square face.
   { width: 641, height: 900, long: true, desktop: true, name: ' (4-column breakpoint)' },
   { width: 390, height: 844, long: false },
   { width: 390, height: 844, long: true },

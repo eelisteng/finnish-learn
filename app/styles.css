@@ -21,6 +21,10 @@
   color-scheme:dark;
 }
 :root[data-theme="dark"] svg [stroke="#2C4A63"]{stroke:#A9C2D8}
+/* The option number floats over full-bleed artwork, so give it a dark pill in
+   dark mode instead of the light-mode white one. */
+:root[data-theme="dark"] .optcard .num,
+:root[data-theme="dark"] .flip-front .num{background:rgba(18,27,36,.88);color:#E8EFF6}
 /* Accent fills are light in dark mode, so their foreground must be dark. */
 :root[data-theme="dark"] .btn.primary,
 :root[data-theme="dark"] .brand-mark,
@@ -32,7 +36,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible,input:focus-visible{outline:3px solid rgba(24,95,165,.35);outline-offset:2px}
 .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-.wrap{max-width:900px;margin:0 auto;padding:22px 18px 64px}
+.wrap{max-width:960px;margin:0 auto;padding:22px 18px 64px}
 
 /* ── top bar ───────────────────────────────────────────────── */
 .topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
@@ -102,7 +106,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(24,95,165,.35);o
 .pbar{height:4px;border-radius:99px;background:var(--line);margin-top:12px;overflow:hidden}
 .pbar i{display:block;height:100%;background:var(--blue);border-radius:99px;transition:width .25s}
 
-.stage{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:var(--shadow)}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:var(--shadow)}
 .stage-head{display:flex;align-items:center;gap:10px;margin-bottom:16px}
 .stage-head h3{font-size:16px;font-weight:600;margin:0;flex:1}
 .pill{font-size:11px;border-radius:999px;padding:3px 10px;background:var(--blue-soft);color:var(--blue)}
@@ -110,8 +114,10 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(24,95,165,.35);o
 .pill.amber{background:var(--amber-soft);color:var(--amber)}
 
 /* memorize card */
-.mem{display:grid;grid-template-columns:150px 1fr;gap:20px}
-.mem-pic{width:150px;height:150px;border-radius:12px;border:1px solid var(--line);background:var(--bg);overflow:hidden;display:block;object-fit:contain}
+.mem{display:grid;grid-template-columns:184px minmax(0,1fr);gap:24px;align-items:start}
+/* Word Atlas art is full-bleed 512x512, so show it as a square frame rather
+   than letterboxing it into the old 150px thumbnail. */
+.mem-pic{width:184px;height:184px;border-radius:14px;border:1px solid var(--line);background:var(--pic-bg);overflow:hidden;display:block;object-fit:cover;box-shadow:0 8px 22px rgba(28,43,58,.10)}
 .mem-pic svg{width:100%;height:100%;display:block}
 .lemma{font-size:32px;font-weight:600;letter-spacing:.4px;line-height:1.25;margin:0}
 .ipa{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;color:var(--blue);margin:2px 0 10px}
@@ -139,9 +145,9 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .vrow b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;font-weight:500}
 
 /* choice / quiz */
-.quiz-prompt{text-align:center;padding:4px 0 18px}
-.quiz-pic{width:132px;height:132px;border-radius:12px;border:1px solid var(--line);background:var(--pic-bg);object-fit:contain;display:block;margin:0 auto 12px;overflow:hidden}
-.quiz-pic svg{width:100%;height:100%}
+.quiz-prompt{text-align:center;padding:4px 0 22px}
+.quiz-pic{width:168px;height:168px;border-radius:14px;border:1px solid var(--line);background:var(--pic-bg);object-fit:cover;display:block;margin:0 auto 14px;overflow:hidden;box-shadow:0 8px 22px rgba(28,43,58,.10)}
+.quiz-pic svg{width:100%;height:100%;display:block}
 .quiz-prompt .zh{font-size:23px;font-weight:600;margin:0}
 .quiz-prompt .en{font-size:13px;color:var(--muted);margin:4px 0 0}
 .quiz-prompt .en.solo{font-size:21px;font-weight:600;color:var(--text);margin:0}
@@ -171,8 +177,8 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .cloze-q .zh{font-size:14px;margin-top:6px}
 .cloze-q .en{font-size:12px;color:var(--muted)}
 /* 填空模式：释义旁边配一张图 */
-.cloze-with-pic{display:flex;flex-direction:column;align-items:center;gap:2px}
-.cloze-pic{width:104px;height:104px;border-radius:10px;border:1px solid var(--line);background:var(--pic-bg);object-fit:contain;overflow:hidden;display:block;margin-bottom:6px}
+.cloze-with-pic{display:flex;flex-direction:column;align-items:center;gap:4px}
+.cloze-pic{width:140px;height:140px;border-radius:12px;border:1px solid var(--line);background:var(--pic-bg);object-fit:cover;overflow:hidden;display:block;margin-bottom:6px;box-shadow:0 6px 18px rgba(28,43,58,.09)}
 .cloze-pic svg{width:100%;height:100%;display:block}
 .answer-row{display:flex;gap:8px;align-items:center}
 .answer-row .spacer{flex:1}
@@ -203,16 +209,16 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .complete-grid b{font-size:19px;font-weight:600}
 
 /* ── 听选 / 找图：带图选项卡 ───────────────────────────────── */
-.listen-hero{text-align:center;padding:10px 0 20px}
-.audio-big{font-size:46px;line-height:1.2;margin-bottom:8px}
+.listen-hero{text-align:center;padding:6px 0 18px}
+.audio-big{font-size:42px;line-height:1.2;margin-bottom:6px}
 .audio-row{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin:12px 0 4px}
-.optcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:10px}
-.optcard{position:relative;border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 8px 12px;display:flex;flex-direction:column;align-items:center;gap:7px;transition:.12s;min-height:136px}
+.optcards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.optcard{position:relative;border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:7px;transition:.12s;min-height:0;overflow:hidden}
 .optcard:hover:not(:disabled){border-color:var(--blue);background:var(--blue-soft)}
-.optcard-pic{width:84px;height:84px;border-radius:9px;border:1px solid var(--line);background:var(--pic-bg);object-fit:contain;overflow:hidden}
+.optcard-pic{width:100%;height:auto;aspect-ratio:1 / 1;border-radius:9px;border:0;background:var(--pic-bg);object-fit:cover;overflow:hidden}
 .optcard-pic svg{width:100%;height:100%;display:block}
 .optcard-label{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;font-weight:600;word-break:break-word;text-align:center}
-.optcard .num{position:absolute;top:5px;left:7px;font-size:10px;color:var(--muted)}
+.optcard .num{position:absolute;top:7px;left:9px;z-index:2;min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:rgba(255,255,255,.88);color:var(--muted);font-size:11px;line-height:19px;font-weight:600;text-align:center}
 .optcard.correct,.optcard.reveal{background:var(--ok-bg);border-color:var(--ok-line);color:var(--ok-text)}
 .optcard.wrong{background:var(--no-bg);border-color:var(--no-line);color:var(--no-text)}
 .optcard:disabled{cursor:default}
@@ -224,65 +230,68 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
    with an indefinite width can shrink its label to one glyph per line.
    So only ONE face is in the DOM, in normal flow with a definite width, and
    the reveal is a 2D-safe animation. No 3D/backface dependency anywhere.
-   That one face also owns the 3:2 ratio, so desktop and phone cards match and
-   the flip cannot change the card's shape.
+   The new Word Atlas art is square, so the one face is now 1:1 too: the same
+   box on every width, and the reveal fills it instead of letterboxing a
+   square painting into a landscape strip.
    WebKit (iOS Safari / WeChat WKWebView) keeps an ANONYMOUS FLEX BOX inside
    every <button> even when the button itself is display:block. It inherits
    align-items from .optcard's base rule: the leftover `center` shrink-wraps
    .flip-inner to the label's max-content width, so four cards with different
-   word lengths get four different face widths (and thus four different 3:2
+   word lengths get four different face widths (and thus four different
    heights). Blink ignores align-items on a block button, so desktop Chrome
    hid the bug. The find-image override MUST reset align-items to stretch. */
 .optcards.find-image,.optcards.with-meaning{grid-template-columns:repeat(4,minmax(0,1fr))}
 .optcards.find-image{align-items:start}
 /* Same WebKit button shrink-wrap applies to the listen options: without a
-   definite width the card becomes 157px inside a 161px phone column (193px
+   definite width the card becomes ~157px inside a 161px phone column (193px
    inside 197px on desktop), so the two option grids do not line up. Stretch
-   also lets the meaning block use the whole card width; the picture keeps its
-   explicit 72/84px size and the text stays centred. */
+   also lets the meaning block use the whole card width; the square artwork
+   keeps its own intrinsic size and the text stays centred. */
 .optcards.with-meaning .optcard{width:100%;align-items:stretch}
-.find-prompt{min-height:118px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-/* The card height comes from the face below, never from a fixed px value:
-   one 3:2 ratio on every width keeps the phone cards landscape like desktop
-   (197 x 132) instead of turning 126 x 136 portrait on a 320px screen. */
+.find-prompt{min-height:96px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+/* The card height comes from the face below, never from a fixed px value.
+   A 1:1 face gives the square artwork the same shape on desktop and phones. */
 .optcards.find-image .optcard{min-width:0;width:100%;min-height:0;height:auto;padding:0;border:0;background:transparent;box-shadow:none;display:block;align-items:stretch;justify-content:stretch;overflow:visible;touch-action:manipulation;-webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent}
 .optcards.find-image .optcard:hover:not(:disabled){border:0;background:transparent;transform:none}
 .optcards.find-image .optcard:hover:not(:disabled) .flip-front{border-color:var(--blue);background:var(--blue-soft)}
 .optcards.find-image .optcard.correct,.optcards.find-image .optcard.reveal,
 .optcards.find-image .optcard.wrong{background:transparent;border-color:transparent;color:inherit}
 .optcards.find-image .optcard.correct .flip-face,
-.optcards.find-image .optcard.reveal .flip-face{background:var(--ok-bg);border-color:var(--ok-line);color:var(--ok-text)}
-.optcards.find-image .optcard.wrong .flip-face{background:var(--no-bg);border-color:var(--no-line);color:var(--no-text)}
+.optcards.find-image .optcard.reveal .flip-face{border-color:var(--ok-line);box-shadow:0 0 0 3px var(--ok-bg);color:var(--ok-text)}
+.optcards.find-image .optcard.wrong .flip-face{border-color:var(--no-line);box-shadow:0 0 0 3px var(--no-bg);color:var(--no-text)}
 /* A definite width + standard wrapping keeps long Finnish compounds from
    stacking one character per line on narrow phone columns. */
-.optcards.find-image .optcard-label{max-width:100%;min-width:0;font-size:clamp(14px,2.4vw,17px);line-height:1.3;word-break:normal;overflow-wrap:anywhere;-webkit-hyphens:auto;hyphens:auto}
+.optcards.find-image .optcard-label{max-width:100%;min-width:0;font-size:clamp(14px,2vw,18px);line-height:1.3;word-break:normal;overflow-wrap:anywhere;-webkit-hyphens:auto;hyphens:auto}
 /* Only the face has a definite height, derived from its own definite width.
    A height:100% chain through .flip-inner into a <button> resolves to auto in
    mobile WebKit, which made each face size to its own content (four different
    heights) and made the picture face a different height from the word face.
    Front and back share this ONE rule, so the flip cannot change the ratio. */
 .flip-inner{position:relative;display:block;width:100%;height:auto;min-width:0;pointer-events:none}
-.flip-face{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:100%;height:132px;min-width:0;min-height:0;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden;pointer-events:none}
-/* Progressive enhancement: Safari 15+/Chrome 88+ get one 3:2 ratio at all
-   widths. Older engines keep the uniform 132px fallback above. */
-@supports (aspect-ratio:3 / 2){.optcards.find-image .flip-face{height:auto;aspect-ratio:3 / 2}}
-.flip-front .num{position:absolute;top:5px;left:7px;font-size:10px;color:var(--muted)}
-.flip-back .optcard-pic{width:100%;height:0;flex:1 1 0;min-height:0;border:0;border-radius:8px;background:var(--pic-bg);object-fit:contain;overflow:hidden}
+.flip-face{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:100%;height:184px;min-width:0;min-height:0;padding:10px 12px;border:1.5px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden;pointer-events:none}
+/* Progressive enhancement: Safari 15+/Chrome 88+ get one 1:1 ratio at all
+   widths. Older engines keep the uniform 184px fallback above. */
+@supports (aspect-ratio:1 / 1){.optcards.find-image .flip-face{height:auto;aspect-ratio:1 / 1}}
+.flip-front{background:radial-gradient(circle at 50% 30%,var(--blue-soft),transparent 62%),var(--surface)}
+.flip-front .num{position:absolute;top:7px;left:9px;z-index:1;min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:var(--surface);font-size:11px;line-height:19px;font-weight:600;color:var(--muted)}
+/* The reveal is now a full-bleed square painting with a legible name strip,
+   not a small contain-fitted thumbnail floating in a landscape card. */
+.flip-back{justify-content:flex-end;padding:0;background:var(--pic-bg)}
+.flip-back .optcard-pic{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;border:0;border-radius:0;object-fit:cover}
 .flip-back .optcard-pic svg{width:100%;height:100%;display:block}
-.flip-word{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;font-weight:600;line-height:1.2;max-width:100%;overflow-wrap:anywhere;text-align:center}
+.flip-word{position:relative;z-index:1;width:100%;padding:22px 10px 10px;background:linear-gradient(180deg,transparent,rgba(10,20,30,.78));color:#fff;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;font-weight:600;line-height:1.25;max-width:100%;overflow-wrap:anywhere;text-align:center}
 .opts .opt,.optcards .optcard,.mtile{touch-action:manipulation}
 /* A purely 2D reveal. The old perspective()/rotateY() swing squashed the
    face's visual box while animating (and WebKit can leave the composited
    layer on the -80deg frame in a backgrounded tab), which reads exactly like
-   "the card changed its width/height ratio after the flip". Opacity never
-   touches layout, so all four 3:2 boxes stay identical before, during and
-   after the reveal, on every engine. */
+   "the card changed its shape after the flip". Opacity never touches layout,
+   so all four 1:1 boxes stay identical before, during and after the reveal. */
 .optcards.find-image .optcard.flipped .flip-inner{animation:fi-reveal .42s ease-out both}
 @keyframes fi-reveal{from{opacity:0}to{opacity:1}}
 @media (prefers-reduced-motion:reduce){.optcards.find-image .optcard.flipped .flip-inner{animation-duration:.18s}}
-.quiz-prompt .quiz-pic{width:118px;height:118px;margin-bottom:10px}
+.quiz-prompt .quiz-pic{width:156px;height:156px;margin-bottom:12px}
 /* 听选模式：每个选项是「图片 + 释义」，绝不显示芬兰语单词 */
-.optcard-meaning{display:flex;flex-direction:column;gap:1px;width:100%;min-width:0;text-align:center}
+.optcard-meaning{display:flex;flex-direction:column;gap:2px;width:100%;min-width:0;padding:10px 2px 2px;text-align:center}
 .optcard-meaning .om{display:block;font-size:12px;line-height:1.35;word-break:break-word}
 .optcard-meaning .om.zh{font-weight:600}
 .optcard-meaning .om.en{font-size:11px;color:var(--muted)}
@@ -298,7 +307,7 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 
 /* ── 拼写 / 听写：逐字母下划线 ─────────────────────────────── */
 .dictation-prompt{text-align:center;background:var(--bg);border-radius:11px;padding:12px 16px 16px;margin-bottom:16px}
-.dictation-prompt .quiz-pic{width:112px;height:112px}
+.dictation-prompt .quiz-pic{width:140px;height:140px}
 .slots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin:18px 0 12px}
 .slot{width:30px;height:40px;text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:22px;font-weight:600;border:0;border-bottom:2.5px solid var(--blue);background:transparent;color:var(--text);border-radius:0;padding:0 0 3px}
 .slot.fixed{display:grid;place-items:center;border-bottom-color:var(--muted);color:var(--blue)}
@@ -358,23 +367,28 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 @media(max-width:640px){
   .wrap{padding:16px 12px 56px}
   .stats{grid-template-columns:repeat(2,1fr)}
-  .mem{grid-template-columns:1fr}
-  .mem-pic{width:120px;height:120px}
+  .mem{grid-template-columns:1fr;gap:16px}
+  .mem-pic{width:132px;height:132px;margin:0 auto}
   .lemma{font-size:28px}
   .quiz-prompt .zh{font-size:20px}
+  .quiz-prompt .quiz-pic{width:132px;height:132px}
+  .cloze-pic,.dictation-prompt .quiz-pic{width:120px;height:120px}
+  .listen-hero{padding:2px 0 12px}
   .opts{grid-template-columns:repeat(2,1fr)}
-  .optcards,.optcards.find-image,.optcards.with-meaning{grid-template-columns:repeat(2,minmax(0,1fr))}
-  /* Same 3:2 ratio as desktop; only the internal spacing gets tighter so a
+  .optcards,.optcards.find-image,.optcards.with-meaning{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  /* Same 1:1 ratio as desktop; only the internal spacing gets tighter so a
      scaled-down card still fits a long Finnish compound and its picture. */
-  .optcards.find-image .flip-face{padding:8px 9px;gap:4px}
-  .optcards.find-image .optcard-label{font-size:15px;line-height:1.3}
-  .optcards.find-image .flip-word{font-size:10px;line-height:1.15}
-  .optcard-pic{width:72px;height:72px}
+  .optcards.find-image .flip-front{padding:9px}
+  .optcards.find-image .flip-back{padding:0}
+  .optcards.find-image .optcard-label{font-size:14px;line-height:1.3}
+  .optcards.find-image .flip-word{font-size:10px;line-height:1.15;padding:16px 6px 8px}
+  .optcard-meaning{padding:7px 1px 0}
+  .find-prompt{min-height:84px}
   .match-row{grid-template-columns:repeat(2,1fr)}
   .slot{width:25px;height:36px;font-size:19px}
   .mode-row em{display:none}
   .bgm-track{flex-wrap:wrap}
   .bgm-track-main{flex:1 1 100%}
   .bgm-track .btn{margin-left:24px}
-  .stage{padding:16px}
+  .stage{padding:14px}
 }

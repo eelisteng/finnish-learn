@@ -87,9 +87,9 @@ window.Audio = class {
   const cards = $$('.optcard')
   const tracks = (css(grid, 'gridTemplateColumns') || '').trim().split(/\s+/).filter(Boolean)
   const IS_PHONE = window.innerWidth <= 640
-  // Desktop reference measured on a 1280px viewport: 197 x 132 = 3:2.
+  // Desktop reference measured on a 1280px viewport: a square card.
   // The runner compares every phone case against the desktop case below.
-  const DESKTOP_RATIO = 3 / 2
+  const DESKTOP_RATIO = 1 / 1
   const ratio = (r) => r.w / r.h
   const close = (a, b, tol = 0.02) => Math.abs(a - b) <= tol
   ok('viewport: phone width or 4-column desktop-class width', IS_PHONE || window.innerWidth >= 641,
@@ -101,10 +101,10 @@ window.Audio = class {
     const r = rect(c); return r.x >= 0 && r.x + r.w <= window.innerWidth + 1
   }), JSON.stringify(cards.map(rect)))
 
-  /* The 3:2 ratio must be identical on every card, on both faces, and on
-     desktop AND phone. A fixed px height used to make 320px cards portrait
-     (126 x 136), and a height:100% chain inside <button> resolves to auto in
-     mobile WebKit so the flipped picture face could change height. */
+  /* The 1:1 ratio must be identical on every card, on both faces, and on
+     desktop AND phone. A fixed px height used to make cards non-square, and a
+     height:100% chain inside <button> resolves to auto in mobile WebKit so the
+     flipped picture face could change height. */
   const faceRects = cards.map((c) => rect(c.querySelector('.flip-face')))
   const cardRects = cards.map(rect)
   const faceRatios = faceRects.map(ratio)
@@ -113,7 +113,7 @@ window.Audio = class {
     faceRatios, cardRects: cardRects.map((r) => [r.w, r.h]),
     faceRects: faceRects.map((r) => [r.w, r.h]),
   }
-  ok('ratio: every face is 3:2 like desktop',
+  ok('ratio: every face is 1:1 like desktop',
     faceRatios.every((r) => close(r, DESKTOP_RATIO)), `ratios=${faceRatios.map((r) => r.toFixed(3)).join(', ')}`)
   ok('ratio: all four cards have identical width and height',
     cardRects.every((r) => close(r.w, cardRects[0].w, 1) && close(r.h, cardRects[0].h, 1)),
@@ -121,12 +121,12 @@ window.Audio = class {
   ok('ratio: the button box is exactly the face box (no extra height)',
     cards.every((c, i) => close(rect(c).h, faceRects[i].h, 1)))
   ok('ratio: the face height comes from aspect-ratio, not a fixed px height',
-    css(cards[0].querySelector('.flip-face'), 'aspectRatio') === '3 / 2',
+    css(cards[0].querySelector('.flip-face'), 'aspectRatio') === '1 / 1',
     `aspectRatio=${css(cards[0].querySelector('.flip-face'), 'aspectRatio')}`)
   /* Engine-independent guard for the real WebKit bug: <button> keeps an
      anonymous flex box that inherits .optcard's align-items:center, which
      shrink-wraps .flip-inner to the label width on iOS Safari and makes the
-     four 3:2 faces four different sizes. Chrome ignores it, so this must be
+     four 1:1 faces four different sizes. Chrome ignores it, so this must be
      asserted explicitly rather than inferred from Chrome's geometry. */
   ok('ratio: button flex alignment is reset so faces stretch to full width',
     cards.every((c) => css(c, 'alignItems') === 'stretch'),
@@ -202,7 +202,7 @@ window.Audio = class {
     ok('tap: flipped card keeps the chosen word visible',
       $('.optcard.flipped .flip-word')?.textContent === q0.options[correctIdx].label)
     // The reveal swaps ONE face in normal flow. Its box must be byte-for-byte
-    // the same 3:2 box, otherwise the card visibly changes shape on flip.
+    // the same 1:1 box, otherwise the card visibly changes shape on flip.
     const afterCards = $$('.optcard')
     // offsetWidth/offsetHeight are the layout box, unaffected by the rotateY
     // reveal animation (getBoundingClientRect would report a squashed box).
@@ -211,7 +211,7 @@ window.Audio = class {
       return { w: f.offsetWidth, h: f.offsetHeight }
     })
     const beforeFaces = window.__geometry.faceRects.map(([w, h]) => ({ w, h }))
-    ok('tap: flipped face keeps the exact same 3:2 ratio',
+    ok('tap: flipped face keeps the exact same 1:1 ratio',
       afterFaces.every((r) => close(ratio(r), DESKTOP_RATIO)),
       `ratios=${afterFaces.map((r) => ratio(r).toFixed(3)).join(', ')}`)
     ok('tap: the picture face has the same box as the three word faces',
@@ -220,10 +220,10 @@ window.Audio = class {
     ok('tap: no card changed size during the flip',
       afterFaces.every((r, i) => close(r.w, beforeFaces[i].w, 1) && close(r.h, beforeFaces[i].h, 1)),
       JSON.stringify({ before: beforeFaces, after: afterFaces }))
-    ok('tap: illustration stays inside the 3:2 face', Boolean(back && pic && (() => {
+    ok('tap: artwork fills the 1:1 face inside its 1.5px feedback border', Boolean(back && pic && (() => {
       const br = rect(back)
-      return pr.x >= br.x - 1 && pr.y >= br.y - 1 &&
-        pr.x + pr.w <= br.x + br.w + 1 && pr.y + pr.h <= br.y + br.h + 1
+      return close(pr.x, br.x, 4) && close(pr.y, br.y, 4) &&
+        close(pr.w, br.w, 4) && close(pr.h, br.h, 4)
     })()), JSON.stringify({ back: rect(back), pic: pr }))
     window.__finish()
     return out.join('\n')

@@ -314,6 +314,10 @@ table.cases td.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .slot.ok{border-bottom-color:var(--ok-line);color:var(--ok-text)}
 .slot.no{border-bottom-color:var(--no-line);color:var(--no-text)}
 .slot:focus{outline:none;background:var(--blue-soft);border-bottom-width:3px}
+/* Visual stand-in for focus after a letter-key tap. The <input> is NOT
+   focused (that would open the mobile IME over the letter keyboard), so the
+   next blank is marked here and keeps the same highlight as :focus. */
+.slot.cursor{background:var(--blue-soft);border-bottom-width:3px}
 .slot:disabled{opacity:1}
 /* 14 clickable Finnish letters: one fixed 7-column grid, so every question
    gets exactly two even rows on desktop and phone alike. */

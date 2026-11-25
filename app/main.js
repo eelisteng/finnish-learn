@@ -218,12 +218,13 @@
   }
   /** Auto-read once per newly shown card/question.
       Memorise: each of the five cards plays once on entry (and again after a
-      paused session is resumed). Listen/dictation: each question plays once.
-      Re-renders of the same card do not repeat the sound. */
+      paused session is resumed). Listen: each question plays once. Dictation
+      has its own entry hook below so it can never be skipped by a phase-list
+      change. Re-renders of the same card do not repeat the sound. */
   function autoSpeak() {
     if (!AUTOPLAY || !session || ui.transition) return
     const p = session.phase
-    if (!['memorize', 'listen', 'dictation'].includes(p)) return
+    if (!['memorize', 'listen'].includes(p)) return
     const r = session.round
     if (!r || r.feedback) return
     let text, audioFile, key
@@ -238,11 +239,26 @@
       if (!q?.audioText) return
       text = q.audioText
       audioFile = q.audioFile
-      key = `${p}:${r.mode}:${r.attempt}:${r.index}`
+      key = `listen:${r.mode}:${r.attempt}:${r.index}`
     }
     if (session._spoken === key) return
     session._spoken = key
     speak(text, r.speed ?? 'normal', audioFile)
+  }
+  /** The dictation prompt is read as soon as the round appears, exactly like
+      listen. This is a dedicated hook called from renderLearn so a shared
+      phase list can never silently drop it. Entry playback is always normal
+      speed; the slow button stays opt-in. */
+  function autoPlayDictation() {
+    if (!AUTOPLAY || !session || ui.transition || session.phase !== 'dictation') return
+    const r = session.round
+    if (!r || r.feedback) return
+    const q = r.questions?.[r.index]
+    if (!q?.audioText) return
+    const key = `dictation:${r.mode}:${r.attempt}:${r.index}`
+    if (session._spoken === key) return
+    session._spoken = key
+    speak(q.audioText, 'normal', q.audioFile)
   }
 
   /* ── session lifecycle ────────────────────────────────────── */
@@ -306,6 +322,9 @@
       r.questions = FI.buildLetterQuestions(g, pack, order, mode, pref().meaningLang)
       r.slots = initSlots(r.questions[0])
     }
+    // A new round starts with the cursor on the first blank, not wherever the
+    // previous round's focus happened to be.
+    lastSlot = null
     return r
   }
 
@@ -556,33 +575,55 @@
     }
   }
 
+  function slotOpen(q, r, i) {
+    // Number.isInteger matters: null >= 0 is true in JS, so a null cursor
+    // would otherwise be treated as slot 0 and write to slots["null"].
+    return Number.isInteger(i) && i >= 0 && i < q.letters.length && !q.reveal[i] &&
+      !r.hintRevealed.includes(i) && !r.slots[i]
+  }
+  function nextOpenSlot(q, r, after) {
+    const from = Number.isInteger(after) && after >= 0 ? after : -1
+    for (let i = from + 1; i < q.letters.length; i++) if (slotOpen(q, r, i)) return i
+    for (let i = 0; i <= from && i < q.letters.length; i++) if (slotOpen(q, r, i)) return i
+    return -1
+  }
   function focusSlot(i) {
     const el = app.querySelector(`input[data-slot="${i}"]`)
     if (el) { el.focus(); el.select?.() }
   }
   function focusNextEmpty(from) {
     const q = session?.round?.questions?.[session.round.index]
-    const r = session.round
+    const r = session?.round
     if (!q || !r) return
-    for (let i = from + 1; i < q.letters.length; i++) {
-      if (!q.reveal[i] && !r.hintRevealed.includes(i) && !r.slots[i]) { focusSlot(i); return }
-    }
-    const first = q.letters.findIndex((_, i) => !q.reveal[i] && !r.hintRevealed.includes(i) && !r.slots[i])
-    if (first >= 0) focusSlot(first)
+    const i = nextOpenSlot(q, r, from)
+    if (i >= 0) { lastSlot = i; focusSlot(i) }
+  }
+  function blanksRemaining(q, r) {
+    return q.letters.some((_, i) => slotOpen(q, r, i))
+  }
+  /** Once the final blank is filled, grade the answer without waiting for a
+      button press. The explicit submit button stays as a fallback for users
+      who fill the blanks via hints or want to review before grading. */
+  function maybeAutoSubmit(q, r) {
+    if (!q || !r || r.feedback || blanksRemaining(q, r)) return false
+    submitAnswer()
+    return true
   }
   function insertLetter(ch) {
     const r = session?.round
     if (!r || r.feedback || !LETTER_MODES.includes(r.mode)) return
     const q = r.questions[r.index]
     let i = lastSlot
-    if (i == null || i < 0 || i >= q.letters.length || q.reveal[i] || r.hintRevealed.includes(i)) {
-      i = q.letters.findIndex((_, j) => !q.reveal[j] && !r.hintRevealed.includes(j) && !r.slots[j])
-    }
+    if (!slotOpen(q, r, i)) i = nextOpenSlot(q, r, -1)
     if (i < 0) return
     r.slots[i] = ch
+    // Move the visual cursor to the next blank WITHOUT focusing the input.
+    // Focusing a text input on a phone opens the IME, which covers the letter
+    // keyboard and can cancel the dictation prompt audio.
+    lastSlot = i
     persist()
+    if (maybeAutoSubmit(q, r)) return
     render()
-    focusNextEmpty(i)
   }
 
   function memNext() {
@@ -945,11 +986,15 @@
     const q = r.questions[r.index]
     const fb = r.feedback
     const isDictation = mode === 'dictation'
+    const cursor = fb ? -1 : nextOpenSlot(q, r, lastSlot)
     const slots = q.letters.map((ch, i) => {
       const fixed = q.reveal[i] || r.hintRevealed.includes(i)
       if (fixed) return `<span class="slot fixed" aria-label="${th('letters.aria.given')}">${esc(ch)}</span>`
       const shown = fb && !fb.correct ? q.letters[i] : (r.slots[i] ?? '')
-      return `<input class="slot ${fb ? (fb.correct ? 'ok' : 'no') : ''}" data-slot="${i}" maxlength="1" value="${esc(shown)}" aria-label="${th('letters.aria.slot', { n: i + 1 })}" autocomplete="off" autocapitalize="off" spellcheck="false" ${fb ? 'disabled' : ''}>`
+      // The active blank is marked with a CSS cursor so a tapped letter can
+      // advance it without focusing an <input> (which pops the mobile IME).
+      const cls = [fb ? (fb.correct ? 'ok' : 'no') : '', !fb && i === cursor ? 'cursor' : ''].filter(Boolean).join(' ')
+      return `<input class="slot ${cls}" data-slot="${i}" maxlength="1" value="${esc(shown)}" aria-label="${th('letters.aria.slot', { n: i + 1 })}" autocomplete="off" autocapitalize="off" spellcheck="false" ${fb ? 'disabled' : ''}>`
     }).join('')
     // Hints are rebuilt on every render so a language or meaning switch
     // applies to the current question rather than only to the next group.
@@ -1068,8 +1113,10 @@
     else stage = renderComplete(g)
     const brandSub = th('learn.brandSub', { level: g.level, kind: groupKindName(g.kind), mode: modeLabel(p) })
     app.innerHTML = `<div class="wrap"><div class="topbar"><div class="brand"><div class="brand-mark">FL</div><div><h1>Finnish Learn</h1><p>${brandSub}</p></div></div></div>${renderHead(g)}${stage}</div>`
-    if (LETTER_MODES.includes(p) && !session.round.feedback) focusNextEmpty(-1)
+    // No automatic focus in letter modes: on a phone that opens the IME and
+    // covers the letter keyboard. The active blank is marked by CSS instead.
     autoSpeak()
+    autoPlayDictation()
   }
 
   function render() { ui.view === 'home' ? renderHome() : renderLearn() }
@@ -1307,8 +1354,11 @@
     const ch = FI.lettersOf(el.value).slice(-1)[0] ?? ''
     r.slots[i] = ch
     el.value = ch
-    if (ch) focusNextEmpty(i)
     persist()
+    if (!ch) return
+    const q = r.questions[r.index]
+    if (maybeAutoSubmit(q, r)) return
+    focusNextEmpty(i)
   })
   app.addEventListener('paste', (e) => {
     const el = e.target.closest?.('[data-slot]')
@@ -1326,7 +1376,9 @@
       r.slots[pos] = ch
       pos++
     }
-    persist(); render(); focusNextEmpty(-1)
+    persist()
+    if (maybeAutoSubmit(q, r)) return
+    render(); focusNextEmpty(-1)
   })
   app.addEventListener('change', (e) => {
     if (e.target.id === 'import-file' && e.target.files?.[0]) {

@@ -29,7 +29,7 @@ try {
   Object.defineProperty(window, 'SpeechSynthesisUtterance', { configurable: true,
     value: class { constructor(text) { this.text = text; this.lang = ''; this.rate = 1; this.pitch = 1 } } })
   Object.defineProperty(window, 'speechSynthesis', { configurable: true,
-    value: { cancel() {}, speak() {}, getVoices() { return [] } } })
+    value: { cancel() {}, speak(u) { (window.__speakCalls ||= []).push(u.text) }, getVoices() { return [] } } })
 } catch (e) { /* built-ins may be non-configurable */ }
 window.Audio = class {
   constructor() { this._src = '' }
@@ -242,6 +242,15 @@ window.Audio = class {
       JSON.stringify([$('#slots')?.scrollWidth, $('#slots')?.clientWidth]))
     ok(`${MODE}: blank inputs are editable`, inputs.length > 0 && inputs.every((i) => !i.disabled),
       `inputs=${inputs.length}`)
+    // Entering a letter mode must not focus an input: on a phone that opens
+    // the IME and covers the on-screen letter keyboard. A CSS cursor marks
+    // the active blank instead.
+    ok(`${MODE}: entry does not focus a slot (no mobile IME)`,
+      document.activeElement?.dataset?.slot === undefined,
+      `active=${document.activeElement?.tagName}/${document.activeElement?.dataset?.slot}`)
+    ok(`${MODE}: exactly one blank carries the visual cursor`,
+      $$('#slots input.slot.cursor').length === 1,
+      `cursors=${$$('#slots input.slot.cursor').length}`)
     ok(`${MODE}: prompt illustration is visible`,
       Boolean($(MODE === 'cloze' ? '.cloze-pic' : '.quiz-pic')) &&
       rect($(MODE === 'cloze' ? '.cloze-pic' : '.quiz-pic'))[0] > 20)
@@ -296,11 +305,24 @@ window.Audio = class {
     ok('interaction: a tap selects a tile', acted && $$('.mtile.selected').length === 1,
       `selected=${$$('.mtile.selected').length}`)
   } else if (MODE === 'cloze' || MODE === 'dictation') {
+    const cursorBefore = $('#slots input.slot.cursor')?.dataset.slot
     const key = $('.letter-keyboard [data-act="slot-letter"]')
     if (key) { key.click(); acted = true }
     ok('interaction: tapping a letter fills a slot',
       acted && FI.Store.load().session.round.slots.some(Boolean),
       JSON.stringify(FI.Store.load().session.round.slots))
+    ok('interaction: letter tap does not focus an input (no IME)',
+      acted && document.activeElement?.dataset?.slot === undefined,
+      `active=${document.activeElement?.tagName}/${document.activeElement?.dataset?.slot}`)
+    ok('interaction: letter tap advances the visual cursor',
+      acted && $('#slots input.slot.cursor')?.dataset.slot !== cursorBefore,
+      `before=${cursorBefore} after=${$('#slots input.slot.cursor')?.dataset.slot}`)
+    if (MODE === 'dictation') {
+      const firstWord = FI.Store.load().session.round.questions[0].audioText
+      ok('dictation: prompt auto-plays once on entry',
+        (window.__speakCalls || []).length === 1 && window.__speakCalls[0] === firstWord,
+        JSON.stringify(window.__speakCalls || []))
+    }
     const hint = $('.answer-row [data-act="hint"]')
     if (hint) hint.click()
     ok('interaction: a tap reveals a hint', FI.Store.load().session.round.hintsUsed === 1,

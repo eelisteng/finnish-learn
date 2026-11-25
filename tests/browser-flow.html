@@ -86,6 +86,11 @@
       .filter((ch) => ch && FI_LETTERS.includes(ch)))]
     ok(`${label}: every needed letter is offered`, needed.every((ch) => keys.includes(ch)),
       `needed=${needed.join('')} keys=${keys.join('')}`)
+    ok(`${label}: entering does not focus a slot (no mobile IME)`,
+      document.activeElement?.dataset?.slot === undefined,
+      `active=${document.activeElement?.tagName}/${document.activeElement?.dataset?.slot}`)
+    ok(`${label}: the next blank has a visual cursor`, $$('input.slot.cursor').length === 1,
+      `cursors=${$$('input.slot.cursor').length}`)
   }
   // Answer every question of a select-style round.
   async function driveSelect(count, targetFn, optionSel, labelFn, wrongFirst = false) {
@@ -116,7 +121,9 @@
         if (opts.hintOn === i) click('[data-act="hint"]')
         fillSlots(lemma)
       }
-      click('[data-act="submit"]')
+      ok('letter round: filling the last blank auto-submits',
+        $('[data-act="next"]') !== null && $('[data-act="submit"]') === null,
+        `next=${Boolean($('[data-act="next"]'))} submit=${Boolean($('[data-act="submit"]'))}`)
       // Colour-only feedback: the slots turn green/red and no .feedback
       // status label is rendered anywhere on the stage.
       if (opts.wrongFirst && i === 0) {
@@ -446,10 +453,20 @@
     ok('cloze: zh/en meaning shown', $('.cloze-q .zh')?.textContent.length > 0)
     await driveLetters(5, () => zhToLemma($('.cloze-q .zh')?.textContent))
     ok('cloze result shown', headIs('本轮结果'))
-    click('[data-act="result-continue"]')
 
     /* ── ⑦ dictation ───────────────────────────────────────── */
+    const playsBeforeDictation = window.__audioCalls.length + window.__ttsCalls.length
+    click('[data-act="result-continue"]')
     ok('entered dictation round', headIs('听写模式'))
+    const dictationFirstWord = window.FI.Store.load().session.round.questions[0].audioText
+    ok('dictation: auto-plays the prompt once on entry',
+      window.__audioCalls.length + window.__ttsCalls.length === playsBeforeDictation + 1,
+      `before=${playsBeforeDictation} after=${window.__audioCalls.length + window.__ttsCalls.length}`)
+    ok('dictation: entry playback uses the first prompt',
+      window.__audioCalls.at(-1)?.src === stubClip ||
+        window.__ttsCalls.at(-1) === dictationFirstWord ||
+        window.__ttsCalls.at(-1)?.includes(dictationFirstWord),
+      `last=${window.__audioCalls.at(-1)?.src ?? window.__ttsCalls.at(-1)} word=${dictationFirstWord}`)
     ok('dictation: every letter is an underline', $$('.slot.fixed').length === 0 && $$('input.slot').length === 4)
     ok('dictation: normal + slow speed', $$('.audio-row [data-act="speak"]').length === 2 &&
       $$('.audio-row [data-act="speak"]').some((b) => b.dataset.speed === 'slow'))

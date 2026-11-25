@@ -53,6 +53,7 @@ window.Audio = class {
   const DARK = P.has('dark')
   const LONG = P.has('long')
   const STAGE_KEY = 'fi-all-modes-stage'
+  const FI_LETTERS = 'abcdefghijklmnopqrstuvwxyzåäö'
   const out = document.getElementById('out')
 
   if (!sessionStorage.getItem(STAGE_KEY)) {
@@ -244,6 +245,22 @@ window.Audio = class {
     ok(`${MODE}: prompt illustration is visible`,
       Boolean($(MODE === 'cloze' ? '.cloze-pic' : '.quiz-pic')) &&
       rect($(MODE === 'cloze' ? '.cloze-pic' : '.quiz-pic'))[0] > 20)
+    const keys = $$('.letter-keyboard [data-act="slot-letter"]')
+    const cols = css($('.letter-keyboard'), 'gridTemplateColumns')?.split(' ').length ?? 0
+    geometry.keyboardKeys = keys.length
+    ok(`${MODE}: 14 unique Finnish letter keys`, keys.length === 14 &&
+      new Set(keys.map((b) => b.dataset.letter)).size === 14 &&
+      keys.every((b) => FI_LETTERS.includes(b.dataset.letter)) &&
+      !keys.some((b) => 'šž'.includes(b.dataset.letter)),
+      keys.map((b) => b.dataset.letter).join(''))
+    ok(`${MODE}: keyboard is a 7-column grid (two rows)`, cols === 7, `cols=${cols}`)
+    ok(`${MODE}: keyboard fits the viewport`,
+      Boolean($('.letter-keyboard')) && inViewport($('.letter-keyboard')) &&
+      $('.letter-keyboard').scrollWidth <= $('.letter-keyboard').clientWidth + 1,
+      JSON.stringify([$('.letter-keyboard')?.scrollWidth, $('.letter-keyboard')?.clientWidth]))
+    ok(`${MODE}: letter keys are tappable`,
+      keys.length === 14 && keys.every((b) => rect(b)[0] >= 30 && rect(b)[1] >= 30),
+      JSON.stringify(keys.map(rect)))
   }
 
   ok('interaction: option boxes have a usable tap target',
@@ -279,9 +296,14 @@ window.Audio = class {
     ok('interaction: a tap selects a tile', acted && $$('.mtile.selected').length === 1,
       `selected=${$$('.mtile.selected').length}`)
   } else if (MODE === 'cloze' || MODE === 'dictation') {
+    const key = $('.letter-keyboard [data-act="slot-letter"]')
+    if (key) { key.click(); acted = true }
+    ok('interaction: tapping a letter fills a slot',
+      acted && FI.Store.load().session.round.slots.some(Boolean),
+      JSON.stringify(FI.Store.load().session.round.slots))
     const hint = $('.answer-row [data-act="hint"]')
-    if (hint) { hint.click(); acted = true }
-    ok('interaction: a tap reveals a hint', acted && FI.Store.load().session.round.hintsUsed === 1,
+    if (hint) hint.click()
+    ok('interaction: a tap reveals a hint', FI.Store.load().session.round.hintsUsed === 1,
       `hintsUsed=${FI.Store.load().session.round.hintsUsed}`)
   }
 

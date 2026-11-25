@@ -249,6 +249,14 @@
   function initSlots(q) {
     return q.letters.map((ch, i) => (q.reveal[i] ? ch : ''))
   }
+  // Paused sessions saved before the clickable keyboard was added have no
+  // `keyboard` array; rebuild it deterministically instead of showing š/ž.
+  function letterPool(q, mode) {
+    return Array.isArray(q.keyboard) && q.keyboard.length === 14
+      ? q.keyboard
+      : FI.buildLetterPool(q.letters, q.reveal,
+        FI.hash(`${session?.groupId ?? ''}:${q.itemId}:${mode}`))
+  }
   function makeRound(mode, scope, isRetry) {
     const g = groupById.get(session.groupId)
     const base = session.seed ?? FI.hash(session.groupId)
@@ -975,7 +983,13 @@
       <div class="stage-head"><h3>${esc(modeLabel(mode))}</h3><span class="pill">${r.index + 1} / ${r.questions.length}</span><span class="pill teal">${pill}</span></div>
       ${prompt}
       <div class="slots" id="slots">${slots}</div>
-      <div class="letterbar"><span class="tip">${th('letters.special')}</span>${['ä', 'ö', 'å', 'š', 'ž'].map((c) => `<button class="btn sm" data-act="slot-letter" data-letter="${esc(c)}">${esc(c)}</button>`).join('')}<span class="tip">${th('letters.paste')}</span></div>
+      <div class="letter-keyboard-wrap">
+        <div class="tip keyboard-tip">${th('letters.special')}</div>
+        <div class="letter-keyboard" role="group" aria-label="${th('letters.special')}">
+          ${letterPool(q, mode).map((c) => `<button class="btn sm letter-key" data-act="slot-letter" data-letter="${esc(c)}" aria-label="${th('letters.aria.pick', { ch: c })}">${esc(c)}</button>`).join('')}
+        </div>
+        <div class="tip keyboard-paste">${th('letters.paste')}</div>
+      </div>
       <div class="answer-row">
         <button class="btn sm" data-act="hint" ${fb || r.hintsUsed >= hintTexts.length ? 'disabled' : ''}>${th('letters.hintButton', { used: r.hintsUsed, total: hintTexts.length })}</button>
         <span class="spacer"></span>

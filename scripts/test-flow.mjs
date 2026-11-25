@@ -92,6 +92,22 @@ ok('sentence cloze masks a token', cs.every((q) => q.fiLine?.includes('______'))
 ok('sentence cloze answer normalises to a real token', cs.every((q) => n(q.answer).length > 0))
 ok('sentence cloze also uses letter slots', cs.every((q) => Array.isArray(q.letters) && q.reveal.length === q.letters.length))
 
+console.log('Clickable letter keyboard')
+const allLetterQs = [...cw, ...cs, ...dictNoReveal, ...FI.buildLetterQuestions(g('A1-S-01'), pack, null, 'dictation')]
+const ALPHABET = FI.FINNISH_ALPHABET.join('')
+ok('every letter question carries exactly 14 keys', allLetterQs.every((q) => Array.isArray(q.keyboard) && q.keyboard.length === 14))
+ok('keys are unique lowercase Finnish letters only', allLetterQs.every((q) =>
+  new Set(q.keyboard).size === 14 && q.keyboard.every((ch) => ALPHABET.includes(ch))))
+ok('š and ž are never offered as Finnish letters', allLetterQs.every((q) =>
+  !q.keyboard.some((ch) => 'šž'.includes(ch))))
+ok('every blank letter is present in the keyboard', allLetterQs.every((q) => {
+  const needed = new Set(q.letters.filter((ch, i) => !q.reveal[i] && FI.isFinnishLetter(ch)).map((ch) => ch.toLowerCase()))
+  return [...needed].every((ch) => q.keyboard.includes(ch))
+}))
+ok('hyphens and spaces are fixed, never blank slots', allLetterQs.every((q) =>
+  q.letters.every((ch, i) => FI.isFinnishLetter(ch) || q.reveal[i])))
+ok('letter pools are deterministic across rebuilds', JSON.stringify(FI.buildClozeQuestions(wg, pack)) === JSON.stringify(cw))
+
 console.log('Group progression')
 ok('A1-W-01 → A1-W-02', FI.nextGroupId(groups, 'A1-W-01') === 'A1-W-02')
 const lastA1WordGroup = groups.groups.filter((x) => x.level === 'A1' && x.kind === 'word').at(-1).id

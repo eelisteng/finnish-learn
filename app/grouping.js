@@ -261,6 +261,30 @@
   }
   FI.lettersOf = function (word) { return Array.from(String(word ?? '').normalize('NFC')) }
 
+  /* The official Finnish alphabet. š / ž are deliberately NOT included: they
+     belong to other languages and must never be offered as Finnish letters. */
+  FI.FINNISH_ALPHABET = [
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+    'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'å', 'ä', 'ö',
+  ]
+  FI.isFinnishLetter = function (ch) {
+    return FI.FINNISH_ALPHABET.includes(String(ch ?? '').toLowerCase())
+  }
+  /** Exactly 14 clickable letters: every distinct letter still needed in the
+      blanks, plus deterministic Finnish distractors. Always unique, lowercase,
+      and free of š / ž. Deterministic per question so pause/resume is stable. */
+  FI.buildLetterPool = function (letters, reveal, seed) {
+    const needed = [...new Set(letters
+      .filter((ch, i) => !reveal[i] && FI.isFinnishLetter(ch))
+      .map((ch) => ch.toLowerCase()))]
+    const distractors = FI.shuffle(
+      FI.FINNISH_ALPHABET.filter((ch) => !needed.includes(ch)),
+      (FI.hash(seed ?? '') ^ 0x9e3779b9) >>> 0,
+    )
+    const pool = [...needed, ...distractors.slice(0, Math.max(0, 14 - needed.length))]
+    return FI.shuffle(pool.slice(0, 14), seed >>> 0)
+  }
+
   /* ── schematic illustrations (placeholder until real art is generated) ── */
   const B = '#185FA5', LB = '#DCEAF7', O = '#D9A86A', N = '#2C4A63', S = '#BFD8C8', W = '#FFFFFF'
   const outline = `stroke="${N}" stroke-width="2" stroke-linejoin="round"`
@@ -483,13 +507,18 @@
       const letters = FI.lettersOf(answer)
       const isDictation = mode === 'dictation'
       const seed = FI.hash(`${group.id}:${id}:${mode}`)
-      const reveal = isDictation ? letters.map(() => false) : FI.randomReveal(letters, seed)
+      const randomReveal = FI.randomReveal(letters, seed)
+      // Spaces and hyphens are not Finnish letters. They stay visible so the
+      // 14 clickable letters can always complete every remaining blank.
+      const reveal = letters.map((ch, i) =>
+        !FI.isFinnishLetter(ch) || (isDictation ? false : randomReveal[i]))
       const blanks = letters.map((_, i) => i).filter((i) => !reveal[i])
       return {
         itemId: id,
         answer,
         letters,
         reveal,
+        keyboard: FI.buildLetterPool(letters, reveal, seed),
         hintOrder: isDictation ? blanks : FI.shuffle(blanks, seed + 7919),
         promptZh: meaning.zh,
         promptEn: meaning.en,

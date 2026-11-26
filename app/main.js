@@ -763,9 +763,12 @@
 
   /* ── learning view ────────────────────────────────────────── */
   function renderHead(g) {
-    const steps = session.pipeline.map((m, i) =>
-      `<div class="step ${i === session.pipelineIndex ? 'on' : i < session.pipelineIndex ? 'past' : ''}">${i + 1}. ${esc(modeShort(m))}</div>`
-    ).join('')
+    // The fixed stage order still exists, but a full strip of labels repeats
+    // what the stage heading already says and pushes the content down. Keep
+    // one compact step pill in the title row; hover exposes the whole order.
+    const flow = session.pipeline.filter((m) => m !== 'complete')
+    const flowIndex = Math.min(Math.max(session.pipelineIndex, 0), Math.max(flow.length - 1, 0))
+    const flowTitle = flow.map(modeShort).join(' → ')
     const r = session.round
     const total = session.phase === 'memorize'
       ? session.scopeIds.length
@@ -780,9 +783,9 @@
       <div class="row">
         <button class="btn sm ghost" data-act="pause">${th('head.pause')}</button>
         <h2>${esc(g.id)} · ${esc(groupTitle(g))}${session.attempt > 1 ? `　<span class="pill amber">${th('head.retryBadge', { n: session.attempt })}</span>` : ''}</h2>
+        <span class="step-mini" title="${esc(flowTitle)}">${esc(t('head.step', { i: flowIndex + 1, n: flow.length }))}</span>
         <span class="counter">${th('head.counter', { level: g.level, kind: kindName(g.kind), pos, total })}</span>
       </div>
-      <div class="steps">${steps}</div>
       <div class="pbar"><i style="width:${pct}%"></i></div>
     </div>`
   }

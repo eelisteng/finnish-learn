@@ -132,6 +132,13 @@ window.Audio = class {
   ok(`theme: ${DARK ? 'dark' : 'light'} dataset is applied`,
     document.documentElement.dataset.theme === (DARK ? 'dark' : 'light'),
     `dataset=${document.documentElement.dataset.theme}`)
+  ok('learning head: eight-label stage strip is hidden on phones',
+    !$('.learn-head .steps') && $$('.learn-head .step').length === 0)
+  ok('learning head: one compact step pill remains visible',
+    Boolean($('.learn-head .step-mini')) && rect($('.learn-head .step-mini'))[1] > 10)
+  ok('learning head: redundant item counter is hidden on phones',
+    css($('.learn-head .counter'), 'display') === 'none',
+    css($('.learn-head .counter'), 'display'))
 
   /* Illustration theme checks run AFTER the interaction: find-image has no
      picture until the correct card is flipped. WebP art is shown as-is in

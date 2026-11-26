@@ -277,7 +277,10 @@
     ok('memorize: zh + en gloss', $('.gloss-box .zh')?.textContent.length > 0 && $('.gloss-box .en')?.textContent.length > 0)
     ok('memorize: pos badge', $('.badges')?.textContent.includes('名词'))
     ok('memorize: case table collapsed by default', $('.cases') !== null && $('details.more').open === false)
-    ok('learn head: 8 stage chips', $$('.learn-head .step').length === 8)
+    ok('learn head: full stage strip collapsed into one step pill',
+      $$('.learn-head .step').length === 0 &&
+      $('.learn-head .step-mini')?.textContent.trim() === '流程 1 / 7' &&
+      $('.learn-head .step-mini')?.title.includes('背词 → 选词'))
 
     const ttsBeforeCard2 = window.__ttsCalls.length
     click('[data-act="mem-next"]')

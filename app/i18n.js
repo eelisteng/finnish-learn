@@ -117,6 +117,7 @@
     'head.kind.word': '单词',
     'head.kind.sentence': '句子',
     'head.retryBadge': '只练错词 · 第 {{n}} 轮',
+    'head.step': '流程 {{i}} / {{n}}',
     'head.counter': '{{level}} · {{kind}} · {{pos}}/{{total}}',
     'head.group.word': '单词组',
     'head.group.sentence': '句子组',
@@ -385,6 +386,7 @@
     'head.kind.word': 'words',
     'head.kind.sentence': 'sentences',
     'head.retryBadge': 'Wrong items only · attempt {{n}}',
+    'head.step': 'Step {{i}} of {{n}}',
     'head.counter': '{{level}} · {{kind}} · {{pos}}/{{total}}',
     'head.group.word': 'Word group',
     'head.group.sentence': 'Sentence group',
@@ -568,7 +570,8 @@
   /** HTML-safe: interpolated values are escaped; markup lives in the dictionary. */
   FI.trHtml = (lang, key, vars) => fill(lookup(lang, key), vars, true)
 
-  /* English names for the practice modes shown in steps, settings, results.
+  /* English names for the practice modes shown in the compact step pill,
+     settings and results.
      Chinese stays in MODE_META so domain tests and older sessions are intact. */
   FI.MODE_I18N = {
     en: {

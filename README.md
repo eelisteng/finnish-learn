@@ -24,7 +24,8 @@ python3 -m http.server 8000
 | 模块 | 说明 |
 | --- | --- |
 | 分级与分组 | A1–C2，每组严格 5 条，单词组与句子组分开；学完一组可继续下一组或随时暂停 |
-| 背词卡 | 词形、IPA、词性、单复数、词干与基本格、格与义项的 CEFR 标注、动词类型徽标、每义项一图、中英释义；进入每张卡片自动朗读一次 |
+| 背词卡 | 词形、IPA、词性、单复数、词干与基本格、格与义项的 CEFR 标注、动词类型徽标、每义项一图、中英释义；词卡下方新增一句包含该词的例句，高亮词在句中的实际形式，例句释义同样跟随「只中文 / 只英文 / 中英」设置；进入每张卡片自动朗读一次 |
+| 例句覆盖 | 980/980 个词都有例句：20 条来自用户工作簿，182 条复用句库中确实含该词的句子，其余 778 条按词性与词形生成模板句，并在界面标注「模板例句 · 待人工校对」。`words.csv` 中 `example_source=manual` 的行不会被重建覆盖 |
 | 练习流程 | **模式顺序固定、按难度递进**：背词 → 选词 → 听选 → 找图 → 匹配 → 填空 → 听写 → 完成，绝不随机打乱（从「看释义认词」逐级到「听音写词」）；设置里取消勾选只会跳过该模式，其余仍保持原顺序。只有**每组 5 条题目在每轮内随机出现**（同组内顺序稳定，暂停 / 继续、重来都不变），由 `session.seed` 保证。句子组自动跳过仅适用于单词的找图与听写。旧版乱序的暂停会话在读取时会自动重排为固定顺序并保留当前轮次 |
 | 学习界面 | 开始学习后收起整条步骤标签，标题行只保留「流程 n / 7」小徽标（悬停可见完整顺序）与进度条；当前模式由阶段标题显示，手机端再隐藏重复的题目计数，让内容区更靠上、更聚焦 |
 | 选词 / 听选 | 4 个选项；答对只把该选项变绿、答错变红并高亮正确项，不再显示任何文字提示；重来只针对答错的词 |
@@ -44,7 +45,7 @@ python3 -m http.server 8000
 - 运行时词包：`data/packs/a1-core.json`；浏览器内嵌版：`app/data.js`（供 `file://` 使用）
 - 分组索引：`data/groups.json`（当前 228 组，每组 5 条）
 - 可编辑种子：`data/content-source.mjs`（50 词 / 35 句的人工复核基线）
-- 人工编辑层：`data/words.csv`（980 词）、`data/sentences.csv`（151 句），UTF-8 BOM，可用表格软件打开
+- 人工编辑层：`data/words.csv`（980 词）、`data/sentences.csv`（151 句），UTF-8 BOM，可用表格软件打开；`words.csv` 的 `example_fi / example_zh / example_en / example_token / example_source / example_reviewStatus` 六列存放每词例句，`example_source=manual` 可人工覆盖自动生成结果
 - 主题映射：`data/topics.json`；导入统计与待办清单：`data/import/import-report.json`
 - 素材与许可清单：`data/sources.json`；内容类型定义：`src/types/content.ts`
 
@@ -59,12 +60,14 @@ node scripts/export-sheets.mjs        # XLSX → 6 份可审阅的 CSV 快照（
 node scripts/build-en-glosses.mjs     # 中文 → 英文缓存（已提交，正常构建无需联网）
 node scripts/import-a1-b1.mjs         # 合并生成 data/words.csv / data/sentences.csv
 node scripts/import-atlas-images.mjs  # 用 Word Atlas WebP 替换全部配图（见下节；重跑导入后必须执行）
+node scripts/build-examples.mjs       # 为每个词补一条例句（工作簿 → 句库 → 模板）
 node scripts/build-content.mjs && node scripts/build-groups.mjs
 ```
 
 - 英文释义来自 `data/import/en-glosses.csv`（1049 条缓存），`en-overrides.tsv` 与 `en-verbs.tsv`（166 个手写不定式）覆盖机器翻译的错例。
 - 形态来自 `data/import/kotus-sanalista-2024.tsv`（Kotus 变格/变位类号 + 辅音交替字母，CC BY 4.0，署名见 `KOTUS-NOTICE.txt`），由 `scripts/fi-morphology.mjs` 推导词干、6 个基本格与动词 1–6 类的主干形式。
 - 50 个人工复核词条 / 35 句保持原 ID 与等级不变，重复词条跳过；导入行的 ID 以 `x` 开头，重跑脚本是幂等的。
+- 例句由 `scripts/build-examples.mjs` 按「工作簿 → 句库 → 模板」固定优先级补齐，每条都记录 `example_token` 以便界面高亮；模板句在界面和 CSV 中都标为待人工校对。`example_source=manual` 的行不会被覆盖。
 - 真正不变化的词（Kotus 99、副词、连词）显示 `—`；推导不出来的词标为 `paradigm pending` 并显示 `—`，**不会冒充「不变化」**。
 - 整条流水线**确定性可复现**：`SOURCE.txt` 与 `import-report.json` 记录输入内容的 SHA-256，而不是构建时间戳；`csv-pack.mjs import` 同理。输入不变时连跑两遍，15 个生成文件字节完全一致，`git diff` 为空即说明数据没有漂移。
 
@@ -125,11 +128,12 @@ node scripts/csv-pack.mjs --self-test          # CSV 往返与反例
 node scripts/import-a1-b1.mjs --dry-run        # 只出报告、不写文件
 node scripts/test-flow.mjs                     # 领域流程与练习行为测试
 node scripts/import-atlas-images.mjs --check # 980 张 WebP 的唯一性 / 文件存在 / 字节漂移
+node scripts/build-examples.mjs --check       # 980 条例句的来源 / 目标词 / 确定性
 node scripts/test-mobile.mjs                   # 找图模式手机适配（需 Node 22+ / 本地 Chrome）
 node scripts/test-webkit.mjs                   # 全 6 种练习模式真实 WebKit 回归（需 macOS + swiftc）
 ```
 
-可复现性自检：依次重跑 `export-sheets.mjs → build-en-glosses.mjs → import-a1-b1.mjs → import-atlas-images.mjs → build-content.mjs → build-groups.mjs`，`git diff` 应为空（生成文件不含时间戳）。若出现差异，说明输入快照或推导规则被改过，需要复核。
+可复现性自检：依次重跑 `export-sheets.mjs → build-en-glosses.mjs → import-a1-b1.mjs → import-atlas-images.mjs → build-examples.mjs → build-content.mjs → build-groups.mjs`，`git diff` 应为空（生成文件不含时间戳）。若出现差异，说明输入快照或推导规则被改过，需要复核。
 
 浏览器端到端回归：用 headless Chrome 打开 `tests/browser-flow.html`，页面内会输出逐项断言结果。
 
@@ -164,6 +168,7 @@ scripts/build-en-glosses.mjs  中文 → 英文翻译缓存
 scripts/fi-morphology.mjs     芬兰语形态 / IPA 规则推导
 scripts/import-a1-b1.mjs      A1–B1 合并导入（幂等）
 scripts/import-atlas-images.mjs     词义匹配 Word Atlas WebP 配图导入器
+scripts/build-examples.mjs          每词例句生成器（工作簿 → 句库 → 模板，幂等）
 scripts/generate-illustrations.mjs  旧版语义 SVG 生成器（后备，默认链不调用）
 scripts/test-mobile.mjs       找图模式手机适配回归（CDP 视口 + touch）
 scripts/test-webkit.mjs       全 6 模式真实 WKWebView 回归（macOS）

@@ -55,7 +55,7 @@ function validatePack(p) {
   const stats = {
     words: 0, senses: 0, imagesReady: 0, imagesPending: 0, imagesReviewed: 0,
     audioDeclared: 0, audioReviewed: 0,
-    verbTypes: new Set(), basicCases: 0, withIpa: 0, withNumber: 0,
+    verbTypes: new Set(), basicCases: 0, withIpa: 0, withNumber: 0, examples: 0,
   }
 
   if (p.format !== 'finnish-learn-content') errors.push('pack.format must be finnish-learn-content')
@@ -104,6 +104,21 @@ function validatePack(p) {
     const derived = LEVELS[minRank]
     if (word.cefr !== derived) errors.push(`${word.id}: cefr ${word.cefr} != min(senses) ${derived}`)
     if (!word.provenance?.lemmaSource) errors.push(`${word.id}: provenance.lemmaSource missing`)
+
+    const ex = word.example
+    if (!ex?.fi || !ex.zh || !ex.en) errors.push(`${word.id}: example fi/zh/en missing`)
+    else {
+      stats.examples++
+      if (!ex.token || !ex.fi.toLocaleLowerCase('fi').includes(ex.token.toLocaleLowerCase('fi'))) {
+        errors.push(`${word.id}: example token not found in the Finnish sentence`)
+      }
+      if (!['workbook', 'sentence', 'template', 'manual'].includes(ex.source)) {
+        errors.push(`${word.id}: invalid example.source "${ex.source}"`)
+      }
+      if (!['human-reviewed', 'auto-derived'].includes(ex.reviewStatus)) {
+        errors.push(`${word.id}: invalid example.reviewStatus "${ex.reviewStatus}"`)
+      }
+    }
 
     if (word.pos === 'verb') {
       const verb = word.verb
@@ -226,6 +241,8 @@ function runSelfTest(p, gi) {
     ['动词类型范围', (q) => { findWord(q, 'puhua').verb.verbType = 9 }, 'verbType'],
     ['六个基本格', (q) => { findWord(q, 'talo').nominal.caseForms = findWord(q, 'talo').nominal.caseForms.slice(0, 5) }, 'basic case'],
     ['音标必填', (q) => { delete findWord(q, 'talo').ipa }, 'ipa missing'],
+    ['例句必填', (q) => { delete findWord(q, 'talo').example }, 'example fi/zh/en missing'],
+    ['例句必须包含目标词', (q) => { findWord(q, 'talo').example.token = 'ei-ole' }, 'example token not found'],
     ['单复数必填', (q) => { delete findWord(q, 'talo').number }, 'number.singular/plural'],
     // Every shipped word now has a ready illustration, so force a pending
     // placeholder explicitly instead of relying on a word that used to be one.
@@ -286,7 +303,7 @@ const allErrors = [...errors, ...groupErrors]
 
 console.log('Content pack:', pack.version)
 console.log(`  words ${stats.words} | senses ${stats.senses} | basic case forms ${stats.basicCases}`)
-console.log(`  ipa ${stats.withIpa} | noun/adjective number ${stats.withNumber}`)
+console.log(`  ipa ${stats.withIpa} | noun/adjective number ${stats.withNumber} | examples ${stats.examples}`)
 console.log(`  images ready ${stats.imagesReady} / motif placeholder ${stats.imagesPending} / human-reviewed ${stats.imagesReviewed}`)
 console.log(`  audio clips ${stats.audioDeclared} / human-reviewed ${stats.audioReviewed}`)
 console.log(`  verb types covered: ${[...stats.verbTypes].sort().join(', ')}`)

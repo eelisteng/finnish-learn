@@ -126,6 +126,17 @@ export interface Provenance {
   reviewStatus: 'auto-derived' | 'human-reviewed' | 'csv-authored'
 }
 
+/** One example sentence per word. `token` is the form of the word that
+    appears in `fi`, so the UI can highlight it without guessing inflections. */
+export interface WordExample {
+  fi: string
+  zh: string
+  en: string
+  token: string
+  source: 'workbook' | 'sentence' | 'template' | 'manual'
+  reviewStatus: 'human-reviewed' | 'auto-derived'
+}
+
 export interface WordEntry {
   id: string
   lemma: string
@@ -138,6 +149,8 @@ export interface WordEntry {
   ipa: string
   ipaSource: 'rule-derived' | 'human-verified'
   senses: Sense[]
+  /** Example sentence containing this word, with zh/en glosses. */
+  example: WordExample
   audio?: AudioRef
   provenance: Provenance
   nominal?: NominalParadigm

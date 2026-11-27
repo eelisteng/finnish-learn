@@ -112,6 +112,23 @@
   function meaningInline(zh, en) {
     return esc(FI.formatMeaning(zh, en, pref().meaningLang))
   }
+  function exampleSentence(ex) {
+    const text = String(ex?.fi ?? '')
+    const token = String(ex?.token ?? '')
+    const i = token ? text.toLocaleLowerCase('fi').indexOf(token.toLocaleLowerCase('fi')) : -1
+    if (i < 0) return esc(text)
+    return `${esc(text.slice(0, i))}<b class="ex-word">${esc(text.slice(i, i + token.length))}</b>${esc(text.slice(i + token.length))}`
+  }
+  function exampleBlock(ex) {
+    if (!ex?.fi) return ''
+    const auto = ex.source === 'template' || ex.reviewStatus === 'auto-derived'
+      ? `<span class="badge amber">${th('mem.example.template')}</span>` : ''
+    return `<div class="example">
+      <div class="example-head"><b>${th('mem.example')}</b>${auto}<span class="tip">${th('mem.example.tip')}</span></div>
+      <div class="example-fi fi">${exampleSentence(ex)} <button class="btn sm ghost" data-act="speak" data-text="${esc(ex.fi)}" data-audio="" title="${th('audio.pronounceTitle')}">🔊</button></div>
+      <div class="example-meaning">${meaningLines(ex.zh, ex.en)}</div>
+    </div>`
+  }
   /** Compact meaning block used on the listen-mode option cards. */
   function meaningOption(zh, en) {
     const lang = pref().meaningLang
@@ -830,6 +847,7 @@
         <div class="badges"><span class="badge blue">${esc(item.cefr)}</span><span class="badge">${esc(FI.posText(item, uiLang()))}</span>${verbBadge}<span class="badge teal">auto-derived</span></div>
         <dl class="kv">${numberBlock}<dt>${th('mem.morphClass')}</dt><dd>${isVerb ? th('mem.kotus', { n: item.verb.kotusType ?? '—' }) : esc(FI.declText(item.nominal.declensionClass, uiLang()))}</dd></dl>
         <div class="gloss-box">${meaningLines(s.zh, s.en)}</div>
+        ${exampleBlock(item.example)}
         ${more}
       </div>
     </div>`

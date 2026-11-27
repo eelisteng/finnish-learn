@@ -72,6 +72,7 @@ export const WORD_COLS = [
   'stem_strong', 'stem_weak', 'gradation', 'harmony', 'kotusType', 'declensionClass',
   'verbType', 'infinitiveEnding', 'presentStem', 'present1sg', 'past3sg', 'nutParticiple', 'irregular',
   'reviewStatus',
+  'example_fi', 'example_zh', 'example_en', 'example_token', 'example_source', 'example_reviewStatus',
   ...AUDIO_COLS,
 ]
 export const SENTENCE_COLS = ['id', 'fiText', 'zhText', 'enText', 'cefr', 'grammarPoints', 'gloss', ...AUDIO_COLS]
@@ -158,6 +159,9 @@ export function wordToRow(w) {
     past3sg: v.past3sg, nutParticiple: v.nutParticiple,
     irregular: v.irregular === undefined ? '' : str(v.irregular),
     reviewStatus: w.provenance?.reviewStatus,
+    example_fi: w.example?.fi, example_zh: w.example?.zh, example_en: w.example?.en,
+    example_token: w.example?.token, example_source: w.example?.source,
+    example_reviewStatus: w.example?.reviewStatus,
     ...audioToRow(w.audio),
   }
   for (const c of BASIC_CASES) row[c] = byCase[c]?.form ?? ''
@@ -243,6 +247,16 @@ export function applyWordRow(base, row) {
   image.license = row.image_license || image.license || 'own'
   image.reviewStatus = row.image_reviewStatus || image.reviewStatus || 'pending'
   w.provenance = { ...(w.provenance ?? {}), reviewStatus: row.reviewStatus || 'auto-derived' }
+  if (row.example_fi) {
+    w.example = {
+      fi: row.example_fi,
+      zh: row.example_zh,
+      en: row.example_en,
+      token: row.example_token || row.lemma,
+      source: row.example_source || 'template',
+      reviewStatus: row.example_reviewStatus || 'auto-derived',
+    }
+  } else delete w.example
   const audio = audioFromRow(row)
   if (audio) w.audio = audio
   else delete w.audio
@@ -351,6 +365,13 @@ export function validateCsv(wordRows, sentenceRows, wordHeader, sentenceHeader) 
     if (!r.ipa) errors.push(`${tag}: ipa missing`)
     if (!r.sense_zh || !r.sense_en) errors.push(`${tag}: Chinese/English gloss missing`)
     if (!REVIEW_STATES.includes(r.reviewStatus)) errors.push(`${tag}: reviewStatus must be ${REVIEW_STATES.join(' / ')}`)
+    if (r.example_fi) {
+      if (!r.example_zh || !r.example_en) errors.push(`${tag}: example needs zh + en translation`)
+      if (!r.example_token) errors.push(`${tag}: example token missing`)
+      if (!['workbook', 'sentence', 'template', 'manual'].includes(r.example_source)) {
+        errors.push(`${tag}: example_source must be workbook / sentence / template / manual`)
+      }
+    }
     if (!['ready', 'pending'].includes(r.image_status)) errors.push(`${tag}: image_status must be ready/pending`)
     if (r.image_status === 'ready') {
       if (!r.image_path) errors.push(`${tag}: ready image needs image_path`)

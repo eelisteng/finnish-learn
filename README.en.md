@@ -24,7 +24,8 @@ python3 -m http.server 8000
 | Area | What it does |
 | --- | --- |
 | Levels & groups | A1–C2, exactly 5 items per group, word and sentence tracks kept separate; continue to the next group or pause at any time |
-| Memorize cards | Lemma, IPA, part of speech, singular/plural, stems and basic cases, CEFR tags on cases and senses, verb-type badge, one image per sense, Chinese and English glosses; each card is read aloud once on entry |
+| Memorize cards | Lemma, IPA, part of speech, singular/plural, stems and basic cases, CEFR tags on cases and senses, verb-type badge, one image per sense, Chinese and English glosses; a new example sentence under each word highlights the word's actual inflected form, and its gloss follows the same Chinese-only / English-only / both setting; each card is read aloud once on entry |
+| Example coverage | All 980 words have an example: 20 from the source workbook, 182 reused from the sentence bank where the word actually occurs, and 778 deterministic template sentences marked "Template sentence · needs review" in the UI. Rows with `example_source=manual` in `words.csv` survive every rebuild |
 | Practice flow | **The stage order is fixed and rises in difficulty**: Memorise → Choose → Listen → Find pic → Match → Blanks → Dictation → Done. Modes are never shuffled (recognise a meaning → recognise the sound → recall the word → pair → spell part → write from dictation). Unchecking a mode in Settings only skips it; the rest keep this order. Only the **five items inside a round are shuffled**, and their order stays fixed inside a group (including after a pause, resume or retry), guaranteed by `session.seed`. Sentence groups skip the word-only modes. Paused sessions saved by the old shuffled build are re-ordered into the fixed sequence on load without losing the current round |
 | Learning view | Once a group starts, the full stage-label strip collapses into one compact "Step n of 7" pill in the title row (hover for the whole order); the progress bar stays, the stage heading still names the current mode, and phones hide the duplicated item counter so the content sits higher |
 | Choice / listen | 4 options; a correct pick turns green, a wrong one turns red and highlights the right option — no text status label; a retry covers only the missed items |
@@ -44,7 +45,7 @@ python3 -m http.server 8000
 - Runtime pack: `data/packs/a1-core.json`; browser-embedded copy: `app/data.js` (for `file://`)
 - Group index: `data/groups.json` (currently 228 groups of 5 items)
 - Editable seed: `data/content-source.mjs` (50 words / 35 sentences — the reviewed baseline)
-- Human editing layer: `data/words.csv` (980 words), `data/sentences.csv` (151 sentences), UTF-8 BOM, opens in Excel / Numbers
+- Human editing layer: `data/words.csv` (980 words), `data/sentences.csv` (151 sentences), UTF-8 BOM, opens in Excel / Numbers; the six `example_fi / example_zh / example_en / example_token / example_source / example_reviewStatus` columns hold one example per word, and `example_source=manual` protects a hand-edited sentence from regeneration
 - Topic map: `data/topics.json`; import statistics and review backlog: `data/import/import-report.json`
 - Source and license inventory: `data/sources.json`; content types: `src/types/content.ts`
 
@@ -59,12 +60,14 @@ node scripts/export-sheets.mjs        # XLSX -> six reviewable CSV snapshots (de
 node scripts/build-en-glosses.mjs     # zh -> en cache (committed; normal builds need no network)
 node scripts/import-a1-b1.mjs         # merge into data/words.csv / data/sentences.csv
 node scripts/import-atlas-images.mjs  # replace all illustrations with Word Atlas WebP (see below; required after a re-import)
+node scripts/build-examples.mjs       # add one example per word (workbook -> sentence bank -> template)
 node scripts/build-content.mjs && node scripts/build-groups.mjs
 ```
 
 - English glosses come from `data/import/en-glosses.csv` (1,049 cached entries); `en-overrides.tsv` and `en-verbs.tsv` (166 hand-checked infinitives) fix machine-translation errors.
 - Morphology comes from `data/import/kotus-sanalista-2024.tsv` (Kotus declension/conjugation class + consonant-gradation letter, CC BY 4.0; attribution in `KOTUS-NOTICE.txt`), expanded by `scripts/fi-morphology.mjs` into stems, six basic cases and verb-type 1–6 principal parts.
 - The 50 reviewed words / 35 sentences keep their IDs and levels; duplicate lemmas are skipped. Imported IDs start with `x`, so re-running the importer is idempotent.
+- `scripts/build-examples.mjs` fills one example per word in a fixed "workbook -> sentence bank -> template" order and stores `example_token` so the UI can highlight the inflected form. Template sentences are labelled as needing review in both the CSV and the app; rows with `example_source=manual` are never overwritten.
 - Truly indeclinable words (Kotus 99, adverbs, conjunctions) show `—`; words whose paradigm could not be derived are labelled `paradigm pending` and also show `—` — they are **never** mislabelled as indeclinable.
 - The whole pipeline is **deterministic**: `SOURCE.txt`, `import-report.json` and `csv-pack.mjs import` record SHA-256 hashes of their inputs rather than build timestamps. With unchanged inputs, two consecutive full rebuilds produce byte-identical output for all 15 generated files, so an empty `git diff` proves nothing drifted.
 
@@ -125,11 +128,12 @@ node scripts/csv-pack.mjs --self-test          # CSV round-trip and negative cas
 node scripts/import-a1-b1.mjs --dry-run        # report only, writes nothing
 node scripts/test-flow.mjs                     # domain and practice-behavior tests
 node scripts/import-atlas-images.mjs --check # 980 WebP: uniqueness / files / byte drift
+node scripts/build-examples.mjs --check       # 980 examples: source / target token / determinism
 node scripts/test-mobile.mjs                   # find-image on phones (needs Node 22+ / local Chrome)
 node scripts/test-webkit.mjs                   # all 6 modes in real WebKit (needs macOS + swiftc)
 ```
 
-Reproducibility check: rerun `export-sheets.mjs -> build-en-glosses.mjs -> import-a1-b1.mjs -> import-atlas-images.mjs -> build-content.mjs -> build-groups.mjs`; `git diff` should be empty because no generated file contains a timestamp. Any diff means an input snapshot or derivation rule changed and needs review.
+Reproducibility check: rerun `export-sheets.mjs -> build-en-glosses.mjs -> import-a1-b1.mjs -> import-atlas-images.mjs -> build-examples.mjs -> build-content.mjs -> build-groups.mjs`; `git diff` should be empty because no generated file contains a timestamp. Any diff means an input snapshot or derivation rule changed and needs review.
 
 For the browser end-to-end regression, open `tests/browser-flow.html` in headless Chrome; the page prints each assertion result.
 
@@ -164,6 +168,7 @@ scripts/build-en-glosses.mjs  zh -> en translation cache
 scripts/fi-morphology.mjs     Finnish morphology / IPA rule derivation
 scripts/import-a1-b1.mjs      idempotent A1-B1 merge importer
 scripts/import-atlas-images.mjs     Word Atlas WebP illustration importer (semantic matching)
+scripts/build-examples.mjs          idempotent per-word example generator (workbook -> bank -> template)
 scripts/generate-illustrations.mjs  legacy SVG generator (fallback only, not in default chain)
 scripts/test-mobile.mjs       mobile find-image regression (CDP viewport + touch)
 scripts/test-webkit.mjs       all-6-mode real-WKWebView regression (macOS)

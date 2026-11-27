@@ -54,6 +54,28 @@ ok('all group items share the group level', groups.groups.every((x) => {
   return x.itemIds.every((id) => items.find((i) => i.id === id)?.cefr === x.level)
 }))
 
+console.log('Word examples')
+const exBySource = (source) => pack.words.filter((w) => w.example?.source === source).length
+ok('every word carries an example sentence', pack.words.every((w) =>
+  w.example?.fi && w.example?.zh && w.example?.en && w.example?.token))
+ok('example token appears in its Finnish sentence', pack.words.every((w) =>
+  w.example.fi.toLocaleLowerCase('fi').includes(w.example.token.toLocaleLowerCase('fi'))))
+ok('all example sources are accounted for',
+  ['workbook', 'sentence', 'template'].every((s) => exBySource(s) > 0) &&
+  pack.words.every((w) => ['workbook', 'sentence', 'template', 'manual'].includes(w.example.source)))
+ok('workbook and sentence examples are marked human-reviewed', pack.words
+  .filter((w) => w.example.source !== 'template')
+  .every((w) => w.example.reviewStatus === 'human-reviewed'))
+ok('template examples are marked auto-derived', pack.words
+  .filter((w) => w.example.source === 'template')
+  .every((w) => w.example.reviewStatus === 'auto-derived'))
+ok('example glosses follow the meaning-language setting', (() => {
+  const zh = FI.formatMeaning('中文', 'English', 'zh')
+  const en = FI.formatMeaning('中文', 'English', 'en')
+  const both = FI.formatMeaning('中文', 'English', 'both')
+  return zh === '中文' && en === 'English' && both.includes('中文') && both.includes('English')
+})())
+
 console.log('Choice round')
 const wg = g('A1-W-01')
 const qs = FI.buildChoiceQuestions(wg, pack, { seed: 7 })

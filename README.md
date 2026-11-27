@@ -2,7 +2,7 @@
 
 简体中文 · [English](README.en.md)
 
-**一词一图，一格一义**
+**一词一画，边学边练**
 
 免登录的芬兰语分级学习网页。用中文或英文释义学芬兰语，按 A1–C2 分级、每组 5 个单词或句子；背词卡展示音标、词性、单复数、强弱词干、基本格与动词 1–6 类型，每个义项配一幅图。学习进度只存本机，靠 JSON 导出 / 导入在设备间迁移，不做自动云同步。
 
@@ -104,7 +104,7 @@ node scripts/import-atlas-images.mjs --check  # 只校验（唯一性 / 文件�
 
 | 要求 | 实现 |
 | --- | --- |
-| 图不重复 | 980/980 张 WebP 的 SHA-256 都不同。词义首选图片被同义词占用时，按人工维护的 `ALTERNATES` → Word Atlas 词族 / 同义词 → 同主题同等级的顺序挑一张未占用的图，保证一条一词一图 |
+| 图不重复 | 980/980 张 WebP 的 SHA-256 都不同。词义首选图片被同义词占用时，按人工维护的 `ALTERNATES` → Word Atlas 词族 / 同义词 → 同主题同等级的顺序挑一张未占用的图，保证一条一词一画 |
 | 大小一致 | 源图统一 512 × 512，复制后按 `<id>.webp` 命名；前端所有图片盒统一 `object-fit:cover`，背词 / 选词 / 填空 / 听写用方形画框，听选与找图选项卡同样保持 1:1，桌面和手机只缩放不裁切出不同比例 |
 | 简明反映词义 | 匹配链为「人工 override（101 个无对应图片的数字 / 代词 / 功能词）→ 英文释义精确匹配 → 去 to / 单数 / 去括号变体 → 中文释义对应 Word Atlas 词义」。数字、代词、语法术语用最接近的具象图（如 `kaksi`→一双、`kolme`→三角形、`minä`→自己） |
 
@@ -155,7 +155,7 @@ app/styles.css                浅色 / 深色主题
 app/bgm.js                    背景音乐：5 首氛围音轨的实时合成与试听/切换
 data/                         词包、分组、CSV、主题映射、素材清单
 data/import/                  原始 XLSX、六份 CSV 快照、英文缓存、Kotus 词表、导入报告
-assets/illustrations/         成品插画（980 张 Word Atlas WebP，一词一图）
+assets/illustrations/         成品插画（980 张 Word Atlas WebP，一词一画）
 assets/audio/                 预录音频（当前为空，按 CSV 声明填充）
 tools/illustration-review.html  980 张 WebP 的可搜索自包含审阅页
 scripts/xlsx-read.mjs         零依赖 XLSX 解析（inlineStr / sharedStrings）
@@ -176,7 +176,7 @@ tests/webkit-find-image.swift WKWebView 几何探针（由 test-webkit.mjs 编�
 
 ## 已知限制
 
-- 980 条配图现在全部是成品 Word Atlas WebP（512 × 512 全彩插画，一词一图），不再是几何占位图；但**全部 `image_reviewStatus` 仍是 `pending`**，需用 `tools/illustration-review.html` 逐张人工复核语义与观感后才能标记为 `human-verified`。数字、代词、功能词用最接近的近似图（语义可能不精确，审阅页可按匹配方式 `override` / `topic` 筛选重点复核）。
+- 980 条配图现在全部是成品 Word Atlas WebP（512 × 512 全彩插画，一词一画），不再是几何占位图；但**全部 `image_reviewStatus` 仍是 `pending`**，需用 `tools/illustration-review.html` 逐张人工复核语义与观感后才能标记为 `human-verified`。数字、代词、功能词用最接近的近似图（语义可能不精确，审阅页可按匹配方式 `override` / `topic` 筛选重点复核）。
 - 词包目前 0 条预录音频，全部走浏览器语音合成；多数设备没有 `fi-FI` 语音，长短音与 `ä/ö/å` 会失真。补齐 CSV 的 `audio_*` 列并放入文件后会自动切换为预录播放。
 - **导入行的 IPA、英文释义、词干、6 个基本格、动词主干形式全部是 `auto-derived` 规则推导，未经芬兰语专家校对，不可直接当教材发布。** 800/930 个词条有 Kotus 类号，其余按词形猜测或标 `paradigm pending`。工作簿的等级只是建议值，CEFR / YKI 并无官方词表。
 - 句子目前只提供逐词 chip，没有 `senseId` / 格标注（工作簿未给逐词注解），因此句子的 CEFR 门槛不会由 gloss 反推。

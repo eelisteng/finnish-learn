@@ -537,7 +537,7 @@
     setPref('uiLang', 'en')
     ok('uiLang: preference persisted', window.FI.Store.load().preferences.uiLang === 'en')
     ok('uiLang: html lang attribute follows', document.documentElement.lang === 'en')
-    ok('uiLang: document title translated', document.title.includes('One word, one image'))
+    ok('uiLang: document title translated', document.title.includes('One word, one picture'))
     ok('uiLang: home chrome is English', $('.hero h2')?.textContent.includes('CEFR levels') &&
       !$('.hero h2')?.textContent.includes('按'))
     ok('uiLang: group titles are English', $('.gcard h4')?.textContent.includes('Places & objects'))

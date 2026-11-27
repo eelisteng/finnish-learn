@@ -13,8 +13,8 @@
   FI.UI_LANG_NAME = { zh: '中文', en: 'English' }
 
   const ZH = {
-    'app.title': 'Finnish Learn · 一词一图，一格一义',
-    'brand.subtitle': '一词一图，一格一义 · 免登录 · 进度可导入导出',
+    'app.title': 'Finnish Learn · 一词一画，边学边练',
+    'brand.subtitle': '一词一画，边学边练 · 免登录 · 进度可导入导出',
     'ui.toggle': '🌐 中文',
     'ui.toggle.title': '切换界面语言（中文 / English）',
     'ui.name.zh': '中文',
@@ -282,8 +282,8 @@
   }
 
   const EN = {
-    'app.title': 'Finnish Learn · One word, one image. One case, one meaning.',
-    'brand.subtitle': 'One word, one image. One case, one meaning. · No login',
+    'app.title': 'Finnish Learn · One word, one picture. Learn by doing.',
+    'brand.subtitle': 'One word, one picture. Learn by doing. · No login',
     'ui.toggle': '🌐 EN',
     'ui.toggle.title': 'Switch interface language (中文 / English)',
     'ui.name.zh': 'Chinese',

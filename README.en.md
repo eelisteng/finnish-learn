@@ -2,7 +2,7 @@
 
 [简体中文](README.md) · English
 
-**One word, one image. One case, one meaning.**
+**One word, one picture. Learn by doing.**
 
 A no-login Finnish learning web app. Learn Finnish through Chinese or English glosses, with CEFR A1–C2 levels and groups of five words or sentences. Each flashcard shows IPA, part of speech, singular and plural forms, strong and weak stems, basic grammatical cases and verb types 1–6, with one illustration per sense. Progress stays on your device and moves between devices through JSON export / import — there is no automatic cloud sync.
 
